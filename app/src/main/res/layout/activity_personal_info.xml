@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PersonalInfo">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textview_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:minHeight="50dp"
+            android:text="用户ID"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textview_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|fill_vertical"
+            android:minWidth="70dp"
+            android:minHeight="40dp"
+            android:text="用户"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edittext_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/textview_user_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|fill_vertical"
+            android:minWidth="70dp"
+            android:minHeight="40dp"
+            android:text="性别"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edittext_user_sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/textview_school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|fill_vertical"
+            android:minWidth="70dp"
+            android:minHeight="40dp"
+            android:text="学校"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edittext_user_school"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/textview_majority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|fill_vertical"
+            android:minWidth="70dp"
+            android:minHeight="40dp"
+            android:text="专业"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edittext_user_majority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+        <Button
+            android:id="@+id/button_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:minHeight="50dp"
+            android:text="编辑" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">ReMa</string>
+    <string name="account">账号</string>
+    <string name="pwd">密码</string>
+    <string name="sign_in">注册</string>
+    <string name="sign_up">登陆</string>
+    <string name="switch_lang">切换为英文</string>
+    <string name="sign_up_fail_title">登陆失败</string>
+    <string name="sign_up_fail_cont">用户名或密码不正确， 剩余登陆次数: {0} 次 </string>
+    <string name="sign_up_success">登陆成功! </string>
+    <string name="title_activity_personal_home_page">PersonalHomePage</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

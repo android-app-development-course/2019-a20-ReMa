@@ -9,7 +9,7 @@
         >
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:id="@+id/detail_comment_uid"
             />
         <TextView
@@ -22,20 +22,24 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         >
         <ImageButton
-            android:layout_width="50sp"
-            android:layout_height="50sp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
             android:scaleType="fitXY"
-            android:src="@drawable/like"
+            android:background="@drawable/like"
             android:id="@+id/detailed_like"
+            android:layout_marginRight="10dp"
+
             />
         <ImageButton
-            android:layout_width="50sp"
-            android:layout_height="50sp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
             android:scaleType="fitXY"
-            android:src="@drawable/more"
+            android:background="@drawable/comment"
             android:id="@+id/detailed_more"
+            android:layout_marginRight="10dp"
             />
 
     </LinearLayout>

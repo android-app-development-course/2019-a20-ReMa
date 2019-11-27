@@ -35,7 +35,7 @@ public class PersonalHomePage extends AppCompatActivity {
         TextView textViewUserComment = findViewById(R.id.textview_my_comment);
 
         textViewUserName.setText(textViewUserName.getText() + user_name);
-        textViewUserStar.setText(textViewUserName.getText() + user_stars.toString());
+//        textViewUserStar.setText(textViewUserName.getText() + user_stars.toString());
         textViewUserName.setText(textViewUserName.getText() + user_comment.toString());
 
         // ---------------------------------------------------------------- buttons

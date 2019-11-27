@@ -24,7 +24,7 @@
         android:autoText="false"
         android:gravity="center_vertical"
         android:minWidth="360dp"
-        android:minHeight="40dp"
+        android:minHeight="50dp"
         android:text="TextView"
         android:textAllCaps="false"
         android:textSize="18sp" />

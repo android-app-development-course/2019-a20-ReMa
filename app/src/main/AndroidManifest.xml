@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"/>
+<!--        <activity android:name=".MainActivity"/>-->
         <activity android:name=".PreviewHistory"/>
         <activity android:name=".MyCourseActivity" />
         <activity android:name=".MyCommentActivity" />
@@ -21,7 +21,7 @@
             android:name=".PersonalHomePage"
             android:label="@string/title_activity_personal_home_page"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SignUpActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,6 +30,8 @@
         </activity>
         <activity android:name=".LessonList"/>
         <activity android:name=".LessonDetail"/>
+        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".Search"/>
     </application>
 
 </manifest>

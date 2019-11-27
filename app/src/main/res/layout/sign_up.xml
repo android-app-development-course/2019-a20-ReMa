@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg13"
     tools:context=".SignUpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="50dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,6 +40,7 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/account"
+                android:textColor="#000000"
                 android:singleLine="true"
                 android:text="account" />
 
@@ -58,6 +60,7 @@
                 android:hint="@string/pwd"
                 android:inputType="textPassword"
                 android:singleLine="true"
+                android:textColor="#000000"
                 android:text="123456" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -75,12 +78,13 @@
 
         <Switch
             android:id="@+id/switch_lang"
-            android:layout_width="188dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:text="@string/switch_lang"
             android:textColor="#8BC34A"
+            android:layout_marginLeft="35dp"
             tools:text="@string/switch_lang" />
     </LinearLayout>
 

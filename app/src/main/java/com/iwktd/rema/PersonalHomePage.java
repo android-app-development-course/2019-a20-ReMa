@@ -51,15 +51,7 @@ public class PersonalHomePage extends AppCompatActivity {
                 button_view_history
         );
 
-    }
-
-    void setListenerForButtons(
-            Button button_my_info ,
-            Button button_my_comment,
-            Button button_my_collection,
-            Button button_view_history)
-    {
-        // 注意this.data状态更新
+        // 2019-11-27
         final Bundle PersonalInfo = (Bundle)this.data.clone();
         button_my_info.setOnClickListener(
                 new View.OnClickListener(){
@@ -106,7 +98,7 @@ public class PersonalHomePage extends AppCompatActivity {
                     }
                 }
         );
-    }
 
+    }
 
 }

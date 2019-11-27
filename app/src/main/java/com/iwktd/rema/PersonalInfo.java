@@ -49,55 +49,26 @@ public class PersonalInfo extends AppCompatActivity {
                             isEditable = false;
                             setEditable(false);
                             // 更改完成， 持久化
-                            persistEdition();
                             changeIsEditable.setText("编辑");
                         }
                         Log.d("PersonalInfo", "editable" + isEditable);
                     }
                 }
         );
-        // load user's info
-        updateInfo();
-
-    }
-
-    void updateInfo(){
-        if (this.textview_user_id != null){
-            this.textview_user_id.setText(String.valueOf(personInfo.getInt("user_id")));
-        }
-        if (this.edittext_user_name != null){
-            this.edittext_user_name.setText(personInfo.getString("user_name"));
-        }
-        if (this.edittext_user_sex != null){
-            this.edittext_user_sex.setText("男");
-        }
-        if (this.edittext_school != null){
-            this.edittext_school.setText("华南师范大学");
-        }
-        if (this.edittext_majority != null){
-            this.edittext_majority.setText("搬砖");
-        }
+        this.textview_user_id.setText(String.valueOf(personInfo.getInt("user_id")));
+        this.edittext_user_name.setText(personInfo.getString("user_name"));
+        this.edittext_user_sex.setText("男");
+        this.edittext_school.setText("华南师范大学");
+        this.edittext_majority.setText("搬砖");
     }
 
     void setEditable(boolean flag){
-
-        if (this.edittext_user_name != null){
-            this.edittext_user_name.setEnabled(flag);
-        }
-        if (this.edittext_user_sex != null){
-            this.edittext_user_sex.setEnabled(flag);
-        }
-        if (this.edittext_school != null){
-            this.edittext_school.setEnabled(flag);
-        }
-        if (this.edittext_majority != null){
-            this.edittext_majority.setEnabled(flag);
-        }
+        this.edittext_user_name.setEnabled(flag);
+        this.edittext_user_sex.setEnabled(flag);
+        this.edittext_school.setEnabled(flag);
+        this.edittext_majority.setEnabled(flag);
     }
 
-    void persistEdition(){
-        // 将个人信息的更改持久化
-    }
 
 
 }

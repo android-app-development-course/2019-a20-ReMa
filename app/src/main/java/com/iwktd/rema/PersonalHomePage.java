@@ -44,12 +44,6 @@ public class PersonalHomePage extends AppCompatActivity {
         Button button_my_collection = findViewById(R.id.button_my_collection);
         Button button_view_history = findViewById(R.id.button_view_history);
 
-        setListenerForButtons(
-                button_my_info,
-                button_my_comment,
-                button_my_collection,
-                button_view_history
-        );
 
         // 2019-11-27
         final Bundle PersonalInfo = (Bundle)this.data.clone();

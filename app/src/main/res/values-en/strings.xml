@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SignUp</string>
+    <string name="account">account</string>
+    <string name="pwd">password</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="switch_lang">switch to Chinese</string>
+    <string name="sign_up_fail_title">Fail to sign up</string>
+    <string name="sign_up_fail_cont">Incorrect account or password. You still can try {0} times. </string>
+    <string name="sign_up_success">Success! </string>
+</resources>

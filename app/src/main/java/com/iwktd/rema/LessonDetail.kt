@@ -2,12 +2,12 @@ package com.iwktd.rema
 
 import android.app.ActionBar
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.SimpleAdapter
+import android.view.LayoutInflater
+import android.widget.*
 import kotlinx.android.synthetic.main.go_back.*
 import kotlinx.android.synthetic.main.lesson_detail.*
 import java.nio.file.attribute.AclFileAttributeView
@@ -16,8 +16,17 @@ class LessonDetail :Activity() {
     data class comment(val cid : Int, val uid : Int)
 
     var id : Int = 0
+    lateinit var comment_list : MutableList<Map<String, String>>
 
-    fun getData() : List<Map<String, String>>{
+    fun insert_comment(uid : Int, comment : String){
+        val map = mutableMapOf<String, String>()
+        map.put("uid", "User${uid} says: ")
+        map.put("comment","New comment")
+
+        comment_list.add(0, map)
+    }
+
+    fun getData() : MutableList<Map<String, String>>{
         val cid = 1
         val list = mutableListOf<Map<String, String>>()
 
@@ -43,6 +52,11 @@ class LessonDetail :Activity() {
         back_btn.setOnClickListener {
             finish()
         }
+
+        add_comment.setOnClickListener {
+            insert_comment(1, "Good")
+            updateComment()
+        }
     }
 
     override fun onStart() {
@@ -58,7 +72,12 @@ class LessonDetail :Activity() {
         // ...
 
         // retrieve a list of comments
-        val simpleAdapter = SimpleAdapter(this, getData(), R.layout.comment, arrayOf("uid", "comment"), intArrayOf(R.id.detail_comment_uid, R.id.detailed_comment));
+        comment_list = getData()
+
+    }
+
+    fun updateComment(){
+        val simpleAdapter = SimpleAdapter(this, comment_list, R.layout.comment, arrayOf("uid", "comment"), intArrayOf(R.id.detail_comment_uid, R.id.detailed_comment));
         detailed_listView.adapter = simpleAdapter
 
     }

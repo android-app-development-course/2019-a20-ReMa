@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.Toast
+import org.jetbrains.anko.startActivityForResult
 import kotlin.collections.*
 
 class LessonList :Activity() {
@@ -76,10 +77,11 @@ class LessonList :Activity() {
 
                 //Toast.makeText(applicationContext, "${id} is clicked", Toast.LENGTH_LONG).show()
 
-                val intent = Intent()
-                intent.setClass(applicationContext, LessonDetail::class.java)
-                intent.putExtra("lesson_id", id)
-                startActivityForResult(intent, 123)
+                //val intent = Intent()
+                //intent.setClass(applicationContext, LessonDetail::class.java)
+                //intent.putExtra("lesson_id", id)
+                //startActivityForResult(intent, 123)
+                startActivityForResult<LessonDetail>(123, "lesson_id" to id)
             }
         }
     }

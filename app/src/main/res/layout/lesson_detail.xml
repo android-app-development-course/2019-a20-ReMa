@@ -24,23 +24,37 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name of lesson"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CS"
-                android:id="@+id/detailed_lesson_name"
-                />
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name of lesson"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CS"
+                    android:id="@+id/detailed_lesson_name"
+                    />
 
+            </LinearLayout>
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/number1"
+                android:id="@+id/add_comment"
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

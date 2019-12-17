@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:background="#000000"
+    >
+
+
+<!--这个没有对应的Java代码，只有xml文件-->
+
+
+    <com.iwktd.rema.ui.view.RevealBackgroundView
+        android:id="@+id/vRevealBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        >
+
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="@dimen/default_elevation"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:src="@drawable/img_toolbar_logo"
+                    android:text="添加课程"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+            </androidx.appcompat.widget.Toolbar>
+
+        <EditText
+            android:id="@+id/et_academy"
+            android:layout_marginTop="20dp"
+            android:hint="请输入学院名"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_lesson"
+            android:layout_marginTop="20dp"
+            android:hint="请输入课程名"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_teacher"
+            android:layout_marginTop="20dp"
+            android:hint="请输入任课老师名字"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_grade"
+            android:layout_marginTop="20dp"
+            android:hint="请输入课程所修年级"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="请上传照片:"/>
+            <ImageView
+                android:id="@+id/et_photo"
+                android:clickable="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="30dp"
+                android:alpha="0.4"
+                android:src="@drawable/tianjiazhaopian"/>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btRegister"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+
+            android:background="#55333333"
+            android:text="发布" />
+
+
+
+    </LinearLayout>
+</FrameLayout>

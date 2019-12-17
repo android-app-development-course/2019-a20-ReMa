@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F0F0"
+    tools:context="com.iwktd.rema.ui.myComment.MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#2d5d81">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/tv_myComTit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="我的评论"
+            android:textColor="#fff"
+            android:textStyle="italic"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"/>
+    </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>

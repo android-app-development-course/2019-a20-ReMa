@@ -16,6 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.iwktd.rema.ui.activity.MainActivity;
+
 import java.text.MessageFormat;
 import java.util.Locale;
 
@@ -39,7 +41,16 @@ public class SignUpActivity extends AppCompatActivity {
         final TextView text_pwd = findViewById(R.id.text_pwd);
         final Button button_sign_up = findViewById(R.id.button_sign_up);
         final Switch text_switch_lang = findViewById(R.id.switch_lang);
+        final TextView tv_sign_in = findViewById(R.id.tv_sign_in);
 
+        tv_sign_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //点击注册按钮 跳转sign_in页面（sign_in.xml ------------------未完成
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         text_switch_lang.setOnCheckedChangeListener(
@@ -93,6 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
                 && pwd.equals(new String("123456"));
     }
 
+    // TODO: Check SP. If didn't sign up, send request to Server.
     int getAccountID(String account, String pwd){
         if (account.equals(new String("account")) &&
                 pwd.equals(new String("123456"))){
@@ -129,8 +141,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     // use for testing.
+    // TODO:
     void switchToHomePage(int userID){
-        Intent intent = new Intent(SignUpActivity.this, PersonalHomePage.class);
+        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("user_name", "nb666233");
         bundle.putInt("user_id", userID);
@@ -141,9 +154,6 @@ public class SignUpActivity extends AppCompatActivity {
         intent.putExtras(bundle);
         Log.d("SignUpActivity", "Start home page");
         startActivity(intent);
-
-
-
     }
 }
 

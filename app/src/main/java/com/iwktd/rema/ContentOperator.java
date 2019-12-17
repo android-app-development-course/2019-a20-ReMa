@@ -73,20 +73,35 @@ public class ContentOperator {
     }
 
 
+    // 前置条件: Info 里面已经输入了账号密码
+    // 正常返回 非负值 , 异常返回-1
     public static int signIn(Activity act, Bundle info){
         // 检查是否已经登录
+        int resp = -1; // 登陆失败
         SharedPreferences sp = act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE);
         boolean is_signed_up = sp.getBoolean("is_signed_in", false);
         if (!is_signed_up){
+            // 如果成功，则更新了info的内容
             int status = askForSessionID(info);
             if (status >= 0){ // ok
-
+                String username = info.getString("username");
+                sp.edit()
+                        .putBoolean("is_signed_in", true)
+                        .putString("username", username)
+                        .apply();
+                resp = 0;
             }
+        }else{
+            resp = 1; // 表示已经登录了
         }
-        return -1;
+        return resp;
     }
 
-    public static int logOut(Activity act, Bundle){
+
+
+    public static int logOut(Activity act, Bundle info){
+        SharedPreferences sp = act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE);
+        sp.edit().putBoolean("is_signed_up", false).apply();
         return -1;
     }
 
@@ -123,10 +138,15 @@ public class ContentOperator {
         try{
             // 同步
             Response response = call.execute();
-            String session_id = request.header("Set-Cookie");
+            String session_id = response.header("Set-Cookie");
+            if (session_id == null){
+                Log.e("signIn", "Did not get session_id");
+                return -1;
+            }
             if (response.code() == 302) {
                 //处理网络请求的响应，处理UI需要在UI线程中处理
                 info.putString("session_id", session_id);
+                Log.d("signIn", session_id);
                 return 0;
             }else{
                 Log.e("signIn", "Can't get set-cookie field.");
@@ -139,6 +159,7 @@ public class ContentOperator {
 
     }
 
+    // 前提是info中有 session_id
     public static int getAllTable(Bundle info){
         // ok -> 0
         // else -> -1

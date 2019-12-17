@@ -16,7 +16,7 @@ public class ContentOperatorTest extends TestCase {
     }
 
     @Test
-    public void testSignIn(){
+    public void testAskForSessionID(){
         // 只有账号密码正确， 才能得到session_id
         String uid = "rema";
         String password = "admin";
@@ -33,4 +33,6 @@ public class ContentOperatorTest extends TestCase {
         }
 
     }
+
+
 }

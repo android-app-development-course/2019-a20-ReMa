@@ -1,6 +1,7 @@
 package com.iwktd.rema;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,39 +16,40 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-// TODO: 这些操作都是需要跟服务器进行协商的.
-// 如果成功则写入本地数据库， 如果失败则显示错误提示，等待用户再次执行.
+// TODO: 部分操作需要询问服务器
+// 2019-12 这里包含了很多常量
 public class ContentOperator {
-    final static String TAG = "ContentOperator";
+   public final static String TAG = "ContentOperator";
 
-    final static int OP_SIGN_IN = 1;
-    final static int OP_SIGN_UP = 2;
-    final static int OP_CREATE_COURSE = 3;
-    final static int OP_MODIFY_COURSE = 4;
-    final static int OP_DELETE_COURSE = 5;
-    final static int OP_CREATE_COMMENT = 6;
-    final static int OP_MODIFY_COMMENT = 7;
-    final static int OP_DELETE_COMMENT = 8;
-    final static int OP_MODIFY_INFO = 9; // 修改个人信息
-    final static int OP_LIKE = 10;
-    final static int OP_UNLIKE = 11;
-    final static int OP_GET_ALL_TABLE = 12;
+   public final static int OP_SIGN_IN = 1;
+   public final static int OP_SIGN_UP = 2;
+   public final static int OP_CREATE_COURSE = 3;
+   public final static int OP_MODIFY_COURSE = 4;
+   public final static int OP_DELETE_COURSE = 5;
+   public final static int OP_CREATE_COMMENT = 6;
+   public final static int OP_MODIFY_COMMENT = 7;
+   public final static int OP_DELETE_COMMENT = 8;
+   public final static int OP_MODIFY_INFO = 9; // 修改个人信息
+   public final static int OP_LIKE = 10;
+   public final static int OP_UNLIKE = 11;
+   public final static int OP_GET_ALL_TABLE = 12;
 
-    final static String SERVER_IP = "http://10.243.0.186:";
-    final static String SERVER_PORT = "8080";
-    final static String PATH_LOGIN = "/autho/login"; // post
-    final static String PATH_REGISTER_ = "/autho/register"; // post
-    final static String PATH_LOGOUT = "/autho/logout";
+   public final static String SERVER_IP = "http://10.243.0.186:";
+   public final static String SERVER_PORT = "8080";
+   public final static String PATH_LOGIN = "/autho/login"; // post
+   public final static String PATH_REGISTER_ = "/autho/register"; // post
+   public final static String PATH_LOGOUT = "/autho/logout";
 
-    final static String PATH_GET_DATA = "/mani/get_data/"; // + current_hash   0 -> all table
-    final static String PATH_CREATE_COMMENT = "/mani/create_comment";
-    final static String PATH_DELETE_COMMENT = "/mani/create_comment";
-    // final static String PATH_MODIFY_COMMENT = "/mani/create_comment";
-    final static String PATH_CREATE_COURSE = "/mani/create_course";
-    final static String PATH_DELETE_COURSE = "/mani/create_course";
-    // final static String PATH_MODIFY_COURSE= "/mani/create_comment";
+   public final static String PATH_GET_DATA = "/mani/get_data/"; // + current_hash   0 -> all table
+   public final static String PATH_CREATE_COMMENT = "/mani/create_comment";
+   public final static String PATH_DELETE_COMMENT = "/mani/create_comment";
+    //public final static String PATH_MODIFY_COMMENT = "/mani/create_comment";
+   public final static String PATH_CREATE_COURSE = "/mani/create_course";
+   public final static String PATH_DELETE_COURSE = "/mani/create_course";
+    //public final static String PATH_MODIFY_COURSE= "/mani/create_comment";
 
-    final static String SP_INFO = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
+    public final static String SP_INFO = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
+    public final static int MAX_COMMENT_LEN = 100; // 最大100个字符(英文也是)
 
     ContentOperator(){
         //
@@ -97,9 +99,12 @@ public class ContentOperator {
         return resp;
     }
 
+    public static int getUid(Context act){
+        return act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE)
+                .getInt("uid", -1);
+    }
 
-
-    public static int logOut(Activity act, Bundle info){
+    public static int logOut(Context act, Bundle info){
         SharedPreferences sp = act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE);
         sp.edit().putBoolean("is_signed_up", false).apply();
         return -1;

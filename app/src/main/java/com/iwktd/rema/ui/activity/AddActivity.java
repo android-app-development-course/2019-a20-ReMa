@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,12 +17,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
@@ -30,6 +34,8 @@ import com.commonsware.cwac.camera.CameraHostProvider;
 import com.commonsware.cwac.camera.CameraView;
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
+import com.iwktd.rema.ContentOperator;
+import com.iwktd.rema.ModelCourse;
 import com.iwktd.rema.ui.adapter.PhotoFiltersAdapter;
 import com.iwktd.rema.ui.view.RevealBackgroundView;
 
@@ -40,7 +46,7 @@ import butterknife.OnClick;
 import com.iwktd.rema.R;
 import com.iwktd.rema.Utils;
 
-
+// 创建课程的视图
 public class AddActivity extends BaseActivity
          {
     public static final String ARG_REVEAL_START_LOCATION = "reveal_start_location";
@@ -53,12 +59,14 @@ public class AddActivity extends BaseActivity
     @BindView(R.id.vRevealBackground)
     RevealBackgroundView vRevealBackground;
 
-    private boolean pendingIntro;
+    private boolean pendingIntro; // ?
     private int currentState;
-
     private File photoPath;
 
-    public static void startCameraFromLocation(int[] startingLocation, Activity startingActivity) {
+    // 2019-12
+    private  Button btnRegister = null;
+
+    public static void startCameraFromLocation(int uid, int[] startingLocation, Activity startingActivity) {
         Intent intent = new Intent(startingActivity, AddActivity.class);
         intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
         startingActivity.startActivity(intent);
@@ -73,7 +81,54 @@ public class AddActivity extends BaseActivity
         setupRevealBackground(savedInstanceState);
 //        setupPhotoFilters();
 
+        int uid = this.getIntent().getIntExtra("uid", -1);
+        if (uid < 0){
+            Log.w("AddActivity", "Didn't get uid!");
+        }
 
+        // 2019-12
+        btnRegister = findViewById(R.id.btRegister);
+        btnRegister.setEnabled(true);
+        btnRegister.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String cname = ((EditText) findViewById(R.id.et_lessonname)).getText().toString();
+                        String tname = ((EditText) findViewById(R.id.et_teacher)).getText().toString();
+                        String intro = ((EditText) findViewById(R.id.et_intro)).getText().toString();
+
+                        if (createNewCourse(cname, tname, intro, uid)){
+                            Log.d("AddActivity", "Success");
+                            finish();
+                        }else{
+                            Log.e("AddActivity", "Failed to add course");
+                        }
+                    }
+                }
+        );
+
+    }
+
+    boolean createNewCourse(String cname, String tname, String intro, int uid){
+        ModelCourse tb = new ModelCourse(this, null, 1);
+        ContentValues cnt = new ContentValues();
+        cnt.put(ModelCourse.tname, tname);
+        cnt.put(ModelCourse.cname, cname);
+        cnt.put(ModelCourse.intro, intro);
+        cnt.put(ModelCourse.uid, String.valueOf(uid));
+        int id = (int) tb.getWritableDatabase().insert(
+                ModelCourse.tblName,
+                null,
+                cnt
+        );
+
+        if (id >= 0){
+            Log.d("AddActivity", "insert success: id = " + id);
+        }else{
+            Log.e("AddActivity", "insert failed.");
+        }
+
+        return id >= 0;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

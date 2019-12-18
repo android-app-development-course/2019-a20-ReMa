@@ -2,10 +2,15 @@ package com.iwktd.rema.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.iwktd.rema.ContentOperator;
+import com.iwktd.rema.ModelComments;
 import com.iwktd.rema.R;
 
 /**
@@ -16,11 +21,13 @@ public class SendCommentButton extends ViewAnimator implements View.OnClickListe
     public static final int STATE_DONE = 1;
 
     private static final long RESET_STATE_DELAY_MILLIS = 2000;
-
+    private Context context;
     private int currentState;
 
     private OnSendClickListener onSendClickListener;
 
+
+    // 2019-12 这个看起来可以做异步调用？
     private Runnable revertStateRunnable = new Runnable() {
         @Override
         public void run() {
@@ -30,6 +37,7 @@ public class SendCommentButton extends ViewAnimator implements View.OnClickListe
 
     public SendCommentButton(Context context) {
         super(context);
+        this.context = context;
         init();
     }
 
@@ -74,11 +82,13 @@ public class SendCommentButton extends ViewAnimator implements View.OnClickListe
         showNext();
     }
 
+
     @Override
     public void onClick(View v) {
         if (onSendClickListener != null) {
             onSendClickListener.onSendClickListener(this);
         }
+
     }
 
     public void setOnSendClickListener(OnSendClickListener onSendClickListener) {
@@ -93,4 +103,5 @@ public class SendCommentButton extends ViewAnimator implements View.OnClickListe
     public interface OnSendClickListener {
         public void onSendClickListener(View v);
     }
+
 }

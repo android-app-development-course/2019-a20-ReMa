@@ -2,6 +2,7 @@ package com.iwktd.rema.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,10 +11,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
+
+import com.iwktd.rema.ContentOperator;
+import com.iwktd.rema.ModelComments;
+import com.iwktd.rema.ModelCourse;
 import com.iwktd.rema.MyDialog;
 import com.iwktd.rema.SearchDemo;
 import com.iwktd.rema.ui.adapter.FeedAdapter;
@@ -25,6 +32,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import com.iwktd.rema.R;
 import com.iwktd.rema.Utils;
+
+import java.util.HashMap;
 
 public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener,
         FeedContextMenu.OnFeedContextMenuItemClickListener {
@@ -42,8 +51,11 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
     private Button button;
     private FeedAdapter feedAdapter;
-
     private boolean pendingIntroAnimation;
+
+    // 2019-12
+    // 通过feedadaptor.pos2cid 获得 cid.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,16 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
     }
 
+    /*
+    @Override
+    protected void onResume(){
+        super.onResume();
+        feedAdapter.updateItems(false);
+        Log.d("MainActivity", "Update item list.");
+    }*/
+
+    // 2019-12
+    // 主页的卡片
     private void setupFeed() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
             @Override
@@ -154,6 +176,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         feedAdapter.updateItems(true);
     }
 
+    // 2019-12
     // TODO: click and open comment list of the course.
     @Override
     public void onCommentsClick(View v, int position) {
@@ -161,6 +184,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         int[] startingLocation = new int[2];
         v.getLocationOnScreen(startingLocation);
         intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION, startingLocation[1]);
+        intent.putExtra(ModelComments.cid, this.feedAdapter.pos2cid.get(position));
         startActivity(intent);
         overridePendingTransition(0, 0);
     }
@@ -199,18 +223,29 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         FeedContextMenuManager.getInstance().hideContextMenu();
     }
 
+    // 2019-12 点击创建课程
     @OnClick(R.id.btnCreate)
     public void onTakePhotoClick() {
         int[] startingLocation = new int[2];
         fabCreate.getLocationOnScreen(startingLocation);
         startingLocation[0] += fabCreate.getWidth() / 2;
-       AddActivity.startCameraFromLocation(startingLocation, this);
-//        PublishActivity.startCameraFromLocation(startingLocation, this);
-        overridePendingTransition(0, 0);
+        // 2019-12  Camera 什么鬼
+        int uid = ContentOperator.getUid(this);
+        if (uid >= 0){
+            Intent intent = new Intent();
+            intent.putExtra("uid", uid);
+            AddActivity.startCameraFromLocation(uid, startingLocation, this);
+            overridePendingTransition(0, 0);
+        }else{
+            Log.e("MainActivity", "Can't get uid");
+        }
+
     }
 
-
+    // 2019-12  点赞
     public void showLikedSnackbar() {
         Snackbar.make(clContent, "Liked!", Snackbar.LENGTH_SHORT).show();
     }
+
+
 }

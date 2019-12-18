@@ -1,6 +1,7 @@
 package com.iwktd.rema;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,7 +27,7 @@ public class ModelUser extends SQLiteOpenHelper  {
     // 创建数据库， 添加初始数据.
     public void onCreate(SQLiteDatabase db) {
         //String drop = "drop table diary;";
-        String createSQL = "create table user(u_id integer primary key autoincrement,type int not null,username text not null,password text not null);";
+        String createSQL = "create table user(u_id integer primary key autoincrement,type text not null default 'U',username text unique not null,password text not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
         String insert = "insert into user (uid, type, username, password) values (1, 1, 'karl-han', 'admin'), (2, 1, 'rema', 'admin');";
@@ -51,13 +52,20 @@ public class ModelUser extends SQLiteOpenHelper  {
         SQLiteDatabase db = model.getReadableDatabase();
 
         Cursor cursor = db.query(
-            ModelUser.tblName, null,null,null,null,null,ModelUser.uid, null
+            ModelUser.tblName,
+                null,
+                null,
+                null,
+                null,
+                null,
+                ModelUser.uid,
+                null
         );
 
         while(cursor.moveToNext()){
                 HashMap<String, String> mapper = new HashMap<>();
                 mapper.put(ModelUser.uid, String.valueOf(cursor.getInt(0)));
-                mapper.put(ModelUser.type, String.valueOf(cursor.getInt(1)));
+                mapper.put(ModelUser.type, cursor.getString(1));
                 mapper.put(ModelUser.username, cursor.getString(2));
                 mapper.put(ModelUser.password, cursor.getString(3));
                 res.add(mapper);
@@ -74,17 +82,45 @@ public class ModelUser extends SQLiteOpenHelper  {
         SQLiteDatabase db = model.getReadableDatabase();
         // 只取一个
         Cursor cursor = db.query(
-                ModelUser.tblName, null,null,null,null,null,ModelUser.uid, "1"
+                ModelUser.tblName,
+                null,
+                ModelUser.uid + "=?",
+                new String[]{uid+""},
+                null,
+                null,
+                null,
+                "1"
         );
         if (cursor.moveToNext()){
             res.put(ModelUser.uid, String.valueOf(cursor.getInt(0)));
-            res.put(ModelUser.type, String.valueOf(cursor.getInt(1)));
+            res.put(ModelUser.type, cursor.getString(1));
             res.put(ModelUser.username, cursor.getString(2));
             res.put(ModelUser.password, cursor.getString(3));
         }
         cursor.close();
         db.close();
         return res;
+    }
+    // return id
+    public static int addNewUser(Context cnt, String type, String username, String password){
+        int id = -1;
+        ModelUser model = new ModelUser(cnt, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+        // 只取一个
+
+        ContentValues values = new ContentValues();
+        values.put(ModelUser.username, username);
+       // values.put(ModelUser.uid, uid);
+        values.put(ModelUser.type, type);
+        values.put(ModelUser.password, password);
+
+        id = (int)db.insert(
+                ModelUser.tblName, null, values
+        );
+        if (id <= 0){
+            Log.e(ModelUser.tblName, "Failed to insert!");
+        }
+        return id;
     }
 
 }

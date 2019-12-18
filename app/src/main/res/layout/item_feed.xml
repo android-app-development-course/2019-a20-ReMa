@@ -78,12 +78,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/academy_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="学院：计算机学院" />
-
-                <TextView
                     android:id="@+id/lesson_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,8 +88,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="任课老师：黄**老师" />
+
                 <TextView
-                    android:id="@+id/grade_name"
+                    android:id="@+id/creator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="学院：计算机学院" />
+
+                <TextView
+                    android:id="@+id/intro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="所修时间：大学二年级" />

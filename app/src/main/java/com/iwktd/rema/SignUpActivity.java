@@ -4,12 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -70,33 +72,52 @@ public class SignUpActivity extends AppCompatActivity {
                         String pwd = text_pwd.getText().toString();
                         if (!Check(account, pwd)){
                             cnt_sign_up -= 1;
-                            // Display alert window.
                             new AlertDialog.Builder(SignUpActivity.this)
                                     .setTitle(R.string.sign_up_fail_title)
                                     .setMessage(MessageFormat.format(getString(R.string.sign_up_fail_cont), cnt_sign_up))
                                     .setPositiveButton("OK", null)
                                     .show();
                             if (cnt_sign_up == 0){
-                                // Disable button_sign_up.
                                 button_sign_up.setEnabled(false);
                             }
                         }else{
                             cnt_sign_up = MAX_SIGN_UP;
-                            // Jump to welcome page.
-                            /*
-                            new AlertDialog.Builder(SignUpActivity.this)
-                                    .setTitle(getString(R.string.sign_up_success))
-                                    //.setMessage("用户名或密码不正确， 剩余登陆次数: " + String.valueOf(cnt_sign_up))
-                                    .setPositiveButton("OK", null)
-                                    .show();
-                            */
                             int id = getAccountID(account, pwd);
+                            saveUserInfoToSP();
                             switchToHomePage(id);
                         }
                     }
                 }
         );
 
+        this.isFirstTime();
+
+    }
+    // 2019-12
+    // Check first time.
+    void isFirstTime(){
+        SharedPreferences sp = this.getSharedPreferences(ContentOperator.SP_INFO, MODE_PRIVATE);
+        boolean is_first_time = sp.getBoolean("is_first_time", true);
+        Log.d("Login", "Is First time?");
+        if (is_first_time){
+            // 自动建立表
+            ModelUser db_user = new ModelUser(this, null, 1);
+            ModelTeacher db_t = new ModelTeacher(this, null, 1);
+            ModelCourse db_course = new ModelCourse(this, null, 1);
+            ModelComments db_command = new ModelComments(this, null, 1);
+
+
+            //sp.edit().putBoolean("is_first_time", false).apply();
+            Log.d("login", "finish initialization");
+        }
+    }
+
+    // 2019-12
+    void saveUserInfoToSP(){
+        SharedPreferences sp = this.getSharedPreferences(ContentOperator.SP_INFO, MODE_PRIVATE);
+        sp.edit()
+                .putString("username", "admin")
+                .putInt("uid", 300).apply();
     }
 
     boolean Check(String account, String pwd){

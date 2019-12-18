@@ -41,47 +41,38 @@
             </androidx.appcompat.widget.Toolbar>
 
         <EditText
-            android:id="@+id/et_academy"
-            android:layout_marginTop="20dp"
-            android:hint="请输入学院名"
+            android:id="@+id/et_teacher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="请输入教师" />
         <EditText
-            android:id="@+id/et_lesson"
+            android:id="@+id/et_lessonname"
             android:layout_marginTop="20dp"
             android:hint="请输入课程名"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/et_teacher"
-            android:layout_marginTop="20dp"
-            android:hint="请输入任课老师名字"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/et_grade"
-            android:layout_marginTop="20dp"
-            android:hint="请输入课程所修年级"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="请上传照片:"/>
-            <ImageView
-                android:id="@+id/et_photo"
-                android:clickable="true"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="30dp"
-                android:alpha="0.4"
-                android:src="@drawable/tianjiazhaopian"/>
+                android:text="简介: " />
+
+            <EditText
+                android:id="@+id/et_intro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
 
         </LinearLayout>
 

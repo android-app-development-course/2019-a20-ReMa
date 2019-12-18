@@ -1,5 +1,6 @@
 package com.iwktd.rema;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,15 +11,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ModelCourse extends SQLiteOpenHelper {
-    public final static String tblName = "Course";
+    public final static String tblName = "course";
     public final static String cid = "cid";
     public final static String cname = "cname"; // text
-    public final static String tid = "tid";     // int
+    public final static String tname = "tname";     // int
     public final static String intro = "intro"; // text
     public final static String likes = "likes"; // int , default 0
     public final static String uid = "uid";  // int
 
-    ModelCourse(Context context, SQLiteDatabase.CursorFactory factory, int version) {
+    public ModelCourse(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, ModelCourse.tblName, factory, version);
     }
 
@@ -28,15 +29,15 @@ public class ModelCourse extends SQLiteOpenHelper {
         String createSQL = "create table course(\n" +
                 "        cid integer primary key autoincrement,\n" +
                 "        cname text,\n" +
-                "        tid integer not null,\n" +
+                "        tname text not null,\n" +
                 "        intro text,\n" +
-                "        likes integer not null,\n" +
+                "        likes integer not null default 0,\n" +
                 "        uid integer not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
-        String insert = "insert into course (cid, cname, tid, intro) values \n" +
-                "    (1, '计算机安全学', 1, '学习与密码学相关知识，了解密码学历史'),\n" +
-                "    (2, '编译原理', 2, '学习如何将代码转换成机器可执行代码的整个过程');";
+        String insert = "insert into course (cid, cname, tname, intro, uid) values \n" +
+                "    (1, '计算机安全学', '斌头', '学习与密码学相关知识，了解密码学历史', 1),\n" +
+                "    (2, '编译原理', '黄煜廉', '学习如何将代码转换成机器可执行代码的整个过程', 2);";
         db.execSQL(insert);
         Log.d("ModelCourse", "create table.");
     }
@@ -65,10 +66,10 @@ public class ModelCourse extends SQLiteOpenHelper {
             HashMap<String, String> mapper = new HashMap<>();
             mapper.put(ModelCourse.cid, String.valueOf(cursor.getInt(0)));
             mapper.put(ModelCourse.cname, cursor.getString(1));
-            mapper.put(ModelCourse.tid, String.valueOf(cursor.getInt(0)));
-            mapper.put(ModelCourse.intro, cursor.getString(1));
-            mapper.put(ModelCourse.likes, String.valueOf(cursor.getInt(0)));
-            mapper.put(ModelCourse.uid, cursor.getString(1));
+            mapper.put(ModelCourse.tname, cursor.getString(2));
+            mapper.put(ModelCourse.intro, cursor.getString(3));
+            mapper.put(ModelCourse.likes, String.valueOf(cursor.getInt(4)));
+            mapper.put(ModelCourse.uid, cursor.getString(5));
             res.add(mapper);
         }
         cursor.close();
@@ -77,21 +78,120 @@ public class ModelCourse extends SQLiteOpenHelper {
         return res;
     }
 
-    public HashMap<String, String> getUserByUid(Context cnt, int uid){
-        HashMap<String, String> res = new HashMap<>();
+    // 匹配
+    public static ArrayList<HashMap<String, String>> getCoursesByCname(Context cnt, String cname){
+        ArrayList<HashMap<String, String>> res = new ArrayList<>();
+        ModelCourse model = new ModelCourse(cnt, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                ModelCourse.tblName,
+                null,
+                ModelCourse.cname + " like ?",
+                new String[]{"%"+cname+"%"},
+                null,
+                null,
+                null,
+                null
+        );
+
+        while(cursor.moveToNext()){
+            HashMap<String, String> mapper = new HashMap<>();
+            mapper.put(ModelCourse.cid, String.valueOf(cursor.getInt(0)));
+            mapper.put(ModelCourse.cname, cursor.getString(1));
+            mapper.put(ModelCourse.tname, cursor.getString(2));
+            mapper.put(ModelCourse.intro, cursor.getString(3));
+            mapper.put(ModelCourse.likes, String.valueOf(cursor.getInt(4)));
+            mapper.put(ModelCourse.uid, cursor.getString(5));
+            res.add(mapper);
+        }
+        cursor.close();
+        db.close();
+
+        return res;
+    }
+
+    //
+    public static ArrayList<HashMap<String, String>> getCoursesByCid(Context cnt, int cid){
+        ArrayList<HashMap<String, String>> res = new ArrayList<>();
+        ModelCourse model = new ModelCourse(cnt, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                ModelCourse.tblName,
+                null,
+                ModelCourse.cid + "=?",
+                new String[]{cid+""},
+                null,
+                null,
+                null,
+                null
+        );
+
+        while(cursor.moveToNext()){
+            HashMap<String, String> mapper = new HashMap<>();
+            mapper.put(ModelCourse.cid, String.valueOf(cursor.getInt(0)));
+            mapper.put(ModelCourse.cname, cursor.getString(1));
+            mapper.put(ModelCourse.tname, cursor.getString(2));
+            mapper.put(ModelCourse.intro, cursor.getString(3));
+            mapper.put(ModelCourse.likes, String.valueOf(cursor.getInt(4)));
+            mapper.put(ModelCourse.uid, cursor.getString(5));
+            res.add(mapper);
+        }
+        cursor.close();
+        db.close();
+
+        return res;
+    }
+
+    public HashMap<String, String> getCourseByCid(Context cnt, int cid){
+        HashMap<String, String> mapper = new HashMap<>();
         ModelCourse model = new ModelCourse(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
         // 只取一个
         Cursor cursor = db.query(
-                ModelCourse.tblName, null,null,null,null,null,ModelCourse.uid, "1"
+                ModelCourse.tblName,
+                null,
+                ModelCourse.cid + "=?",
+                new String[]{cid+""},
+                null,null,ModelCourse.uid, "1"
         );
         if (cursor.moveToNext()){
-            res.put(ModelCourse.uid, String.valueOf(cursor.getInt(0)));
-            res.put(ModelCourse.username, cursor.getString(1));
+            mapper.put(ModelCourse.cid, String.valueOf(cursor.getInt(0)));
+            mapper.put(ModelCourse.cname, cursor.getString(1));
+            mapper.put(ModelCourse.tname, cursor.getString(2));
+            mapper.put(ModelCourse.intro, cursor.getString(3));
+            mapper.put(ModelCourse.likes, String.valueOf(cursor.getInt(4)));
+            mapper.put(ModelCourse.uid, cursor.getString(5));
         }
         cursor.close();
         db.close();
-        return res;
+        return mapper;
     }
+
+    public static int addNewCourse(Context cnt, String cname, String tname, String intro, int likes, int uid){
+        int id = -1;
+        ModelCourse model = new ModelCourse(cnt, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+        // 只取一个
+
+        ContentValues values = new ContentValues();
+        values.put(ModelCourse.cname, cname);
+        values.put(ModelCourse.tname, tname);
+        values.put(ModelCourse.intro, intro);
+        values.put(ModelCourse.likes, likes);
+        values.put(ModelCourse.uid, uid);
+
+        id = (int)db.insert(
+                ModelCourse.tblName, null, values
+        );
+        if (id <= 0){
+            Log.e(ModelCourse.tblName, "Failed to insert!");
+        }
+
+        return id;
+    }
+
+
 
 }

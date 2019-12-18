@@ -3,31 +3,31 @@ package com.iwktd.rema.ui.adapter;
 import android.content.Context;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
+import com.iwktd.rema.ModelCourse;
+import com.iwktd.rema.ModelUser;
 import com.iwktd.rema.ui.activity.MainActivity;
 import com.iwktd.rema.ui.view.LoadingFeedItemView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.lang.String;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.iwktd.rema.R;
+
+import static java.lang.Integer.parseInt;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button";
@@ -47,9 +47,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
     }
 
+    // 2019-12 --> 给MainActivity
+    public HashMap<Integer, Integer> pos2cid = null;
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_DEFAULT) {
+            // 这个就是首页的 课程简介 的item
             View view = LayoutInflater.from(context).inflate(R.layout.item_feed, parent, false);
             CellFeedViewHolder cellFeedViewHolder = new CellFeedViewHolder(view);
             setupClickableViews(view, cellFeedViewHolder);
@@ -157,15 +161,29 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void updateItems(boolean animated) {
         feedItems.clear();
-        feedItems.addAll(Arrays.asList(
-                new FeedItem(33, false),
-                new FeedItem(1, false),
-                new FeedItem(223, false),
-                new FeedItem(2, false),
-                new FeedItem(6, false),
-                new FeedItem(8, false),
-                new FeedItem(99, false)
-        ));
+
+        // db 读取数据
+        ArrayList<HashMap<String, String>> courseInfo = ModelCourse.getAllCourse(this.context);
+        this.pos2cid = new HashMap<>();
+
+        for(int i = 0; i < courseInfo.size(); i++){
+            HashMap<String, String> c = courseInfo.get(i);
+            if (c != null){
+                int likes = parseInt(c.getOrDefault(ModelCourse.likes, "0"));
+                feedItems.add(
+                        new FeedItem(likes,
+                                false,
+                                "教师: "+c.get(ModelCourse.tname),
+                                "课程名: "+c.get(ModelCourse.cname),
+                                "创建者: "+c.get(ModelCourse.cid),
+                                "简介: "+c.get(ModelCourse.intro)
+                                )
+                );
+                // 创建 pos -> cid, 也即是 i -> cid
+                this.pos2cid.put(i, parseInt(c.get(ModelCourse.cid)));
+            }
+        }
+
         if (animated) {
             notifyItemRangeInserted(0, feedItems.size());
         } else {
@@ -204,6 +222,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.vImageRoot)
         LinearLayout vImageRoot;
 
+        // 2019-12 -----------------------------------------
+        @BindView(R.id.creator)
+        TextView creator;
+        @BindView(R.id.lesson_name)
+        TextView lessonname;
+        @BindView(R.id.teacher)
+        TextView teachername;
+        @BindView(R.id.intro)
+        TextView intro;
+
         FeedItem feedItem;
 
         public CellFeedViewHolder(View view) {
@@ -221,6 +249,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     R.plurals.likes_count, feedItem.likesCount, feedItem.likesCount
             ));
 //            tsLikesCounter.setText(feedItem.likesCount);
+
+            // 2019-12
+            teachername.setText(feedItem.teachername);
+            //academyname.setText(feedItem.academyname);
+            lessonname.setText(feedItem.coursename);
+            intro.setText(feedItem.intro);
+            creator.setText(feedItem.creator);
+
         }
 
         public FeedItem getFeedItem() {
@@ -247,9 +283,19 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public int likesCount;
         public boolean isLiked;
 
-        public FeedItem(int likesCount, boolean isLiked) {
+        // 2019-12
+        public String coursename;
+        public String teachername; //.tname -> tname
+        public String creator; // uid ->
+        public String intro;
+
+        public FeedItem(int likesCount, boolean isLiked, String teacherName, String coursename, String creater, String intro) {
             this.likesCount = likesCount;
             this.isLiked = isLiked;
+            this.coursename = coursename;
+            this.teachername = teacherName;
+            this.intro = intro;
+            this.creator = creater;
         }
     }
 

@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +13,17 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.iwktd.rema.ModelComments;
+import com.iwktd.rema.ModelCourse;
 import com.iwktd.rema.ui.utils.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.iwktd.rema.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by froger_mcs on 11.11.14.
@@ -31,9 +38,21 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
 
+    // 2019-12
+    ArrayList<HashMap<String, String>> data = null;
+    private int cid;
+
     public CommentsAdapter(Context context) {
         this.context = context;
         avatarSize = context.getResources().getDimensionPixelSize(R.dimen.comment_avatar_size);
+    }
+
+    // 2019-12
+    // 获得
+    public void setDataByCid(int cid){
+        this.data = ModelComments.getCommentsByCid(this.context, cid);
+        this.itemsCount = this.data.size();
+        this.cid = cid;
     }
 
     @Override
@@ -46,18 +65,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         runEnterAnimation(viewHolder.itemView, position);
         CommentViewHolder holder = (CommentViewHolder) viewHolder;
-        switch (position % 3) {
-            case 0:
-                holder.tvComment.setText("很棒");
-                break;
-            case 1:
-                holder.tvComment.setText("好好好");
-                break;
-            case 2:
-                holder.tvComment.setText("优秀好哈好.");
-                break;
-        }
-
+        // 2019-12
+        holder.tvComment.setText(this.data.get(position).get(ModelComments.content));
+        // ??
         Picasso.with(context)
                 .load(R.drawable.ic_launcher)
                 .centerCrop()
@@ -93,13 +103,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return itemsCount;
     }
 
+    // 2019-12
+    // 这里设置itemCount的大小
     public void updateItems() {
-        itemsCount = 10;
+        setDataByCid(this.cid); // cid不变
         notifyDataSetChanged();
     }
 
+    // 2019-12
+    // 修改， 改为重新读取db， 后面可继续优化
     public void addItem() {
-        itemsCount++;
+        setDataByCid(cid);
         notifyItemInserted(itemsCount - 1);
     }
 

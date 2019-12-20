@@ -66,7 +66,7 @@ public class AddActivity extends BaseActivity
     // 2019-12
     private  Button btnRegister = null;
 
-    public static void startCameraFromLocation(int uid, int[] startingLocation, Activity startingActivity) {
+    public static void startCameraFromLocation(int[] startingLocation, Activity startingActivity) {
         Intent intent = new Intent(startingActivity, AddActivity.class);
         intent.putExtra(ARG_REVEAL_START_LOCATION, startingLocation);
         startingActivity.startActivity(intent);
@@ -81,7 +81,7 @@ public class AddActivity extends BaseActivity
         setupRevealBackground(savedInstanceState);
 //        setupPhotoFilters();
 
-        int uid = this.getIntent().getIntExtra("uid", -1);
+        int uid = ContentOperator.getUid(this);
         if (uid < 0){
             Log.w("AddActivity", "Didn't get uid!");
         }

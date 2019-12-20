@@ -17,7 +17,7 @@ public class ModelCourse extends SQLiteOpenHelper {
     public final static String tname = "tname";     // int
     public final static String intro = "intro"; // text
     public final static String likes = "likes"; // int , default 0
-    public final static String uid = "uid";  // int
+    public final static String uid = "uid";  // id of creator.
 
     public ModelCourse(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, ModelCourse.tblName, factory, version);
@@ -111,8 +111,8 @@ public class ModelCourse extends SQLiteOpenHelper {
         return res;
     }
 
-    //
-    public static ArrayList<HashMap<String, String>> getCoursesByCid(Context cnt, int cid){
+
+    public static ArrayList<HashMap<String, String>> getMyIssues(Context cnt, int uid){
         ArrayList<HashMap<String, String>> res = new ArrayList<>();
         ModelCourse model = new ModelCourse(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -120,8 +120,8 @@ public class ModelCourse extends SQLiteOpenHelper {
         Cursor cursor = db.query(
                 ModelCourse.tblName,
                 null,
-                ModelCourse.cid + "=?",
-                new String[]{cid+""},
+                ModelCourse.uid + "=?",
+                new String[]{uid+""},
                 null,
                 null,
                 null,
@@ -140,23 +140,27 @@ public class ModelCourse extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-
         return res;
     }
 
-    public HashMap<String, String> getCourseByCid(Context cnt, int cid){
-        HashMap<String, String> mapper = new HashMap<>();
+    // 2019-12
+    public static HashMap<String, String> getCoursesByCid(Context cnt, int cid){
         ModelCourse model = new ModelCourse(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        // 只取一个
+
         Cursor cursor = db.query(
                 ModelCourse.tblName,
                 null,
                 ModelCourse.cid + "=?",
                 new String[]{cid+""},
-                null,null,ModelCourse.uid, "1"
+                null,
+                null,
+                null,
+                null
         );
-        if (cursor.moveToNext()){
+        HashMap<String, String> mapper = new HashMap<>();
+
+        if(cursor.moveToNext()){
             mapper.put(ModelCourse.cid, String.valueOf(cursor.getInt(0)));
             mapper.put(ModelCourse.cname, cursor.getString(1));
             mapper.put(ModelCourse.tname, cursor.getString(2));
@@ -166,8 +170,10 @@ public class ModelCourse extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+
         return mapper;
     }
+
 
     public static int addNewCourse(Context cnt, String cname, String tname, String intro, int likes, int uid){
         int id = -1;
@@ -192,6 +198,17 @@ public class ModelCourse extends SQLiteOpenHelper {
         return id;
     }
 
+        public static HashMap<Integer, String> getMapCid2Cname(Context context){
+            HashMap<Integer, String> res = new HashMap<>();
+            ArrayList<HashMap<String, String>> courses = ModelCourse.getAllCourse(context);
+            for(int i = 0; i < courses.size(); i++){
+                res.put(
+                        Integer.parseInt(courses.get(i).get(ModelCourse.cid)),
+                        courses.get(i).get(ModelCourse.cname)
+                );
+            }
+            return res;
+        }
 
 
 }

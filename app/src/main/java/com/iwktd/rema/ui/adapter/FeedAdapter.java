@@ -175,7 +175,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 false,
                                 "教师: "+c.get(ModelCourse.tname),
                                 "课程名: "+c.get(ModelCourse.cname),
-                                "创建者: "+c.get(ModelCourse.cid),
+                                "创建者: "+c.get(ModelCourse.uid),
                                 "简介: "+c.get(ModelCourse.intro)
                                 )
                 );

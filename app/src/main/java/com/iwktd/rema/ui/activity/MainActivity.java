@@ -23,6 +23,7 @@ import com.iwktd.rema.ModelComments;
 import com.iwktd.rema.ModelCourse;
 import com.iwktd.rema.MyDialog;
 import com.iwktd.rema.SearchDemo;
+import com.iwktd.rema.ViewHistoryController;
 import com.iwktd.rema.ui.adapter.FeedAdapter;
 import com.iwktd.rema.ui.adapter.FeedItemAnimator;
 import com.iwktd.rema.ui.view.FeedContextMenu;
@@ -180,11 +181,20 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     // TODO: click and open comment list of the course.
     @Override
     public void onCommentsClick(View v, int position) {
+
+        // 浏览记录
+        int cid = this.feedAdapter.pos2cid.getOrDefault(position, -1);
+        if (cid < 0){
+            Log.e("MainActivity", "Error, can't find cid.");
+            return;
+        }
+        ViewHistoryController.addNewViewRecord(cid);
+
         final Intent intent = new Intent(this, CommentsActivity.class);
         int[] startingLocation = new int[2];
         v.getLocationOnScreen(startingLocation);
         intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION, startingLocation[1]);
-        intent.putExtra(ModelComments.cid, this.feedAdapter.pos2cid.get(position));
+        intent.putExtra(ModelComments.cid, cid);
         startActivity(intent);
         overridePendingTransition(0, 0);
     }
@@ -230,16 +240,8 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         fabCreate.getLocationOnScreen(startingLocation);
         startingLocation[0] += fabCreate.getWidth() / 2;
         // 2019-12  Camera 什么鬼
-        int uid = ContentOperator.getUid(this);
-        if (uid >= 0){
-            Intent intent = new Intent();
-            intent.putExtra("uid", uid);
-            AddActivity.startCameraFromLocation(uid, startingLocation, this);
-            overridePendingTransition(0, 0);
-        }else{
-            Log.e("MainActivity", "Can't get uid");
-        }
-
+        AddActivity.startCameraFromLocation(startingLocation, this);
+        overridePendingTransition(0, 0);
     }
 
     // 2019-12  点赞

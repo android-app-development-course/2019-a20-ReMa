@@ -2,6 +2,7 @@ package com.iwktd.rema;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,8 +15,10 @@ import com.iwktd.rema.ui.myComment.PersonCard;
 import com.iwktd.rema.ui.myComment.WaterFallAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+// 我的发布
 public class myIssueActivity extends AppCompatActivity {
     public Context waterfallContext;
     public List<PersonCard> list;
@@ -35,7 +38,13 @@ public class myIssueActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);//recycleview_main.xml
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mAdapter = new WaterFallAdapter(this, buildData());
+
+        int uid = ContentOperator.getUid(this);
+        if (uid < 0){
+            Log.e("myIssueActivity", "Error, Can't find uid.");
+            return ;
+        }
+        mAdapter = new WaterFallAdapter(this, buildDataFromUid(uid));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -85,10 +94,8 @@ public class myIssueActivity extends AppCompatActivity {
         }
     };*/
 
-
     //生成6个明星数据，这些Url地址都来源于网络
     private List<PersonCard> buildData() {
-
         String[] names = {"啊啊啊111111111111111111111111111111111111111111111111111111","啊啊啊啊","哈哈哈哈","呵呵哈哈哈","哈哈哈哈","哈哈哈哈"};//对应不同课程名称
         int[] imgUrs = {R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2};//对应不同课程的图片
         int[] imgHds = {R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty};//头像
@@ -111,5 +118,26 @@ public class myIssueActivity extends AppCompatActivity {
         return list;
     }
 
+    private List<PersonCard> buildDataFromUid(int uid){
+        int[] imgUrs = {R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2};//对应不同课程的图片
+        int[] imgHds = {R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty};//头像
+        int[] imgLikes = {R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey};//未点赞桃心
+
+        ArrayList<HashMap<String, String>> courses = ModelCourse.getMyIssues(this, uid);
+
+        list = new ArrayList<>();
+        for(int i = 0; i< courses.size(); i++) {
+            PersonCard p = new PersonCard();
+            p.avatarUrl = imgUrs[i];
+            p.courseName = courses.get(i).getOrDefault(ModelCourse.cname, "Error"); // 课程名
+            p.userName = "";
+            p.head = imgHds[i];
+            p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
+            p.like = imgLikes[i];
+            p.likeNum = "0";
+            list.add(p);
+        }
+        return list;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.iwktd.rema.ui.myComment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,9 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.iwktd.rema.ContentOperator;
+import com.iwktd.rema.ModelComments;
+import com.iwktd.rema.ModelCourse;
 import com.iwktd.rema.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,9 +41,16 @@ public class MainActivity extends AppCompatActivity {
     }
     private void init() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);//recycleview_main.xml
+
+        int uid = ContentOperator.getUid(this);
+        if (uid < 0){
+            Log.e("Comments MainActivity", "Error, can't find uid");
+            return;
+        }
+
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mAdapter = new WaterFallAdapter(this, buildData());
+        mAdapter = new WaterFallAdapter(this, buildDataFromUid(uid));
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -133,6 +145,31 @@ public class MainActivity extends AppCompatActivity {
             p.imgHeight = (i % 2)*100 + 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
             p.like = imgLikes[i];
             p.likeNum = likesNum[i];
+            list.add(p);
+        }
+        return list;
+    }
+
+    private List<PersonCard> buildDataFromUid(int uid) {
+
+        int[] imgUrs = {R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2};//对应不同课程的图片
+        int[] imgHds = {R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty};//头像
+        int[] imgLikes = {R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey};//未点赞桃心
+
+        ArrayList<HashMap<String, String>> comments = ModelComments.getCommentsByUid(this, uid);
+        HashMap<Integer, String> mapper = ModelCourse.getMapCid2Cname(this);
+
+        list = new ArrayList<>();
+        for(int i = 0 ; i< comments.size(); i++) {
+            PersonCard p = new PersonCard();
+            Integer cid = Integer.parseInt(comments.get(i).get(ModelComments.cid));
+            p.avatarUrl = imgUrs[i];
+            p.courseName = mapper.get(cid);
+            p.userName = comments.get(i).get(ModelComments.content); // 显示评论
+            p.head = imgHds[i];
+            p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
+            p.like = imgLikes[i];
+            p.likeNum = "";
             list.add(p);
         }
         return list;

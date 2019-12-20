@@ -16,9 +16,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 // TODO: 部分操作需要询问服务器
 // 2019-12 这里包含了很多常量
 public class ContentOperator {
+
+
    public final static String TAG = "ContentOperator";
 
    public final static int OP_SIGN_IN = 1;
@@ -51,8 +54,8 @@ public class ContentOperator {
     public final static String SP_INFO = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
     public final static int MAX_COMMENT_LEN = 100; // 最大100个字符(英文也是)
 
+    // 2019-12
     ContentOperator(){
-        //
         Log.d(ContentOperator.TAG, "Constructor");
     }
 
@@ -101,7 +104,7 @@ public class ContentOperator {
 
     public static int getUid(Context act){
         return act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE)
-                .getInt("uid", -1);
+                .getInt(ModelUser.uid, -1);
     }
 
     public static int logOut(Context act, Bundle info){

@@ -13,11 +13,8 @@ import com.iwktd.rema.Utils;
 
 public class FeedContextMenu extends LinearLayout {
     private static final int CONTEXT_MENU_WIDTH = Utils.dpToPx(240);
-
     private int feedItem = -1;
-
     private OnFeedContextMenuItemClickListener onItemClickListener;
-
     public FeedContextMenu(Context context) {
         super(context);
         init();

@@ -11,26 +11,29 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.iwktd.rema.Network.NetworkInit;
+import com.iwktd.rema.Network.SessionOperation;
 import com.iwktd.rema.ui.activity.MainActivity;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 
 public class SignUpActivity extends AppCompatActivity {
-    final int MAX_SIGN_UP = 5; // 最大登陆次数
-    int cnt_sign_up;
     static boolean isChinese;
+
     static {
          isChinese = false;
     }
+
+    public SessionOperation sessionOperation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,6 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.sign_up);
 
         // init
-        cnt_sign_up = MAX_SIGN_UP;
         final TextView text_account = findViewById(R.id.text_account);
         final TextView text_pwd = findViewById(R.id.text_pwd);
         final Button button_sign_up = findViewById(R.id.button_sign_up);
@@ -71,18 +73,14 @@ public class SignUpActivity extends AppCompatActivity {
                         String account = text_account.getText().toString();
                         String pwd = text_pwd.getText().toString();
                         if (!Check(account, pwd)){
-                            cnt_sign_up -= 1;
                             new AlertDialog.Builder(SignUpActivity.this)
                                     .setTitle(R.string.sign_up_fail_title)
-                                    .setMessage(MessageFormat.format(getString(R.string.sign_up_fail_cont), cnt_sign_up))
                                     .setPositiveButton("OK", null)
                                     .show();
-                            if (cnt_sign_up == 0){
-                                button_sign_up.setEnabled(false);
-                            }
                         }else{
-                            cnt_sign_up = MAX_SIGN_UP;
                             int id = getAccountID(account, pwd);
+                            NetworkInit networkInit = new NetworkInit(account, pwd);
+                            sessionOperation = new SessionOperation(networkInit.session);
                             saveUserInfoToSP();
                             switchToHomePage(id);
                         }
@@ -121,8 +119,19 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     boolean Check(String account, String pwd){
-        return account.equals(new String("account"))
-                && pwd.equals(new String("123456"));
+        ArrayList<HashMap<String, String>> users = ModelUser.getAllUsers(this);
+        for(HashMap<String, String> user : users){
+            Log.v("SignUp", "username = " + user.get("username"));
+            Log.v("SignUp", "password = " + user.get("password"));
+            if (user.get("username").equals(account) ){
+                if (user.get("password").equals(pwd)){
+                    return true;
+
+                }
+                return false;
+            }
+        }
+        return false;
     }
 
     // TODO: Check SP. If didn't sign up, send request to Server.
@@ -166,11 +175,12 @@ public class SignUpActivity extends AppCompatActivity {
     void switchToHomePage(int userID){
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("user_name", "nb666233");
-        bundle.putInt("user_id", userID);
-        bundle.putInt("user_stars", 666); // 666个赞
-        bundle.putInt("user_course", 233); // 666个赞
-        bundle.putInt("user_comments", 996); // 666个赞
+        //bundle.putString("user_name", "nb666233");
+        //bundle.putInt("user_id", userID);
+        //bundle.putInt("user_stars", 666); // 666个赞
+        //bundle.putInt("user_course", 233); // 666个赞
+        //bundle.putInt("user_comments", 996); // 666个赞
+        bundle.putSerializable("session", sessionOperation);
 
         intent.putExtras(bundle);
         Log.d("SignUpActivity", "Start home page");

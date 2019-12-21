@@ -2,7 +2,6 @@ package com.iwktd.rema.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,10 +17,9 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 
-import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.ModelComments;
-import com.iwktd.rema.ModelCourse;
 import com.iwktd.rema.MyDialog;
+import com.iwktd.rema.Network.NetworkInit;
 import com.iwktd.rema.SearchDemo;
 import com.iwktd.rema.ViewHistoryController;
 import com.iwktd.rema.ui.adapter.FeedAdapter;
@@ -33,8 +31,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import com.iwktd.rema.R;
 import com.iwktd.rema.Utils;
-
-import java.util.HashMap;
 
 public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener,
         FeedContextMenu.OnFeedContextMenuItemClickListener {
@@ -53,6 +49,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     private Button button;
     private FeedAdapter feedAdapter;
     private boolean pendingIntroAnimation;
+    private NetworkInit networkClass;
 
     // 2019-12
     // 通过feedadaptor.pos2cid 获得 cid.

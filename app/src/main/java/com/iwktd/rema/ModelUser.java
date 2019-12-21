@@ -27,10 +27,10 @@ public class ModelUser extends SQLiteOpenHelper  {
     // 创建数据库， 添加初始数据.
     public void onCreate(SQLiteDatabase db) {
         //String drop = "drop table diary;";
-        String createSQL = "create table user(u_id integer primary key autoincrement,type text not null default 'U',username text unique not null,password text not null);";
+        String createSQL = "create table user(uid integer primary key autoincrement,type text not null default 'U',username text unique not null,password text not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
-        String insert = "insert into user (uid, type, username, password) values (1, 1, 'karl-han', 'admin'), (2, 1, 'rema', 'admin');";
+        String insert = "insert into user (uid, type, username, password) values (1, 'A', 'karl-han', 'admin'), (2, 'A', 'rema', 'admin');";
         db.execSQL(insert);
         Log.d("ModelUser", "create table.");
     }
@@ -101,6 +101,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         db.close();
         return res;
     }
+
     // return id
     public static int addNewUser(Context cnt, String type, String username, String password){
         int id = -1;

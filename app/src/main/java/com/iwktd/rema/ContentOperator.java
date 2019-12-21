@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.iwktd.rema.Models.ModelUser;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -20,8 +22,6 @@ import okhttp3.Response;
 // TODO: 部分操作需要询问服务器
 // 2019-12 这里包含了很多常量
 public class ContentOperator {
-
-
    public final static String TAG = "ContentOperator";
 
    public final static int OP_SIGN_IN = 1;
@@ -43,6 +43,7 @@ public class ContentOperator {
    public final static String PATH_REGISTER_ = "/autho/register"; // post
    public final static String PATH_LOGOUT = "/autho/logout";
 
+   // 需要补充两条 修改 的路由！
    public final static String PATH_GET_DATA = "/mani/get_data/"; // + current_hash   0 -> all table
    public final static String PATH_CREATE_COMMENT = "/mani/create_comment";
    public final static String PATH_DELETE_COMMENT = "/mani/create_comment";
@@ -53,46 +54,39 @@ public class ContentOperator {
 
     public final static String SP_INFO = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
     public final static int MAX_COMMENT_LEN = 100; // 最大100个字符(英文也是)
+    public final static String IS_LOGINED = "is_signed_in";
+    public final static String KEY_SESSION = "Set-Cookie"; // 用来从Bundle中提取sessionID
+    public final static String KEY_USERNAME = "username";
+    public final static String KEY_PWD = "password";
+    public final static String KEY_HASH = "seesion_id";
 
-    // 2019-12
+
     ContentOperator(){
         Log.d(ContentOperator.TAG, "Constructor");
     }
 
-    // if ok, return
-    public static int askForOK(){
-        return 0;
-    }
-
-    public static boolean doOperation(int op_type, String hint){
-        // hint 错误提示
-        return true;
-    }
-
-
     // 注册
-    public static int signUp(Bundle info){
+    public static int register(Bundle info){
         int id = -1;
 
         return id;
     }
 
-
     // 前置条件: Info 里面已经输入了账号密码
     // 正常返回 非负值 , 异常返回-1
-    public static int signIn(Activity act, Bundle info){
+    public static int isLogined(Activity act, Bundle info){
         // 检查是否已经登录
         int resp = -1; // 登陆失败
         SharedPreferences sp = act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE);
-        boolean is_signed_up = sp.getBoolean("is_signed_in", false);
+        boolean is_signed_up = sp.getBoolean(ContentOperator.IS_LOGINED, false);
         if (!is_signed_up){
             // 如果成功，则更新了info的内容
             int status = askForSessionID(info);
             if (status >= 0){ // ok
-                String username = info.getString("username");
+                String username = info.getString(ContentOperator.KEY_USERNAME);
                 sp.edit()
-                        .putBoolean("is_signed_in", true)
-                        .putString("username", username)
+                        .putBoolean(ContentOperator.IS_LOGINED, true)
+                        .putString(ContentOperator.KEY_USERNAME, username)
                         .apply();
                 resp = 0;
             }
@@ -102,23 +96,27 @@ public class ContentOperator {
         return resp;
     }
 
-    public static int getUid(Context act){
-        return act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE)
+    public static int getUid(Context context){
+        return context
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
                 .getInt(ModelUser.uid, -1);
     }
 
+
     public static int logOut(Context act, Bundle info){
         SharedPreferences sp = act.getSharedPreferences(ContentOperator.SP_INFO, Activity.MODE_PRIVATE);
-        sp.edit().putBoolean("is_signed_up", false).apply();
+        sp.edit().putBoolean(ContentOperator.IS_LOGINED, false).apply();
         return -1;
     }
 
-    // sign
+    // 传递username, password来询问服务器sessionID
+    // 如果成功，将sessionID放入info中，并且返回 0; 其他情况都返回-1。
+    // 应该先判断返回值，再取 sessionID(key = ContentOperator.KEY_SESSION)
     public static int askForSessionID(Bundle info){
 
-        String username = info.getString("username");
-        String password = info.getString("password");
-        String current_hash = info.getString("current_hash");
+        String username = info.getString(ContentOperator.KEY_USERNAME);
+        String password = info.getString(ContentOperator.KEY_PWD);
+        String current_hash = info.getString(ContentOperator.KEY_HASH);
 
         //创建OkHttpClient对象
         OkHttpClient client = new OkHttpClient.Builder()
@@ -133,8 +131,8 @@ public class ContentOperator {
                 + ContentOperator.SERVER_PORT
                 + ContentOperator.PATH_LOGIN;
         RequestBody body = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
+                .add(ContentOperator.KEY_USERNAME, username)
+                .add(ContentOperator.KEY_PWD, password)
                 .build();
         Request request = new Request.Builder()
                 .post(body)
@@ -146,14 +144,14 @@ public class ContentOperator {
         try{
             // 同步
             Response response = call.execute();
-            String session_id = response.header("Set-Cookie");
+            String session_id = response.header(ContentOperator.KEY_SESSION);
             if (session_id == null){
                 Log.e("signIn", "Did not get session_id");
                 return -1;
             }
             if (response.code() == 302) {
                 //处理网络请求的响应，处理UI需要在UI线程中处理
-                info.putString("session_id", session_id);
+                info.putString(ContentOperator.KEY_SESSION, session_id);
                 Log.d("signIn", session_id);
                 return 0;
             }else{
@@ -165,50 +163,6 @@ public class ContentOperator {
         }
         return -1;
 
-    }
-
-    // 前提是info中有 session_id
-    public static int getAllTable(Bundle info){
-        // ok -> 0
-        // else -> -1
-        return 0;
-    }
-
-    // if ok, return id; else, return -1
-    public static int modifyCourse(Bundle info){
-        int id = -1;
-
-        return -1;
-    }
-
-    public static int modifyComment(Bundle info){
-        int id = -1;
-
-        return -1;
-    }
-
-    public static int createCourse(Bundle info){
-        int id = -1;
-
-        return -1;
-    }
-
-    public static int createComment(Bundle info){
-        int id = -1;
-
-        return -1;
-    }
-
-    public static int deleteCourse(Bundle info){
-        int id = -1;
-
-        return -1;
-    }
-
-    public static int deleteComment(Bundle info){
-        int id = -1;
-
-        return -1;
     }
 
 

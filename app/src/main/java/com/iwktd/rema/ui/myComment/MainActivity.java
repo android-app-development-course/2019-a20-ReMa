@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.iwktd.rema.ContentOperator;
-import com.iwktd.rema.ModelComments;
-import com.iwktd.rema.ModelCourse;
+import com.iwktd.rema.Models.ModelComments;
+import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.R;
 
 import java.util.ArrayList;

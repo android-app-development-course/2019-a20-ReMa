@@ -17,16 +17,18 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.iwktd.rema.Models.ModelComments;
+import com.iwktd.rema.Models.ModelCourse;
+import com.iwktd.rema.Models.ModelTeacher;
+import com.iwktd.rema.Models.ModelUser;
 import com.iwktd.rema.Network.NetworkInit;
 import com.iwktd.rema.Network.SessionOperation;
 import com.iwktd.rema.ui.activity.MainActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 
 
-public class SignUpActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     static boolean isChinese;
 
     static {
@@ -51,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //点击注册按钮 跳转sign_in页面（sign_in.xml ------------------未完成
-                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        Log.d("SignUpActivity", "switch lang, with isChinese = " + String.valueOf(isChinese));
+                        Log.d("LoginActivity", "switch lang, with isChinese = " + String.valueOf(isChinese));
                         SwitchLang();
                     }
                 }
@@ -73,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
                         String account = text_account.getText().toString();
                         String pwd = text_pwd.getText().toString();
                         if (!Check(account, pwd)){
-                            new AlertDialog.Builder(SignUpActivity.this)
+                            new AlertDialog.Builder(LoginActivity.this)
                                     .setTitle(R.string.sign_up_fail_title)
                                     .setPositiveButton("OK", null)
                                     .show();
@@ -100,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
         if (is_first_time){
             // 自动建立表
             ModelUser db_user = new ModelUser(this, null, 1);
-            ModelTeacher db_t = new ModelTeacher(this, null, 1);
+            //ModelTeacher db_t = new ModelTeacher(this, null, 1);
             ModelCourse db_course = new ModelCourse(this, null, 1);
             ModelComments db_command = new ModelComments(this, null, 1);
 
@@ -119,19 +121,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     boolean Check(String account, String pwd){
-        ArrayList<HashMap<String, String>> users = ModelUser.getAllUsers(this);
-        for(HashMap<String, String> user : users){
-            Log.v("SignUp", "username = " + user.get("username"));
-            Log.v("SignUp", "password = " + user.get("password"));
-            if (user.get("username").equals(account) ){
-                if (user.get("password").equals(pwd)){
-                    return true;
+        // send request to server !
 
-                }
-                return false;
-            }
-        }
-        return false;
+        return true;
     }
 
     // TODO: Check SP. If didn't sign up, send request to Server.
@@ -151,20 +143,20 @@ public class SignUpActivity extends AppCompatActivity {
         // 获得屏幕参数：主要是分辨率，像素等。
         DisplayMetrics metrics = resources.getDisplayMetrics();
         //在这里设置需要转换成的语言，也就是选择用哪个values目录下的strings.xml文件
-        if (SignUpActivity.isChinese){
+        if (LoginActivity.isChinese){
             config.setLocale(Locale.ENGLISH);
-            Log.d("SignUpActivity", "set ENG");
-            SignUpActivity.isChinese = false;
+            Log.d("LoginActivity", "set ENG");
+            LoginActivity.isChinese = false;
         }else{
             config.setLocale(Locale.SIMPLIFIED_CHINESE);
-            Log.d("SignUpActivity", "set SCN");
-            SignUpActivity.isChinese = true;
+            Log.d("LoginActivity", "set SCN");
+            LoginActivity.isChinese = true;
         }
-        Log.d("SignUpActivity", "sss");
+        Log.d("LoginActivity", "sss");
         resources.updateConfiguration(config, metrics);
 
         //重新启动Activity
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
@@ -173,7 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
     // use for testing.
     // TODO:
     void switchToHomePage(int userID){
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         Bundle bundle = new Bundle();
         //bundle.putString("user_name", "nb666233");
         //bundle.putInt("user_id", userID);
@@ -183,7 +175,7 @@ public class SignUpActivity extends AppCompatActivity {
         bundle.putSerializable("session", sessionOperation);
 
         intent.putExtras(bundle);
-        Log.d("SignUpActivity", "Start home page");
+        Log.d("LoginActivity", "Start home page");
         startActivity(intent);
     }
 }

@@ -4,21 +4,19 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.text.TextUtils;
+
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.iwktd.rema.ContentOperator;
-import com.iwktd.rema.ModelComments;
+import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.ui.adapter.CommentsAdapter;
 import com.iwktd.rema.ui.view.SendCommentButton;
 

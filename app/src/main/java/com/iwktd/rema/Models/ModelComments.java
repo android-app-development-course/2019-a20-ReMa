@@ -1,4 +1,4 @@
-package com.iwktd.rema;
+package com.iwktd.rema.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +17,7 @@ public class ModelComments extends SQLiteOpenHelper {
     public final static String content = "content";
     public final static String cid = "cid";
 
-   ModelComments(Context context, SQLiteDatabase.CursorFactory factory, int version) {
+   public ModelComments(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context,ModelComments.tblName, factory, version);
     }
 
@@ -48,6 +48,7 @@ public class ModelComments extends SQLiteOpenHelper {
         Log.d(ModelComments.tblName, "Open table "+ModelComments.tblName + " ---------- ");
     }
 
+    // 注意，这里接受的是cid，也就是课程的id。这个方法专门用来找某个课程下的评论
     public static ArrayList<HashMap<String, String>> getCommentsByCid(Context cnt, int cid){
         ArrayList<HashMap<String, String>> res = new ArrayList<>();
         ModelComments model = new ModelComments(cnt, null, 1);
@@ -100,6 +101,7 @@ public class ModelComments extends SQLiteOpenHelper {
         return id;
     }
 
+    // 这个函数接受用户的uid， 专门用来寻找用户的所有评论
     public static ArrayList<HashMap<String, String>> getCommentsByUid(Context cnt, int uid){
         ArrayList<HashMap<String, String>> res = new ArrayList<>();
         ModelComments model = new ModelComments(cnt, null, 1);
@@ -130,5 +132,72 @@ public class ModelComments extends SQLiteOpenHelper {
         return res;
     }
 
+    // 这个是个完整的接口，但是参数比较多
+    public static int modifyByCoid(Context context, int coid, int uid, String content, int cid){
+        int id = -1;
+        ModelComments table = new ModelComments(context, null, 1);
+        SQLiteDatabase db = table.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ModelComments.uid, uid);
+        values.put(ModelComments.content, content);
+        values.put(ModelComments.cid, cid);
+        id = db.update(
+            ModelComments.tblName,
+            values,
+                ModelComments.coid + "=?",
+                new String[]{coid+""}
+        );
+
+        return id;
+    }
+
+    // 用户修改自己的评论，建议用这个，因为不需要修改 cid 和 uid.
+    // 可能抛出异常
+    public static void updateContentByCoid(Context context, int coid, String newIntro){
+        ModelComments table = new ModelComments(context, null, 1);
+        SQLiteDatabase db = table.getWritableDatabase();
+        // update comments set content = 'Lu BenWei niu B!!!';
+        db.execSQL(
+                "update " + ModelComments.tblName
+                        + " set " + ModelComments.content
+                        + " = " + newIntro
+                        + " where " + ModelComments.coid + " = " + coid
+         );
+        db.close();
+    }
+
+    // 返回删除了多少条，应该不大于1
+    public static int deleteByCoid(Context context, int coid){
+       return new ModelComments(context, null, 1)
+               .getWritableDatabase()
+               .delete(
+               ModelComments.tblName,
+               ModelComments.coid + "=?",
+               new String[]{coid+""}
+            );
+    }
+
+    public static void dropAll(Context context){
+        ModelComments model = new ModelComments(context, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+        db.execSQL("drop table " + ModelComments.tblName + ";");
+        db.close();
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

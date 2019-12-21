@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
-            android:name=".SignUpActivity">
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -48,18 +48,14 @@
         <!--            android:theme="@style/AppTheme"-->
         <!--            android:windowSoftInputMode="stateHidden">-->
         <!--        </activity>-->
-        <activity android:name=".PreviewHistory"></activity>
-        <activity android:name=".MyCourseActivity"></activity>
-        <activity android:name=".MyCommentActivity"></activity>
-        <activity android:name=".PersonalInfo"></activity>
-        <activity android:name=".PersonalHomePage"></activity>
         <activity android:name=".myIssueActivity"></activity>
         <activity android:name=".SearchDemo"></activity>
         <activity android:name=".ui.activity.MainActivity"></activity>
         <activity android:name=".ui.myComment.MainActivity"></activity>
         <activity android:name="myCollectionActivity"></activity>
         <activity android:name="myViewHistoryActivity"></activity>
-        <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".PersonalInfo"></activity>
     </application>
 
 </manifest>

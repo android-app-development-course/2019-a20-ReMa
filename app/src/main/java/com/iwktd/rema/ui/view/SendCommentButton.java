@@ -2,15 +2,10 @@ package com.iwktd.rema.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.iwktd.rema.ContentOperator;
-import com.iwktd.rema.ModelComments;
 import com.iwktd.rema.R;
 
 /**

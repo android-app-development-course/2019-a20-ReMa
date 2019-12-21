@@ -13,8 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 
-import com.iwktd.rema.ModelCourse;
-import com.iwktd.rema.ModelUser;
+import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.ui.activity.MainActivity;
 import com.iwktd.rema.ui.view.LoadingFeedItemView;
 

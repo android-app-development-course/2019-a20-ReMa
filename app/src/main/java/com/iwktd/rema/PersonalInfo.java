@@ -1,5 +1,6 @@
 package com.iwktd.rema;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 public class PersonalInfo extends AppCompatActivity {
 
     TextView textview_user_id = null;
@@ -18,7 +18,7 @@ public class PersonalInfo extends AppCompatActivity {
     TextView edittext_school = null;
     TextView edittext_majority = null;
     Bundle personInfo = null;
-//    private Button back;
+    //    private Button back;
     Boolean isEditable = false; // boolean 不可变
     //boolean isEditable = false;
 

@@ -1,22 +1,13 @@
 package com.iwktd.rema.ui.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
@@ -26,23 +17,17 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ViewSwitcher;
 
-import com.commonsware.cwac.camera.CameraHost;
-import com.commonsware.cwac.camera.CameraHostProvider;
-import com.commonsware.cwac.camera.CameraView;
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
 import com.iwktd.rema.ContentOperator;
-import com.iwktd.rema.ModelCourse;
-import com.iwktd.rema.ui.adapter.PhotoFiltersAdapter;
+import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.ui.view.RevealBackgroundView;
 
 import java.io.File;
 
 import butterknife.BindView;
-import butterknife.OnClick;
+
 import com.iwktd.rema.R;
 import com.iwktd.rema.Utils;
 

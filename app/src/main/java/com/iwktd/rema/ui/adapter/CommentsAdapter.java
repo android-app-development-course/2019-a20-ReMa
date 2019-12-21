@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iwktd.rema.ModelComments;
-import com.iwktd.rema.ModelCourse;
+import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.ui.utils.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 

@@ -13,9 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.view.MenuItem;
 
-import com.iwktd.rema.MyCourseActivity;
 import com.iwktd.rema.PersonalInfo;
-import com.iwktd.rema.PreviewHistory;
 import com.iwktd.rema.myCollectionActivity;
 import com.iwktd.rema.myViewHistoryActivity;
 import com.iwktd.rema.ui.utils.CircleTransformation;

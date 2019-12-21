@@ -1,4 +1,4 @@
-package com.iwktd.rema;
+package com.iwktd.rema.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,7 +16,7 @@ public class ModelTeacher extends SQLiteOpenHelper {
     public static final String tname = "tname";
 
 
-    ModelTeacher(Context context, SQLiteDatabase.CursorFactory factory, int version) {
+    public ModelTeacher(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context,ModelTeacher.tblName, factory, version);
     }
 

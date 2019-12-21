@@ -1,4 +1,4 @@
-package com.iwktd.rema;
+package com.iwktd.rema.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -78,7 +78,7 @@ public class ModelCourse extends SQLiteOpenHelper {
         return res;
     }
 
-    // 匹配
+    //
     public static ArrayList<HashMap<String, String>> getCoursesByCname(Context cnt, String cname){
         ArrayList<HashMap<String, String>> res = new ArrayList<>();
         ModelCourse model = new ModelCourse(cnt, null, 1);
@@ -111,7 +111,6 @@ public class ModelCourse extends SQLiteOpenHelper {
         return res;
     }
 
-
     public static ArrayList<HashMap<String, String>> getMyIssues(Context cnt, int uid){
         ArrayList<HashMap<String, String>> res = new ArrayList<>();
         ModelCourse model = new ModelCourse(cnt, null, 1);
@@ -143,7 +142,7 @@ public class ModelCourse extends SQLiteOpenHelper {
         return res;
     }
 
-    // 2019-12
+    //
     public static HashMap<String, String> getCoursesByCid(Context cnt, int cid){
         ModelCourse model = new ModelCourse(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -174,7 +173,6 @@ public class ModelCourse extends SQLiteOpenHelper {
         return mapper;
     }
 
-
     public static int addNewCourse(Context cnt, String cname, String tname, String intro, int likes, int uid){
         int id = -1;
         ModelCourse model = new ModelCourse(cnt, null, 1);
@@ -198,17 +196,63 @@ public class ModelCourse extends SQLiteOpenHelper {
         return id;
     }
 
-        public static HashMap<Integer, String> getMapCid2Cname(Context context){
-            HashMap<Integer, String> res = new HashMap<>();
-            ArrayList<HashMap<String, String>> courses = ModelCourse.getAllCourse(context);
-            for(int i = 0; i < courses.size(); i++){
-                res.put(
-                        Integer.parseInt(courses.get(i).get(ModelCourse.cid)),
-                        courses.get(i).get(ModelCourse.cname)
-                );
-            }
-            return res;
+    public static HashMap<Integer, String> getMapCid2Cname(Context context){
+        HashMap<Integer, String> res = new HashMap<>();
+        ArrayList<HashMap<String, String>> courses = ModelCourse.getAllCourse(context);
+        for(int i = 0; i < courses.size(); i++){
+            res.put(
+                    Integer.parseInt(courses.get(i).get(ModelCourse.cid)),
+                    courses.get(i).get(ModelCourse.cname)
+            );
         }
+        return res;
+    }
+
+    public static int modifyByCid(Context context, int cid, String cname, String tname, int likes, String intro, int uid) {
+        int id = -1;
+        ModelCourse model = new ModelCourse(context, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ModelCourse.cname, cname);
+        values.put(ModelCourse.tname, tname);
+        values.put(ModelCourse.likes, likes);
+        values.put(ModelCourse.intro, intro);
+        values.put(ModelCourse.uid, uid);
+
+        id = (int)db.update(
+                ModelCourse.tblName,
+                values,
+                ModelCourse.cid + "=?",
+                new String[]{cid+""}
+        );
+        if (id <= 0){
+            Log.e(ModelUser.tblName, "Failed to insert!");
+        }
+        db.close();
+        return id;
+    }
+
+    // 删除了多少条
+    public static int deleteByCid(Context context, int cid){
+        int cnt = 0;
+        ModelCourse model = new ModelCourse(context, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+        cnt = db.delete(
+                ModelCourse.tblName,
+                ModelCourse.cid+ "=?",
+                new String[]{cid+""}
+        );
+        db.close();
+        return cnt;
+    }
+
+    public static void dropAll(Context context){
+        ModelCourse model = new ModelCourse(context, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+        db.execSQL("drop table " + ModelCourse.tblName + ";");
+        db.close();
+    }
 
 
 }

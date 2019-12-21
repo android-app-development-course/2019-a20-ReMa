@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 
-import com.iwktd.rema.ModelComments;
+import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.MyDialog;
 import com.iwktd.rema.Network.NetworkInit;
 import com.iwktd.rema.SearchDemo;

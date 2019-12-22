@@ -69,7 +69,7 @@ public class ModelTeacher extends SQLiteOpenHelper {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }

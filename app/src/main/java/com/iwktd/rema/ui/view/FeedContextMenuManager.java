@@ -34,19 +34,20 @@ public class FeedContextMenuManager extends RecyclerView.OnScrollListener implem
 
     }
 
-public void toggleContextMenuFromView(View openingView, int feedItem, FeedContextMenu.OnFeedContextMenuItemClickListener listener) {
+public void toggleContextMenuFromView(View openingView, int feedItem, FeedContextMenu.OnFeedContextMenuItemClickListener listener, int cid) {
     if (contextMenuView == null) {
-        showContextMenuFromView(openingView, feedItem, listener);
+        showContextMenuFromView(openingView, feedItem, listener, cid);
     } else {
         hideContextMenu();
     }
 }
 
-    private void showContextMenuFromView(final View openingView, int feedItem, FeedContextMenu.OnFeedContextMenuItemClickListener listener) {
+    private void showContextMenuFromView(final View openingView, int feedItem, FeedContextMenu.OnFeedContextMenuItemClickListener listener, int cid) {
         if (!isContextMenuShowing) {
             isContextMenuShowing = true;
             contextMenuView = new FeedContextMenu(openingView.getContext());
-            contextMenuView.bindToItem(feedItem);
+            // 绑定位置
+            contextMenuView.bindToItem(feedItem, cid);
             contextMenuView.addOnAttachStateChangeListener(this);
             contextMenuView.setOnFeedMenuItemClickListener(listener);
 

@@ -34,6 +34,7 @@ public class ModelComments extends SQLiteOpenHelper {
                 "    (1, '这门课真的不错', 1),\n" +
                 "    (2, '这门课真的不错', 2);";
         db.execSQL(insert);
+        //db.close();
         Log.d("ModelComments", "create table.");
     }
 
@@ -74,7 +75,7 @@ public class ModelComments extends SQLiteOpenHelper {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }
@@ -127,7 +128,7 @@ public class ModelComments extends SQLiteOpenHelper {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }
@@ -163,7 +164,7 @@ public class ModelComments extends SQLiteOpenHelper {
                         + " = " + newIntro
                         + " where " + ModelComments.coid + " = " + coid
          );
-        db.close();
+        //db.close();
     }
 
     // 返回删除了多少条，应该不大于1
@@ -181,7 +182,7 @@ public class ModelComments extends SQLiteOpenHelper {
         ModelComments model = new ModelComments(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
         db.execSQL("drop table " + ModelComments.tblName + ";");
-        db.close();
+        //db.close();
     }
 
 }

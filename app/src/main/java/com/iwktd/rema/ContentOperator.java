@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.iwktd.rema.Models.ModelComments;
+import com.iwktd.rema.Models.ModelCourse;
+import com.iwktd.rema.Models.ModelMyCollection;
 import com.iwktd.rema.Models.ModelUser;
 
 import java.io.IOException;
@@ -63,6 +66,14 @@ public class ContentOperator {
 
     ContentOperator(){
         Log.d(ContentOperator.TAG, "Constructor");
+    }
+
+    public static void init(Context context){
+        ModelUser db_user = new ModelUser(context, null, 1);
+        //ModelTeacher db_t = new ModelTeacher(this, null, 1);
+        ModelCourse db_course = new ModelCourse(context, null, 1);
+        ModelComments db_command = new ModelComments(context, null, 1);
+        ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
     }
 
     // 注册

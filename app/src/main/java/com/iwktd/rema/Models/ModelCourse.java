@@ -73,7 +73,7 @@ public class ModelCourse extends SQLiteOpenHelper {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }
@@ -106,7 +106,7 @@ public class ModelCourse extends SQLiteOpenHelper {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }
@@ -138,7 +138,7 @@ public class ModelCourse extends SQLiteOpenHelper {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
         return res;
     }
 
@@ -168,7 +168,7 @@ public class ModelCourse extends SQLiteOpenHelper {
             mapper.put(ModelCourse.uid, cursor.getString(5));
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return mapper;
     }
@@ -192,6 +192,8 @@ public class ModelCourse extends SQLiteOpenHelper {
         if (id <= 0){
             Log.e(ModelCourse.tblName, "Failed to insert!");
         }
+
+        //db.close();
 
         return id;
     }
@@ -229,7 +231,7 @@ public class ModelCourse extends SQLiteOpenHelper {
         if (id <= 0){
             Log.e(ModelUser.tblName, "Failed to insert!");
         }
-        db.close();
+        //db.close();
         return id;
     }
 
@@ -243,7 +245,7 @@ public class ModelCourse extends SQLiteOpenHelper {
                 ModelCourse.cid+ "=?",
                 new String[]{cid+""}
         );
-        db.close();
+        //db.close();
         return cnt;
     }
 
@@ -251,7 +253,7 @@ public class ModelCourse extends SQLiteOpenHelper {
         ModelCourse model = new ModelCourse(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
         db.execSQL("drop table " + ModelCourse.tblName + ";");
-        db.close();
+        //db.close();
     }
 
 

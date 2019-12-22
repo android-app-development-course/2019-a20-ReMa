@@ -1,22 +1,29 @@
 package com.iwktd.rema.ui.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.iwktd.rema.CollectionController;
 import com.iwktd.rema.R;
 import com.iwktd.rema.Utils;
 
-
+// 对应一个课程的收藏按钮
 public class FeedContextMenu extends LinearLayout {
     private static final int CONTEXT_MENU_WIDTH = Utils.dpToPx(240);
     private int feedItem = -1;
+    // 2019-12
+    private int cid = -1;
+    private Context context = null;
     private OnFeedContextMenuItemClickListener onItemClickListener;
     public FeedContextMenu(Context context) {
         super(context);
+        this.context = context;
         init();
     }
 
@@ -27,8 +34,10 @@ public class FeedContextMenu extends LinearLayout {
         setLayoutParams(new LayoutParams(CONTEXT_MENU_WIDTH, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
-    public void bindToItem(int feedItem) {
+    // 这东西应该是把 pos 绑定起来
+    public void bindToItem(int feedItem, int cid) {
         this.feedItem = feedItem;
+        this.cid = cid;
     }
 
     @Override
@@ -41,11 +50,16 @@ public class FeedContextMenu extends LinearLayout {
         ((ViewGroup) getParent()).removeView(FeedContextMenu.this);
     }
 
+    // 这个， 就是点击事件
     @OnClick(R.id.btnCollect)
     public void onReportClick() {
         if (onItemClickListener != null) {
+            // ???
             onItemClickListener.onReportClick(feedItem);
         }
+        CollectionController.addNewRecord(this.context, this.cid);
+
+
     }
 
 //    @OnClick(R.id.btnSharePhoto)

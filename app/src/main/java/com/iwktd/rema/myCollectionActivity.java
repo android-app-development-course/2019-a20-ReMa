@@ -3,6 +3,7 @@ package com.iwktd.rema;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,13 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.ui.myComment.PersonCard;
 import com.iwktd.rema.ui.myComment.WaterFallAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
-public class myCollectionActivity extends AppCompatActivity {
+public class MyCollectionActivity extends AppCompatActivity {
     public Context waterfallContext;
     public List<PersonCard> list;
 
@@ -35,7 +39,7 @@ public class myCollectionActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);//recycleview_main.xml
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mAdapter = new WaterFallAdapter(this, buildData());
+        mAdapter = new WaterFallAdapter(this, buildDataFromMyCollection());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -106,6 +110,26 @@ public class myCollectionActivity extends AppCompatActivity {
             p.imgHeight = (i % 2)*100 + 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
             p.like = imgLikes[i];
             p.likeNum = likesNum[i];
+            list.add(p);
+        }
+        return list;
+    }
+
+    private List<PersonCard> buildDataFromMyCollection() {
+        int uid = ContentOperator.getUid(this);
+        ArrayList<Integer> courseID = CollectionController.getCollection(this);
+        HashMap<Integer, String> mapCid2Cname = ModelCourse.getMapCid2Cname(this);
+
+        list = new ArrayList<>();
+        for(Integer i: courseID) {
+            PersonCard p = new PersonCard();
+            p.avatarUrl = R.drawable.empty;
+            p.courseName = mapCid2Cname.getOrDefault(i, "Error"); // 课程名
+            p.userName = "";
+            p.head = R.drawable.empty;
+            p.imgHeight = 400;
+            p.like = R.drawable.ic_heart_outline_grey;
+            p.likeNum = "0";
             list.add(p);
         }
         return list;

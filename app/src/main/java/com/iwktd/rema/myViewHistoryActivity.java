@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class myViewHistoryActivity extends AppCompatActivity {
+public class MyViewHistoryActivity extends AppCompatActivity {
     public Context waterfallContext;
     public List<PersonCard> list;
 
@@ -120,9 +120,6 @@ public class myViewHistoryActivity extends AppCompatActivity {
     }
 
     private List<PersonCard> buildDataFromCid(ArrayList<Integer> cids){
-        int[] imgUrs = {R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2};//对应不同课程的图片
-        int[] imgHds = {R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty};//头像
-        int[] imgLikes = {R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey};//未点赞桃心
         ArrayList<String> names = new ArrayList<>();
         for (int cid: cids) {
             HashMap<String, String> course = ModelCourse.getCoursesByCid(this, cid);
@@ -132,12 +129,12 @@ public class myViewHistoryActivity extends AppCompatActivity {
         list = new ArrayList<>();
         for(int i = 0; i< cids.size(); i++) {
             PersonCard p = new PersonCard();
-            p.avatarUrl = imgUrs[i];
+            p.avatarUrl = R.drawable.img_feed_center_2;
             p.courseName = names.get(i); // 课程名
             p.userName = "";
-            p.head = imgHds[i];
+            p.head = R.drawable.empty;
             p.imgHeight = 400;
-            p.like = imgLikes[i];
+            p.like = R.drawable.ic_heart_outline_grey;
             p.likeNum = "0";
             list.add(p);
         }

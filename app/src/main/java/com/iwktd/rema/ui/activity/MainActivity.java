@@ -198,7 +198,11 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
     @Override
     public void onMoreClick(View v, int itemPosition) {
-        FeedContextMenuManager.getInstance().toggleContextMenuFromView(v, itemPosition, this);
+        // itemPosition(同时也是课程item的位置) -> cid
+        int cid = this.feedAdapter.pos2cid.getOrDefault(itemPosition, -1);
+        if (cid >= 0){
+            FeedContextMenuManager.getInstance().toggleContextMenuFromView(v, itemPosition, this, cid);
+        }
     }
 
     @Override

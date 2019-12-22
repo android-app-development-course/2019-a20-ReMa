@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 // 我的发布
-public class myIssueActivity extends AppCompatActivity {
+public class MyIssueActivity extends AppCompatActivity {
     public Context waterfallContext;
     public List<PersonCard> list;
 
@@ -41,7 +41,7 @@ public class myIssueActivity extends AppCompatActivity {
 
         int uid = ContentOperator.getUid(this);
         if (uid < 0){
-            Log.e("myIssueActivity", "Error, Can't find uid.");
+            Log.e("MyIssueActivity", "Error, Can't find uid.");
             return ;
         }
         mAdapter = new WaterFallAdapter(this, buildDataFromUid(uid));
@@ -119,21 +119,17 @@ public class myIssueActivity extends AppCompatActivity {
     }
 
     private List<PersonCard> buildDataFromUid(int uid){
-        int[] imgUrs = {R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2};//对应不同课程的图片
-        int[] imgHds = {R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty};//头像
-        int[] imgLikes = {R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey};//未点赞桃心
-
         ArrayList<HashMap<String, String>> courses = ModelCourse.getMyIssues(this, uid);
 
         list = new ArrayList<>();
         for(int i = 0; i< courses.size(); i++) {
             PersonCard p = new PersonCard();
-            p.avatarUrl = imgUrs[i];
+            p.avatarUrl = R.drawable.img_feed_center_2;
             p.courseName = courses.get(i).getOrDefault(ModelCourse.cname, "Error"); // 课程名
             p.userName = "";
-            p.head = imgHds[i];
+            p.head = R.drawable.empty;
             p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
-            p.like = imgLikes[i];
+            p.like = R.drawable.ic_heart_outline_grey;
             p.likeNum = "0";
             list.add(p);
         }

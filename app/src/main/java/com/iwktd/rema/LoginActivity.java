@@ -101,12 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("Login", "Is First time?");
         if (is_first_time){
             // 自动建立表
-            ModelUser db_user = new ModelUser(this, null, 1);
-            //ModelTeacher db_t = new ModelTeacher(this, null, 1);
-            ModelCourse db_course = new ModelCourse(this, null, 1);
-            ModelComments db_command = new ModelComments(this, null, 1);
-
-
+            ContentOperator.init(this);
             //sp.edit().putBoolean("is_first_time", false).apply();
             Log.d("login", "finish initialization");
         }

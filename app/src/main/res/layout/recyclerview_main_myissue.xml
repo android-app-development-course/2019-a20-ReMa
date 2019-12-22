@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F0F0"
-    tools:context="com.iwktd.rema.myIssueActivity"
+    tools:context="com.iwktd.rema.MyIssueActivity"
     android:orientation="vertical">
 
     <LinearLayout

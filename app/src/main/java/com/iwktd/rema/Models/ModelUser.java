@@ -68,7 +68,7 @@ public class ModelUser extends SQLiteOpenHelper  {
                 res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }
@@ -95,7 +95,7 @@ public class ModelUser extends SQLiteOpenHelper  {
             res.put(ModelUser.password, cursor.getString(3));
         }
         cursor.close();
-        db.close();
+        //db.close();
         return res;
     }
 
@@ -118,6 +118,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         if (id <= 0){
             Log.e(ModelUser.tblName, "Failed to insert!");
         }
+        //db.close();
         return id;
     }
 
@@ -146,7 +147,7 @@ public class ModelUser extends SQLiteOpenHelper  {
             res.add(mapper);
         }
         cursor.close();
-        db.close();
+        //db.close();
 
         return res;
     }
@@ -173,7 +174,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         if (id <= 0){
             Log.e(ModelUser.tblName, "Failed to insert!");
         }
-        db.close();
+        //db.close();
         return id;
     }
 
@@ -187,7 +188,7 @@ public class ModelUser extends SQLiteOpenHelper  {
                 ModelUser.uid + "=?",
                 new String[]{uid+""}
         );
-        db.close();
+        //db.close();
         return cnt;
     }
 
@@ -196,7 +197,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         ModelUser model = new ModelUser(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
         db.execSQL("drop table " + ModelUser.tblName + ";");
-        db.close();
+        //db.close();
     }
 
 }

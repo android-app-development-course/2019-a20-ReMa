@@ -13,9 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.view.MenuItem;
 
+import com.iwktd.rema.MyIssueActivity;
 import com.iwktd.rema.PersonalInfo;
-import com.iwktd.rema.myCollectionActivity;
-import com.iwktd.rema.myViewHistoryActivity;
+import com.iwktd.rema.MyCollectionActivity;
+import com.iwktd.rema.MyViewHistoryActivity;
 import com.iwktd.rema.ui.utils.CircleTransformation;
 import com.squareup.picasso.Picasso;
 
@@ -106,17 +107,17 @@ public class BaseDrawerActivity extends BaseActivity {
                         break;
                     case R.id.button_my_collection:
                         Intent intent3 = new Intent();
-                        intent3.setClass(BaseDrawerActivity.this, myCollectionActivity.class);
+                        intent3.setClass(BaseDrawerActivity.this, MyCollectionActivity.class);
                         startActivity(intent3);
                         break;
                     case R.id.button_add:
                         Intent intent4 = new Intent();
-                        intent4.setClass(BaseDrawerActivity.this, com.iwktd.rema.myIssueActivity.class);
+                        intent4.setClass(BaseDrawerActivity.this, MyIssueActivity.class);
                         startActivity(intent4);
                         break;
                     case R.id.button_view_history:
                         Intent intent5 = new Intent();
-                        intent5.setClass(BaseDrawerActivity.this, myViewHistoryActivity.class);
+                        intent5.setClass(BaseDrawerActivity.this, MyViewHistoryActivity.class);
                         startActivity(intent5);
                         break;
 

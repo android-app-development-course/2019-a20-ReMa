@@ -152,10 +152,6 @@ public class MainActivity extends AppCompatActivity {
 
     private List<PersonCard> buildDataFromUid(int uid) {
 
-        int[] imgUrs = {R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2, R.drawable.img_feed_center_2};//对应不同课程的图片
-        int[] imgHds = {R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty, R.drawable.empty};//头像
-        int[] imgLikes = {R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey, R.drawable.ic_heart_outline_grey};//未点赞桃心
-
         ArrayList<HashMap<String, String>> comments = ModelComments.getCommentsByUid(this, uid);
         HashMap<Integer, String> mapper = ModelCourse.getMapCid2Cname(this);
 
@@ -163,12 +159,12 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0 ; i< comments.size(); i++) {
             PersonCard p = new PersonCard();
             Integer cid = Integer.parseInt(comments.get(i).get(ModelComments.cid));
-            p.avatarUrl = imgUrs[i];
+            p.avatarUrl = R.drawable.img_feed_center_2;
             p.courseName = mapper.get(cid);
             p.userName = comments.get(i).get(ModelComments.content); // 显示评论
-            p.head = imgHds[i];
+            p.head = R.drawable.empty;
             p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
-            p.like = imgLikes[i];
+            p.like = R.drawable.ic_heart_outline_grey;
             p.likeNum = "";
             list.add(p);
         }

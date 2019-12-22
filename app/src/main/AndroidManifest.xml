@@ -31,7 +31,8 @@
         </activity>
         <activity
             android:name=".ui.activity.CommentsActivity"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activity.UserProfileActivity"
             android:theme="@style/AppTheme.TransparentActivity" />
@@ -48,14 +49,23 @@
         <!--            android:theme="@style/AppTheme"-->
         <!--            android:windowSoftInputMode="stateHidden">-->
         <!--        </activity>-->
-        <activity android:name=".myIssueActivity"></activity>
+        <activity
+            android:name=".MyIssueActivity"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".MyCollectionActivity"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".MyViewHistoryActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".PersonalInfo"
+            android:launchMode="singleTask"></activity>
         <activity android:name=".SearchDemo"></activity>
-        <activity android:name=".ui.activity.MainActivity"></activity>
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:launchMode="singleTask"></activity>
         <activity android:name=".ui.myComment.MainActivity"></activity>
-        <activity android:name="myCollectionActivity"></activity>
-        <activity android:name="myViewHistoryActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>
-        <activity android:name=".PersonalInfo"></activity>
     </application>
 
 </manifest>

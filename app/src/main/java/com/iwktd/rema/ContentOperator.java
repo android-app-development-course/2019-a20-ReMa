@@ -3,15 +3,20 @@ package com.iwktd.rema;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.Models.ModelMyCollection;
+import com.iwktd.rema.Models.ModelTeacher;
 import com.iwktd.rema.Models.ModelUser;
+import com.iwktd.rema.Objects.ResponseDB;
+import com.iwktd.rema.Objects.TableObjects;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -60,6 +65,7 @@ public class ContentOperator {
     public final static String IS_LOGINED = "is_signed_in";
     public final static String KEY_SESSION = "Set-Cookie"; // 用来从Bundle中提取sessionID
     public final static String KEY_USERNAME = "username";
+    public final static String KEY_UID = "uid";
     public final static String KEY_PWD = "password";
     public final static String KEY_HASH = "seesion_id";
 
@@ -68,12 +74,51 @@ public class ContentOperator {
         Log.d(ContentOperator.TAG, "Constructor");
     }
 
+
+
     public static void init(Context context){
         ModelUser db_user = new ModelUser(context, null, 1);
         //ModelTeacher db_t = new ModelTeacher(this, null, 1);
         ModelCourse db_course = new ModelCourse(context, null, 1);
         ModelComments db_command = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
+    }
+
+    // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
+    public synchronized static void updateAllTable(Context context, ResponseDB resp){
+        ModelMyCollection.dropAll(context);
+        ModelComments.dropAll(context);
+        ModelCourse.dropAll(context);
+        ModelUser.dropAll(context);
+
+        {
+            ModelUser tb_user = new ModelUser(context, null, 1);
+            SQLiteDatabase db_user = tb_user.getWritableDatabase();
+            for(TableObjects.user u: resp.userVector){
+                ModelUser.addNewUser(context,u.uid, u.username);
+            }
+        }
+
+        {
+            HashMap<Integer, String> mapTid2Tname = ModelTeacher.getMapTid2Tname(context);
+            ModelCourse tb_course = new ModelCourse(context, null, 1);
+            SQLiteDatabase db_course = tb_course.getWritableDatabase();
+            for (TableObjects.course course : resp.courseVector) {
+                ModelCourse.addNewCourse(context, course.cname,
+                        mapTid2Tname.get(course.cid),
+                        course.intro,
+                        course.likes,
+                        course.uid);
+            }
+        }
+
+        {
+            ModelComments tb_comment = new ModelComments(context, null, 1);
+            SQLiteDatabase db_comment = tb_comment.getWritableDatabase();
+            for(TableObjects.comments com: resp.commentsVector){
+                ModelComments.addNewComment(context, com.uid, com.content, com.cid);
+            }
+        }
     }
 
     // 注册

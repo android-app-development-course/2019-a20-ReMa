@@ -13,9 +13,9 @@ import java.util.HashMap;
 public class ModelUser extends SQLiteOpenHelper  {
     public final static String tblName = "user";
     public final static String uid = "uid";
-    public final static String type = "type";
+    //public final static String type = "type";
     public final static String username = "username";
-    public final static String password = "password";
+    //public final static String password = "password";
 
     public ModelUser(Context context, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, ModelUser.tblName, factory, version);
@@ -24,7 +24,9 @@ public class ModelUser extends SQLiteOpenHelper  {
     // 创建数据库， 添加初始数据.
     public void onCreate(SQLiteDatabase db) {
         //String drop = "drop table diary;";
-        String createSQL = "create table user(uid integer primary key autoincrement,type text not null default 'U',username text unique not null,password text not null);";
+        String createSQL = "create table user(" +
+                "uid integer primary key autoincrement," +
+                "username text unique not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
         String insert = "insert into user (uid, type, username, password) values (1, 'A', 'karl-han', 'admin'), (2, 'A', 'rema', 'admin');";
@@ -62,9 +64,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         while(cursor.moveToNext()){
                 HashMap<String, String> mapper = new HashMap<>();
                 mapper.put(ModelUser.uid, String.valueOf(cursor.getInt(0)));
-                mapper.put(ModelUser.type, cursor.getString(1));
-                mapper.put(ModelUser.username, cursor.getString(2));
-                mapper.put(ModelUser.password, cursor.getString(3));
+                mapper.put(ModelUser.username, cursor.getString(1));
                 res.add(mapper);
         }
         cursor.close();
@@ -90,9 +90,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         );
         if (cursor.moveToNext()){
             res.put(ModelUser.uid, String.valueOf(cursor.getInt(0)));
-            res.put(ModelUser.type, cursor.getString(1));
-            res.put(ModelUser.username, cursor.getString(2));
-            res.put(ModelUser.password, cursor.getString(3));
+            res.put(ModelUser.username, cursor.getString(1));
         }
         cursor.close();
         //db.close();
@@ -100,7 +98,7 @@ public class ModelUser extends SQLiteOpenHelper  {
     }
 
     // return id
-    public static int addNewUser(Context cnt, String type, String username, String password){
+    public static int addNewUser(Context cnt, int uid, String username){
         int id = -1;
         ModelUser model = new ModelUser(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -108,9 +106,7 @@ public class ModelUser extends SQLiteOpenHelper  {
 
         ContentValues values = new ContentValues();
         values.put(ModelUser.username, username);
-       // values.put(ModelUser.uid, uid);
-        values.put(ModelUser.type, type);
-        values.put(ModelUser.password, password);
+        values.put(ModelUser.uid, uid);
 
         id = (int)db.insert(
                 ModelUser.tblName, null, values
@@ -141,9 +137,7 @@ public class ModelUser extends SQLiteOpenHelper  {
         while(cursor.moveToNext()){
             HashMap<String, String> mapper = new HashMap<>();
             mapper.put(ModelUser.uid, String.valueOf(cursor.getInt(0)));
-            mapper.put(ModelUser.type, cursor.getString(1));
-            mapper.put(ModelUser.username, cursor.getString(2));
-            mapper.put(ModelUser.password, cursor.getString(3));
+            mapper.put(ModelUser.username, cursor.getString(1));
             res.add(mapper);
         }
         cursor.close();
@@ -152,17 +146,15 @@ public class ModelUser extends SQLiteOpenHelper  {
         return res;
     }
 
-    public static int modifyByUid(Context context, int uid, String type, String username, String password) {
+    public static int modifyByUid(Context context, int uid, String username) {
         int id = -1;
         ModelUser model = new ModelUser(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
         // 只取一个
 
         ContentValues values = new ContentValues();
+        values.put(ModelUser.uid, uid);
         values.put(ModelUser.username, username);
-        // values.put(ModelUser.uid, uid);
-        values.put(ModelUser.type, type);
-        values.put(ModelUser.password, password);
 
         id = (int)db.update(
                 ModelUser.tblName,
@@ -194,7 +186,7 @@ public class ModelUser extends SQLiteOpenHelper  {
 
     // 删除全部表
     public static void dropAll(Context context){
-        ModelUser model = new ModelUser(context, null, 1);
+        ModelMyCollection model = new ModelMyCollection(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
         db.execSQL("drop table " + ModelUser.tblName + ";");
         //db.close();

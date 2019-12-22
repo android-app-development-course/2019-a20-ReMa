@@ -25,6 +25,7 @@ public class TableObjects {
         public String intro;
         public int likes;
         public int tid;
+        public int uid;
     }
 
     public class comments {

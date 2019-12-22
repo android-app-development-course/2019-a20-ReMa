@@ -98,4 +98,8 @@ public class ModelMyCollection extends SQLiteOpenHelper {
         cursor.close();
         return res;
     }
+
+    public static void dropAll(Context context){
+
+    }
 }

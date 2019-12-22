@@ -81,7 +81,7 @@ public class ModelComments extends SQLiteOpenHelper {
     }
 
 
-    public static int addNewComment(Context cnt,  int uid, String content, int cid){
+    public static int addNewComment(Context cnt, int coid,  int uid, String content, int cid){
         int id = -1;
        ModelComments model = new ModelComments(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -91,6 +91,7 @@ public class ModelComments extends SQLiteOpenHelper {
         values.put(ModelComments.uid, uid);
         values.put(ModelComments.content, content);
         values.put(ModelComments.cid, cid);
+        values.put(ModelComments.coid, coid);
 
         id = (int)db.insert(
                ModelComments.tblName, null, values

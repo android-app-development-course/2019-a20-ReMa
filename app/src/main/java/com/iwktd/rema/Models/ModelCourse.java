@@ -173,7 +173,7 @@ public class ModelCourse extends SQLiteOpenHelper {
         return mapper;
     }
 
-    public static int addNewCourse(Context cnt, String cname, String tname, String intro, int likes, int uid){
+    public static int addNewCourse(Context cnt, int cid, String cname, String tname, String intro, int likes, int uid){
         int id = -1;
         ModelCourse model = new ModelCourse(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -185,6 +185,7 @@ public class ModelCourse extends SQLiteOpenHelper {
         values.put(ModelCourse.intro, intro);
         values.put(ModelCourse.likes, likes);
         values.put(ModelCourse.uid, uid);
+        values.put(ModelCourse.cid, cid);
 
         id = (int)db.insert(
                 ModelCourse.tblName, null, values

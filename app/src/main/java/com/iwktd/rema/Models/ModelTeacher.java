@@ -101,7 +101,7 @@ public class ModelTeacher extends SQLiteOpenHelper {
         return res;
     }
 
-    public static int addNewTeacher(Context cnt,  String tname){
+    public static int addNewTeacher(Context cnt,  int tid, String tname){
         int id = -1;
         ModelTeacher model = new ModelTeacher(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -109,6 +109,7 @@ public class ModelTeacher extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(ModelTeacher.tname, tname);
+        values.put(ModelTeacher.tid, tid);
 
         id = (int)db.insert(
                 ModelTeacher.tblName, null, values

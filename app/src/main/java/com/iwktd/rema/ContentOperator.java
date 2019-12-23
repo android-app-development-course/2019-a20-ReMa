@@ -12,6 +12,7 @@ import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.Models.ModelMyCollection;
 import com.iwktd.rema.Models.ModelTeacher;
 import com.iwktd.rema.Models.ModelUser;
+import com.iwktd.rema.Network.SessionOperation;
 import com.iwktd.rema.Objects.ResponseDB;
 import com.iwktd.rema.Objects.TableObjects;
 
@@ -48,16 +49,16 @@ public class ContentOperator {
    public final static String SERVER_IP = "http://10.243.0.186:";
    public final static String SERVER_PORT = "8080";
    public final static String PATH_LOGIN = "/autho/login"; // post
-   public final static String PATH_REGISTER_ = "/autho/register"; // post
+   public final static String PATH_REGISTER = "/autho/register"; // post
    public final static String PATH_LOGOUT = "/autho/logout";
 
    // 需要补充两条 修改 的路由！
    public final static String PATH_GET_DATA = "/mani/get_data/"; // + current_hash   0 -> all table
    public final static String PATH_CREATE_COMMENT = "/mani/create_comment";
-   public final static String PATH_DELETE_COMMENT = "/mani/create_comment";
-    //public final static String PATH_MODIFY_COMMENT = "/mani/create_comment";
+   public final static String PATH_DELETE_COMMENT = "/mani/delete_comment";
+    public final static String PATH_UPDATE_COMMENT = "/mani/update_comment";
    public final static String PATH_CREATE_COURSE = "/mani/create_course";
-   public final static String PATH_DELETE_COURSE = "/mani/create_course";
+   public final static String PATH_DELETE_COURSE = "/mani/delete_course";
     //public final static String PATH_MODIFY_COURSE= "/mani/create_comment";
 
     public final static String SP_INFO = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
@@ -70,6 +71,10 @@ public class ContentOperator {
     public final static String KEY_HASH = "current_hash";
 
     private static Context GlobalContext = null;
+
+    // Karl Han
+    static SessionOperation sessionOperation = null;
+    static OkHttpClient client;
 
     public synchronized static void setGlobalContext(Context context){
         GlobalContext = context;
@@ -105,6 +110,14 @@ public class ContentOperator {
         ModelCourse db_course = new ModelCourse(context, null, 1);
         ModelComments db_command = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
+
+        ContentOperator.client = new OkHttpClient.Builder()
+                .callTimeout(20_000, TimeUnit.MILLISECONDS)
+                .connectTimeout(20_000, TimeUnit.MILLISECONDS)
+                .readTimeout(20_000, TimeUnit.MILLISECONDS)
+                .followRedirects(false)
+                //.writeTimeout(20_000, TimeUnit.MILLISECONDS)
+                .build();
     }
 
     // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
@@ -246,6 +259,5 @@ public class ContentOperator {
         return -1;
 
     }
-
 
 }

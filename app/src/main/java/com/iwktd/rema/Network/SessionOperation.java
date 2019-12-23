@@ -1,5 +1,14 @@
 package com.iwktd.rema.Network;
 
+import android.content.Context;
+import android.content.pm.ModuleInfo;
+
+import com.iwktd.rema.ContentOperator;
+import com.iwktd.rema.Models.ModelComments;
+import com.iwktd.rema.Models.ModelCourse;
+import com.iwktd.rema.Models.ModelTeacher;
+import com.iwktd.rema.Models.ModelTeaching;
+import com.iwktd.rema.Models.ModelUser;
 import com.iwktd.rema.Objects.ResponseDB;
 import com.iwktd.rema.Objects.TableObjects;
 
@@ -12,6 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Vector;
+import android.os.Handler;
+import android.util.Log;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -19,12 +30,14 @@ import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class SessionOperation implements Serializable {
     private String session;
     public String latest_hash;
+    private int uid;
 
     public SessionOperation(String session){
         this.session = session;
@@ -36,17 +49,17 @@ public class SessionOperation implements Serializable {
         this.latest_hash = latest_hash;
     }
 
-    public void get_db(){
+    public void update_db(){
         if(latest_hash == "000000"){
             // get the whole db
-            get_whole_db();
+            init_whole_db();
         }
         else{
             get_increment_table();
         }
     }
 
-    public void get_whole_db() {
+    public void init_whole_db() {
         HashMap<String, Class> t2c = new HashMap<>();
         String [] t = new String[]{"user","teaching","teacher","course","comments"};
         t2c.put(t[0], TableObjects.user.class);
@@ -143,9 +156,9 @@ public class SessionOperation implements Serializable {
                             }
                         }
                     }
-                    // UNIMPLEMENTED
                     // initialize whole database base on db
-                    db.printVec();
+                    //db.printVec();
+                    ContentOperator.updateAllTable(ContentOperator.getGlobalContext(), db);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -153,6 +166,7 @@ public class SessionOperation implements Serializable {
         });
     }
 
+    // mode differ
     public void get_increment_table(){
         Request request = new Request.Builder()
                 .url("http://127.0.0.1:5000/mani/get_data/" + latest_hash)
@@ -203,14 +217,20 @@ public class SessionOperation implements Serializable {
                                 update_list.add(fastJSON.JSON.parseObject(obj_s, TableObjects.update_db.class));
                             }
                             for(TableObjects.update_db u : update_list){
-                                u.print();
+                                //u.print();
+                                u.execute();
                             }
+                            // mode controls
+                            // or use latest_hash
                             break;
                         }
                         case 603:{
                             // get the wrong hash
                             // UNIMPLEMENTED
                             // probably clean the database
+                            drop_all_db();
+                            latest_hash = "000000";
+                            update_db();
                         }
                     }
                     // UNIMPLEMENTED
@@ -253,5 +273,280 @@ public class SessionOperation implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Return status code
+    // * 1 is the comment too long
+    // * 2 is course does not exist
+    public int create_comment(int coid, String comment){
+        if(comment.length() > 100){
+            // -1 represent the comment is too long
+            return 1;
+        }
+        HashMap<Integer, String> map = ModelCourse.getMapCid2Cname(ContentOperator.getGlobalContext());
+        String s = map.get(coid);
+        if (s.length() == 0){
+            // no such course
+            return 2;
+        }
+
+        // Be able to add now
+        OkHttpClient client = new OkHttpClient()
+            .newBuilder()
+            .followRedirects(false)
+            .build();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("coid", String.valueOf(coid))
+                .add("comment", comment)
+                .build();
+        Request request = new Request.Builder()
+                .url("127.0.0.1:5000/mani/create_comment")
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try(ResponseBody responseBody = response.body()){
+                    String body = responseBody.string();
+                    JSONObject jsonObject = new JSONObject(body);
+                    int status = jsonObject.getInt("status");
+                    if (status == 102){
+                        // UNIMPLEMENTED
+                        // Use handler to ???
+                        Log.v("create comment", "No enough parameter");
+                        return;
+                    }
+                    else if (status == 100){
+                        // 100 is the normal mode
+                        Log.v("create comment", "Success");
+                        update_db();
+                        return;
+                    }
+                    else{
+                        Log.v("create comment", "Unknow error" + body);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return 0;
+    }
+
+    public void delete_comment(int coid){
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(false)
+                .build();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("coid", String.valueOf(coid))
+                .build();
+        Request request = new Request.Builder()
+                .url("127.0.0.1:5000/mani/delete_comment")
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try(ResponseBody responseBody = response.body()){
+                    String body = responseBody.string();
+                    JSONObject jsonObject = new JSONObject(body);
+                    int status = jsonObject.getInt("status");
+
+                    if (status == 202 || status == 203){
+                        // No such comment
+                        // UNIMPLEMENTED
+                        Log.v("delete comment", "No such coid or no enough parameter");
+                        return;
+                    }
+                    else if (status == 204){
+                        // No priviledge
+                        Log.v("delete comment", "No priviledge");
+                        return;
+                    }
+                    else if (status == 200){
+                        Log.v("delete comment", "Success");
+                        update_db();
+                        return;
+                    }
+                    Log.v("delete comment", "Unknown error" + body);
+                    //String new_hash = jsonObject.getString("new_hash");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void update_comment(int coid, String comment){
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(false)
+                .build();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("coid", String.valueOf(coid))
+                .add("comment", comment)
+                .build();
+        Request request = new Request.Builder()
+                .url("127.0.0.1:5000/mani/delete_comment")
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try(ResponseBody responseBody = response.body()){
+                    String body = responseBody.string();
+                    JSONObject jsonObject = new JSONObject(body);
+                    int status = jsonObject.getInt("status");
+
+                    if (status == 202 || status == 203){
+                        // No such comment
+                        // UNIMPLEMENTED
+                        Log.v("update comment", "No such coid or no enough parameter");
+                        return;
+                    }
+                    else if (status == 204){
+                        // No priviledge
+                        Log.v("update comment", "No priviledge");
+                        return;
+                    }
+                    else if (status == 200){
+                        Log.v("update comment", "Success");
+                        update_db();
+                        return;
+                    }
+                    Log.v("update comment", "Unknown error" + body);
+                    //String new_hash = jsonObject.getString("new_hash");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public int create_course(String cname, String tname, String intro){
+        // Be able to add now
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(false)
+                .build();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("cname", cname)
+                .add("tname", tname)
+                .add("intro", intro)
+                .build();
+        Request request = new Request.Builder()
+                .url("127.0.0.1:5000/mani/create_course")
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try(ResponseBody responseBody = response.body()){
+                    String body = responseBody.string();
+                    JSONObject jsonObject = new JSONObject(body);
+                    int status = jsonObject.getInt("status");
+                    if (status == 302){
+                        // UNIMPLEMENTED
+                        // Use handler to ???
+                        Log.v("create course", "No enough parameter");
+                        return;
+                    }
+                    else if (status == 300){
+                        Log.v("create course", "Success");
+                        update_db();
+                    }
+                    else{
+                        Log.v("create course", "Unknown Error: " + body);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        return 0;
+    }
+
+    public void delete_course(int cid){
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(false)
+                .build();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("cid", String.valueOf(cid))
+                .build();
+        Request request = new Request.Builder()
+                .url("127.0.0.1:5000/mani/delete_comment")
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try(ResponseBody responseBody = response.body()){
+                    String body = responseBody.string();
+                    JSONObject jsonObject = new JSONObject(body);
+                    int status = jsonObject.getInt("status");
+
+                    if (status == 402 || status == 403){
+                        // No such comment
+                        // UNIMPLEMENTED
+                        Log.v("delete course", "No such course or enough parameter");
+                        return;
+                    }
+                    else if (status == 404){
+                        // No priviledge
+                        Log.v("delete course", "No priviledge");
+                        return;
+                    }
+                    else if (status == 400){
+                        Log.v("delete course", "Success");
+                        //String new_hash = jsonObject.getString("new_hash");
+                        update_db();
+                    }
+                    else{
+                        Log.v("delete course", "Unknown Error: " + body);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void drop_all_db(){
+        ModelCourse.dropAll(ContentOperator.getGlobalContext());
+        ModelComments.dropAll(ContentOperator.getGlobalContext());
+        ModelTeacher.dropAll(ContentOperator.getGlobalContext());
+        ModelUser.dropAll(ContentOperator.getGlobalContext());
+        // UNIMPLEMETED
+        //ModelTeaching.dropAll(this.context);
     }
 }

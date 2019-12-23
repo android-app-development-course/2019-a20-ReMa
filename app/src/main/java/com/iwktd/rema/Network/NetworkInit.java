@@ -45,6 +45,11 @@ public class NetworkInit extends Thread{
         this.username = username;
         this.password = password;
         this.latest_hash = hash;
+
+        client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(false)
+                .build();
     }
 
     //public Map<String, String> fetch_data(){

@@ -107,6 +107,8 @@ public class ContentOperator {
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
     }
 
+
+    
     // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
     public synchronized static void updateAllTable(Context context, ResponseDB resp){
         ModelMyCollection.dropAll(context);

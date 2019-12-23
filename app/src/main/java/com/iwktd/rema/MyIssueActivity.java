@@ -44,7 +44,8 @@ public class MyIssueActivity extends AppCompatActivity {
             Log.e("MyIssueActivity", "Error, Can't find uid.");
             return ;
         }
-        mAdapter = new WaterFallAdapter(this, buildDataFromUid(uid));
+        this.list =  PersonCard.getPersonCardForMyIssues(this, uid);
+        mAdapter = new WaterFallAdapter(this, this.list);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -118,23 +119,7 @@ public class MyIssueActivity extends AppCompatActivity {
         return list;
     }
 
-    private List<PersonCard> buildDataFromUid(int uid){
-        ArrayList<HashMap<String, String>> courses = ModelCourse.getMyIssues(this, uid);
 
-        list = new ArrayList<>();
-        for(int i = 0; i< courses.size(); i++) {
-            PersonCard p = new PersonCard();
-            p.avatarUrl = R.drawable.img_feed_center_2;
-            p.courseName = courses.get(i).getOrDefault(ModelCourse.cname, "Error"); // 课程名
-            p.userName = "";
-            p.head = R.drawable.empty;
-            p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
-            p.like = R.drawable.ic_heart_outline_grey;
-            p.likeNum = "0";
-            list.add(p);
-        }
-        return list;
-    }
 
     @Override
     protected void onStart(){

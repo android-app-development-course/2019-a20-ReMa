@@ -91,7 +91,7 @@ public class ModelComments extends SQLiteOpenHelper {
         values.put(ModelComments.uid, uid);
         values.put(ModelComments.content, content);
         values.put(ModelComments.cid, cid);
-        if (coid < 0){
+        if (coid >= 0){
             // for testing, input coid = -1
             values.put(ModelComments.coid, coid);
         }
@@ -185,7 +185,7 @@ public class ModelComments extends SQLiteOpenHelper {
     public static void dropAll(Context context){
         ModelComments model = new ModelComments(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("drop table " + ModelComments.tblName + ";");
+        db.execSQL("delete from " + ModelComments.tblName + ";");
         //db.close();
     }
 

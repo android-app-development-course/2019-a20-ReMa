@@ -41,8 +41,9 @@ public class MyViewHistoryActivity extends AppCompatActivity {
         //mAdapter = new WaterFallAdapter(this, buildData());
         ArrayList<Integer> cidList = ViewHistoryController.getHistory();
         Collections.reverse(cidList); // 反向
+        this.list = PersonCard.getPersonCardForMyViewHistory(this, cidList);
         mAdapter = new WaterFallAdapter(this,
-               buildDataFromCid(cidList)
+               this.list
                 );
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -119,27 +120,6 @@ public class MyViewHistoryActivity extends AppCompatActivity {
         return list;
     }
 
-    private List<PersonCard> buildDataFromCid(ArrayList<Integer> cids){
-        ArrayList<String> names = new ArrayList<>();
-        for (int cid: cids) {
-            HashMap<String, String> course = ModelCourse.getCoursesByCid(this, cid);
-            names.add(course.getOrDefault(ModelCourse.cname, "Error")); // 不存在的课程 -> Error.
-        }
-
-        list = new ArrayList<>();
-        for(int i = 0; i< cids.size(); i++) {
-            PersonCard p = new PersonCard();
-            p.avatarUrl = R.drawable.img_feed_center_2;
-            p.courseName = names.get(i); // 课程名
-            p.userName = "";
-            p.head = R.drawable.empty;
-            p.imgHeight = 400;
-            p.like = R.drawable.ic_heart_outline_grey;
-            p.likeNum = "0";
-            list.add(p);
-        }
-        return list;
-    }
 
     @Override
     protected void onStart(){

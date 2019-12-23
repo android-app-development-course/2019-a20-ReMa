@@ -146,6 +146,7 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             commentsAdapter.addItem();
             commentsAdapter.setAnimationsLocked(false);
             commentsAdapter.setDelayEnterAnimation(false);
+            // Bugs here!!!!!!!!!!!!!!!!!
             rvComments.smoothScrollBy(0, rvComments.getChildAt(0).getHeight() * commentsAdapter.getItemCount());
 
             // 清空输入框
@@ -157,7 +158,7 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
     // 2019-12
     // 当干函数返回 true, 表示已经把评论保存到db里面了
     private boolean validateComment() {
-
+        ContentOperator.getUid(this);
         String comment = etComment.getText().toString();
         if (comment.length() == 0){
             Log.e("Button send comment", "Empty coment");
@@ -168,12 +169,16 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             Log.e("Button send comment", "Too long! length > " + ContentOperator.MAX_COMMENT_LEN);
             return false;
         }
+
         int uid = ContentOperator.getUid(this);
         if (uid < 0) {
             Log.e("Button send comment", "Too long! length > " + ContentOperator.MAX_COMMENT_LEN);
             return false;
         }
-
+        // int result = create_comment(this.cid, comment);
+        // if (result == 0) --> OK
+        // if (result == 1)  --> Too long.
+        // else if(result == 2) --> course doesn't exist.
         int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
         if (id <= 0){
             Log.e("Button send comment", "Failed to add new comment.");

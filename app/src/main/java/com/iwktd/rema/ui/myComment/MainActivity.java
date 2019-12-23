@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mAdapter = new WaterFallAdapter(this, buildDataFromUid(uid));
+        this.list = PersonCard.getPersonCardForMyComments(this, uid);
+        mAdapter = new WaterFallAdapter(this, this.list);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -102,11 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
     public CreateCommentPopWin createCommentPopWin;
 
+    // 2019-12
+    // 这里就是修改评论的
     public void showCommentPopWin(View view, int position) {
 
-        createCommentPopWin = new CreateCommentPopWin(this,onClickListener);
+        createCommentPopWin = new CreateCommentPopWin(this, onClickListener);
         createCommentPopWin.showAtLocation(findViewById(R.id.recyclerview), Gravity.CENTER,0,0);
-        createCommentPopWin.et_comment.setText(list.get(position).courseName);
+        createCommentPopWin.et_comment.setText(list.get(position).comment);
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -150,26 +153,6 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
-    private List<PersonCard> buildDataFromUid(int uid) {
-
-        ArrayList<HashMap<String, String>> comments = ModelComments.getCommentsByUid(this, uid);
-        HashMap<Integer, String> mapper = ModelCourse.getMapCid2Cname(this);
-
-        list = new ArrayList<>();
-        for(int i = 0 ; i< comments.size(); i++) {
-            PersonCard p = new PersonCard();
-            Integer cid = Integer.parseInt(comments.get(i).get(ModelComments.cid));
-            p.avatarUrl = R.drawable.img_feed_center_2;
-            p.courseName = mapper.get(cid);
-            p.userName = comments.get(i).get(ModelComments.content); // 显示评论
-            p.head = R.drawable.empty;
-            p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
-            p.like = R.drawable.ic_heart_outline_grey;
-            p.likeNum = "";
-            list.add(p);
-        }
-        return list;
-    }
 
     @Override
     protected void onStart(){

@@ -174,7 +174,7 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             return false;
         }
 
-        int id = ModelComments.addNewComment(this, uid, comment, this.cid);
+        int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
         if (id <= 0){
             Log.e("Button send comment", "Failed to add new comment.");
         }else{

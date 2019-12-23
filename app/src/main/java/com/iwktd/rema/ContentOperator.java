@@ -107,8 +107,6 @@ public class ContentOperator {
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
     }
 
-
-    
     // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
     public synchronized static void updateAllTable(Context context, ResponseDB resp){
         ModelMyCollection.dropAll(context);
@@ -129,8 +127,11 @@ public class ContentOperator {
             ModelCourse tb_course = new ModelCourse(context, null, 1);
             SQLiteDatabase db_course = tb_course.getWritableDatabase();
             for (TableObjects.course course : resp.courseVector) {
-                ModelCourse.addNewCourse(context, course.cname,
-                        mapTid2Tname.get(course.cid),
+                ModelCourse.addNewCourse(
+                        context,
+                        course.cid,
+                        course.cname,
+                        mapTid2Tname.get(course.tid),
                         course.intro,
                         course.likes,
                         course.uid);
@@ -141,7 +142,7 @@ public class ContentOperator {
             ModelComments tb_comment = new ModelComments(context, null, 1);
             SQLiteDatabase db_comment = tb_comment.getWritableDatabase();
             for(TableObjects.comments com: resp.commentsVector){
-                ModelComments.addNewComment(context, com.uid, com.content, com.cid);
+                ModelComments.addNewComment(context, com.coid, com.uid, com.content, com.cid);
             }
         }
     }

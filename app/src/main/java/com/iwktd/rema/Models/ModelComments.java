@@ -91,7 +91,10 @@ public class ModelComments extends SQLiteOpenHelper {
         values.put(ModelComments.uid, uid);
         values.put(ModelComments.content, content);
         values.put(ModelComments.cid, cid);
-        values.put(ModelComments.coid, coid);
+        if (coid < 0){
+            // for testing, input coid = -1
+            values.put(ModelComments.coid, coid);
+        }
 
         id = (int)db.insert(
                ModelComments.tblName, null, values

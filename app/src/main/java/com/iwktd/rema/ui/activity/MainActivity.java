@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.MyDialog;
 import com.iwktd.rema.Network.NetworkInit;
@@ -248,6 +249,18 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     // 2019-12  点赞
     public void showLikedSnackbar() {
         Snackbar.make(clContent, "Liked!", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
     }
 
 

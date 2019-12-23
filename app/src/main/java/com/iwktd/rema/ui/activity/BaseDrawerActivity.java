@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.view.MenuItem;
 
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.MyIssueActivity;
 import com.iwktd.rema.PersonalInfo;
 import com.iwktd.rema.MyCollectionActivity;
@@ -153,6 +154,18 @@ public class BaseDrawerActivity extends BaseActivity {
                 overridePendingTransition(0, 0);
             }
         }, 200);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
     }
 
 }

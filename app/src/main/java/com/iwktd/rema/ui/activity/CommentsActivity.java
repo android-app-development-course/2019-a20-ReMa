@@ -182,4 +182,16 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
         }
         return true;
     }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
+    }
 }

@@ -67,18 +67,41 @@ public class ContentOperator {
     public final static String KEY_USERNAME = "username";
     public final static String KEY_UID = "uid";
     public final static String KEY_PWD = "password";
-    public final static String KEY_HASH = "seesion_id";
+    public final static String KEY_HASH = "current_hash";
 
+    private static Context GlobalContext = null;
+
+    public synchronized static void setGlobalContext(Context context){
+        GlobalContext = context;
+    }
+
+    public synchronized static Context getGlobalContext(){
+        return GlobalContext;
+    }
+
+    public synchronized static void saveCurrentHash(String hash){
+        assert(GlobalContext != null);
+        GlobalContext
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                .edit()
+                .putString(ContentOperator.KEY_HASH, "")
+                .apply();
+    }
+
+    public synchronized static String getCurrentHash(){
+        assert(GlobalContext != null);
+        return GlobalContext
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                .getString(ContentOperator.KEY_HASH, "");
+    }
 
     ContentOperator(){
         Log.d(ContentOperator.TAG, "Constructor");
     }
 
-
-
     public static void init(Context context){
         ModelUser db_user = new ModelUser(context, null, 1);
-        //ModelTeacher db_t = new ModelTeacher(this, null, 1);
+        ModelTeacher db_t = new ModelTeacher(context, null, 1);
         ModelCourse db_course = new ModelCourse(context, null, 1);
         ModelComments db_command = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);

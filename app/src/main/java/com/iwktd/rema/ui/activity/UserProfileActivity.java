@@ -14,6 +14,7 @@ import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.ui.adapter.UserProfileAdapter;
 import com.iwktd.rema.ui.utils.CircleTransformation;
 import com.iwktd.rema.ui.view.RevealBackgroundView;
@@ -149,5 +150,17 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
            ivUserProfilePhoto.animate().translationY(0).setDuration(300).setStartDelay(100).setInterpolator(INTERPOLATOR);
            vUserDetails.animate().translationY(0).setDuration(300).setStartDelay(200).setInterpolator(INTERPOLATOR);
            vUserStats.animate().alpha(1).setDuration(200).setStartDelay(400).setInterpolator(INTERPOLATOR).start();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
     }
 }

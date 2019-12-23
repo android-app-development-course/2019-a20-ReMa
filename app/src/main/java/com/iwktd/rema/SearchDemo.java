@@ -53,5 +53,17 @@ public class SearchDemo extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
+    }
+
 
 }

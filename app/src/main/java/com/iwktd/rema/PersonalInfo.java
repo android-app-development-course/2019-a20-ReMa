@@ -129,5 +129,17 @@ public class PersonalInfo extends AppCompatActivity {
         // 将个人信息的更改持久化
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
+    }
+
 
 }

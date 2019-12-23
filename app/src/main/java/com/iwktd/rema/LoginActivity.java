@@ -173,6 +173,17 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("LoginActivity", "Start home page");
         startActivity(intent);
     }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
+    }
 }
 
 

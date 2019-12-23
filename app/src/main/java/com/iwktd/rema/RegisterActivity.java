@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
@@ -24,6 +23,18 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
     }
 
 }

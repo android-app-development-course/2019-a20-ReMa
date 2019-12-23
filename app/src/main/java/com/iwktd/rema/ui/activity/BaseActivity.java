@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.R;
 
 /**
@@ -69,5 +71,17 @@ public class BaseActivity extends AppCompatActivity {
 
     public ImageView getIvLogo() {
         return ivLogo;
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
     }
 }

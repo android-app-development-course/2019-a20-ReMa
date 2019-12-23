@@ -135,5 +135,17 @@ public class MyCollectionActivity extends AppCompatActivity {
         return list;
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ContentOperator.setGlobalContext(this);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        ContentOperator.setGlobalContext(this);
+    }
+
 
 }

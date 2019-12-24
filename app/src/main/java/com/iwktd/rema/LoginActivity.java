@@ -29,20 +29,23 @@ import com.iwktd.rema.ui.activity.MainActivity;
 
 import java.util.Locale;
 
+import static com.iwktd.rema.ContentOperator.networkInit;
+import static com.iwktd.rema.ContentOperator.sessionOperation;
+
 
 public class LoginActivity extends AppCompatActivity {
     // 2019
     final Handler handler = null;
     final Handler postHandler = new Handler();
-    ProgressDialog dialog;
 
     static boolean isChinese;
+
+    public Handler loginHandler;
+    public ProgressDialog dialog;
 
     static {
          isChinese = false;
     }
-
-    public SessionOperation sessionOperation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         final Button button_sign_up = findViewById(R.id.button_sign_up);
         final Switch text_switch_lang = findViewById(R.id.switch_lang);
         final TextView tv_sign_in = findViewById(R.id.tv_sign_in);
+        this.isFirstTime();
+        loginHandler = new Handler();
 
         tv_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,35 +88,34 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String account = text_account.getText().toString();
                         String pwd = text_pwd.getText().toString();
-
-                        if (!Check(account, pwd)){
-                            new AlertDialog.Builder(LoginActivity.this)
-                                    .setTitle(R.string.sign_up_fail_title)
-                                    .setPositiveButton("OK", null)
-                                    .show();
-                        }else{
-                            int id = getAccountID(account, pwd);
-                            NetworkInit networkInit = new NetworkInit(account, pwd);
-                            sessionOperation = new SessionOperation(networkInit.session);
-                            saveUserInfoToSP();
-                            switchToHomePage(id);
-                        }
+                        //int id = getAccountID(account, pwd);
+                        dialog = ProgressDialog.show(LoginActivity.this, "",
+                                "Loading. Please wait...", true);
+                        networkInit = new NetworkInit(account, pwd, loginHandler, LoginActivity.this);
+                        networkInit.start();
+                        //switchToHomePage();
                     }
                 }
         );
-        this.isFirstTime();
+    }
+
+    public void loginFailed(){
+        new AlertDialog.Builder(LoginActivity.this)
+                .setTitle(R.string.sign_up_fail_title)
+                .setPositiveButton("OK", null)
+                .show();
     }
     // 2019-12
     // Check first time.
     void isFirstTime(){
         SharedPreferences sp = this.getSharedPreferences(ContentOperator.SP_INFO, MODE_PRIVATE);
         boolean is_first_time = sp.getBoolean("is_first_time", true);
-        Log.d("Login", "Is First time?");
+        Log.d("Login", "Is First time?" + is_first_time);
         if (is_first_time){
             // 自动建立表
             ContentOperator.zinit(this);
             //sp.edit().putBoolean("is_first_time", false).apply();
-            Log.d("login", "finish initialization");
+            Log.d("Login", "finish initialization");
         }
     }
 
@@ -167,17 +171,21 @@ public class LoginActivity extends AppCompatActivity {
 
     // use for testing.
     // TODO:
-    void switchToHomePage(int userID){
+    public void switchToHomePage(){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        Bundle bundle = new Bundle();
+        //Bundle bundle = new Bundle();
         //bundle.putString("user_name", "nb666233");
         //bundle.putInt("user_id", userID);
         //bundle.putInt("user_stars", 666); // 666个赞
         //bundle.putInt("user_course", 233); // 666个赞
         //bundle.putInt("user_comments", 996); // 666个赞
-        bundle.putSerializable("session", sessionOperation);
 
-        intent.putExtras(bundle);
+        sessionOperation = new SessionOperation(networkInit.session);
+        Log.v("LoginActivity", "Hash = " + ContentOperator.getCurrentHash());
+        sessionOperation.update_db();
+        saveUserInfoToSP();
+
+        //intent.putExtras(bundle);
         Log.d("LoginActivity", "Start home page");
         startActivity(intent);
     }

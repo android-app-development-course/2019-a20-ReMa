@@ -30,10 +30,10 @@ public class ModelComments extends SQLiteOpenHelper {
                 "        content text not null ,\n" +
                 "        cid integer not null);";
         db.execSQL(createSQL);
-        String insert = "insert into comments (uid, content, cid) values\n" +
-                "    (1, '这门课真的不错', 1),\n" +
-                "    (2, '这门课真的不错', 2);";
-        db.execSQL(insert);
+        //String insert = "insert into comments (uid, content, cid) values\n" +
+        //        "    (1, '这门课真的不错', 1),\n" +
+        //        "    (2, '这门课真的不错', 2);";
+        //db.execSQL(insert);
         //db.close();
         Log.d("ModelComments", "create table.");
     }

@@ -12,6 +12,7 @@ import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.Models.ModelMyCollection;
 import com.iwktd.rema.Models.ModelTeacher;
 import com.iwktd.rema.Models.ModelUser;
+import com.iwktd.rema.Network.NetworkInit;
 import com.iwktd.rema.Network.SessionOperation;
 import com.iwktd.rema.Objects.ResponseDB;
 import com.iwktd.rema.Objects.TableObjects;
@@ -46,8 +47,8 @@ public class ContentOperator {
    public final static int OP_UNLIKE = 11;
    public final static int OP_GET_ALL_TABLE = 12;
 
-   public final static String SERVER_IP = "http://10.243.0.186:";
-   public final static String SERVER_PORT = "8080";
+   public final static String SERVER_IP = "http://10.243.0.186:8080";
+   //public final static String SERVER_PORT = "8080";
    public final static String PATH_LOGIN = "/autho/login"; // post
    public final static String PATH_REGISTER = "/autho/register"; // post
    public final static String PATH_LOGOUT = "/autho/logout";
@@ -74,6 +75,7 @@ public class ContentOperator {
 
     // Karl Han
     public static SessionOperation sessionOperation = null;
+    public static NetworkInit networkInit = null;
     public static OkHttpClient client;
 
     public synchronized static void setGlobalContext(Context context){
@@ -115,7 +117,7 @@ public class ContentOperator {
         assert(GlobalContext != null);
         return GlobalContext
                 .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
-                .getString(ContentOperator.KEY_HASH, "");
+                .getString(ContentOperator.KEY_HASH, "000000");
     }
 
     ContentOperator(){
@@ -126,7 +128,7 @@ public class ContentOperator {
         ModelUser db_user = new ModelUser(context, null, 1);
         ModelTeacher db_t = new ModelTeacher(context, null, 1);
         ModelCourse db_course = new ModelCourse(context, null, 1);
-        ModelComments db_command = new ModelComments(context, null, 1);
+        ModelComments db_comment = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
 
 
@@ -141,10 +143,10 @@ public class ContentOperator {
 
     // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
     public synchronized static void updateAllTable(Context context, ResponseDB resp){
-        ModelMyCollection.dropAll(context);
-        ModelComments.dropAll(context);
-        ModelCourse.dropAll(context);
-        ModelUser.dropAll(context);
+        //ModelMyCollection.dropAll(context);
+        //ModelComments.dropAll(context);
+        //ModelCourse.dropAll(context);
+        //ModelUser.dropAll(context);
 
         {
             ModelUser tb_user = new ModelUser(context, null, 1);
@@ -186,6 +188,7 @@ public class ContentOperator {
         return id;
     }
 
+    /*
     // 前置条件: Info 里面已经输入了账号密码
     // 正常返回 非负值 , 异常返回-1
     public static int isLogined(Activity act, Bundle info){
@@ -209,6 +212,7 @@ public class ContentOperator {
         }
         return resp;
     }
+    */
 
     public static int getUid(Context context){
         return context
@@ -226,6 +230,7 @@ public class ContentOperator {
     // 传递username, password来询问服务器sessionID
     // 如果成功，将sessionID放入info中，并且返回 0; 其他情况都返回-1。
     // 应该先判断返回值，再取 sessionID(key = ContentOperator.KEY_SESSION)
+    /*
     public static int askForSessionID(Bundle info){
 
         String username = info.getString(ContentOperator.KEY_USERNAME);
@@ -278,5 +283,7 @@ public class ContentOperator {
         return -1;
 
     }
+
+     */
 
 }

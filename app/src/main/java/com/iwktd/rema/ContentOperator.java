@@ -46,8 +46,8 @@ public class ContentOperator {
    public final static int OP_UNLIKE = 11;
    public final static int OP_GET_ALL_TABLE = 12;
 
-   public final static String SERVER_IP = "http://10.243.0.186:";
-   public final static String SERVER_PORT = "8080";
+   public final static String SERVER_IP = "http://10.243.0.186:8080";
+   //public final static String SERVER_PORT = "8080";
    public final static String PATH_LOGIN = "/autho/login"; // post
    public final static String PATH_REGISTER = "/autho/register"; // post
    public final static String PATH_LOGOUT = "/autho/logout";
@@ -167,6 +167,7 @@ public class ContentOperator {
         return id;
     }
 
+    /*
     // 前置条件: Info 里面已经输入了账号密码
     // 正常返回 非负值 , 异常返回-1
     public static int isLogined(Activity act, Bundle info){
@@ -190,6 +191,7 @@ public class ContentOperator {
         }
         return resp;
     }
+    */
 
     public static int getUid(Context context){
         return context
@@ -207,6 +209,7 @@ public class ContentOperator {
     // 传递username, password来询问服务器sessionID
     // 如果成功，将sessionID放入info中，并且返回 0; 其他情况都返回-1。
     // 应该先判断返回值，再取 sessionID(key = ContentOperator.KEY_SESSION)
+    /*
     public static int askForSessionID(Bundle info){
 
         String username = info.getString(ContentOperator.KEY_USERNAME);
@@ -259,5 +262,7 @@ public class ContentOperator {
         return -1;
 
     }
+
+     */
 
 }

@@ -3,12 +3,14 @@ package com.iwktd.rema;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -31,11 +33,12 @@ import java.util.Locale;
 public class LoginActivity extends AppCompatActivity {
     static boolean isChinese;
 
+    public Handler loginHandler;
+    public ProgressDialog dialog;
+
     static {
          isChinese = false;
     }
-
-    public SessionOperation sessionOperation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button button_sign_up = findViewById(R.id.button_sign_up);
         final Switch text_switch_lang = findViewById(R.id.switch_lang);
         final TextView tv_sign_in = findViewById(R.id.tv_sign_in);
+        loginHandler = new Handler();
 
         tv_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,24 +78,27 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String account = text_account.getText().toString();
                         String pwd = text_pwd.getText().toString();
-                        if (!Check(account, pwd)){
-                            new AlertDialog.Builder(LoginActivity.this)
-                                    .setTitle(R.string.sign_up_fail_title)
-                                    .setPositiveButton("OK", null)
-                                    .show();
-                        }else{
-                            int id = getAccountID(account, pwd);
-                            NetworkInit networkInit = new NetworkInit(account, pwd);
-                            sessionOperation = new SessionOperation(networkInit.session);
-                            saveUserInfoToSP();
-                            switchToHomePage(id);
-                        }
+                        //int id = getAccountID(account, pwd);
+                        dialog = ProgressDialog.show(LoginActivity.this, "",
+                                "Loading. Please wait...", true);
+                        NetworkInit networkInit = new NetworkInit(account, pwd, loginHandler, LoginActivity.this);
+                        networkInit.start();
+                        ContentOperator.sessionOperation = new SessionOperation(networkInit.session);
+                        saveUserInfoToSP();
+                        //switchToHomePage();
                     }
                 }
         );
 
         this.isFirstTime();
 
+    }
+
+    public void loginFailed(){
+        new AlertDialog.Builder(LoginActivity.this)
+                .setTitle(R.string.sign_up_fail_title)
+                .setPositiveButton("OK", null)
+                .show();
     }
     // 2019-12
     // Check first time.
@@ -159,17 +166,16 @@ public class LoginActivity extends AppCompatActivity {
 
     // use for testing.
     // TODO:
-    void switchToHomePage(int userID){
+    public void switchToHomePage(){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        Bundle bundle = new Bundle();
+        //Bundle bundle = new Bundle();
         //bundle.putString("user_name", "nb666233");
         //bundle.putInt("user_id", userID);
         //bundle.putInt("user_stars", 666); // 666个赞
         //bundle.putInt("user_course", 233); // 666个赞
         //bundle.putInt("user_comments", 996); // 666个赞
-        bundle.putSerializable("session", sessionOperation);
 
-        intent.putExtras(bundle);
+        //intent.putExtras(bundle);
         Log.d("LoginActivity", "Start home page");
         startActivity(intent);
     }

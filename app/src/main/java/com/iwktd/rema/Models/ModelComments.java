@@ -184,7 +184,7 @@ public class ModelComments extends SQLiteOpenHelper {
     public static void dropAll(Context context){
         ModelComments model = new ModelComments(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("drop table " + ModelComments.tblName + ";");
+        db.execSQL("delete from " + ModelComments.tblName + ";");
         //db.close();
     }
 

@@ -1,9 +1,11 @@
 package scut.carson_ho.searchview;
 
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.ColorSpace;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 /**
  * Created by Carson_Ho on 17/8/10.
@@ -275,14 +278,16 @@ public class SearchView extends LinearLayout {
         // 1. 模糊搜索
         Cursor cursor = helper.getReadableDatabase().rawQuery(
                 "select id as _id,name from records where name like '%" + tempName + "%' order by id desc ", null);
-        // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
-        adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "name" },
+                // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
+        adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "cname" },
                 new int[] { android.R.id.text1 }, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         // 3. 设置适配器
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         System.out.println(cursor.getCount());
+
+
         // 当输入框为空 & 数据库中有搜索记录时，显示 "删除搜索记录"按钮
         if (tempName.equals("") && cursor.getCount() != 0){
             tv_clear.setVisibility(VISIBLE);

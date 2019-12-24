@@ -39,7 +39,8 @@ public class MyCollectionActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);//recycleview_main.xml
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mAdapter = new WaterFallAdapter(this, buildDataFromMyCollection());
+        this.list = PersonCard.getPersonCardForMyCollection(this);
+        mAdapter = new WaterFallAdapter(this, this.list);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

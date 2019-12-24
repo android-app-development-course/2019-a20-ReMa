@@ -157,7 +157,6 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
     // 2019-12
     // 当干函数返回 true, 表示已经把评论保存到db里面了
     private boolean validateComment() {
-
         String comment = etComment.getText().toString();
         if (comment.length() == 0){
             Log.e("Button send comment", "Empty coment");

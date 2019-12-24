@@ -160,11 +160,12 @@ public class ModelComments extends SQLiteOpenHelper {
         ModelComments table = new ModelComments(context, null, 1);
         SQLiteDatabase db = table.getWritableDatabase();
         // update comments set content = 'Lu BenWei niu B!!!';
+
         db.execSQL(
                 "update " + ModelComments.tblName
                         + " set " + ModelComments.content
-                        + " = " + newIntro
-                        + " where " + ModelComments.coid + " = " + coid
+                        + " = '" + newIntro
+                        + "' where " + ModelComments.coid + " = " + coid + ";"
          );
         //db.close();
     }

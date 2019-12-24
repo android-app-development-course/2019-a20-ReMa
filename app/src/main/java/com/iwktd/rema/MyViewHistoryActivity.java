@@ -41,9 +41,9 @@ public class MyViewHistoryActivity extends AppCompatActivity {
         //mAdapter = new WaterFallAdapter(this, buildData());
         ArrayList<Integer> cidList = ViewHistoryController.getHistory();
         Collections.reverse(cidList); // 反向
-        mAdapter = new WaterFallAdapter(this,
-               buildDataFromCid(cidList)
-                );
+        this.list = buildDataFromCid(cidList);
+
+        mAdapter = new WaterFallAdapter(this, this.list);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

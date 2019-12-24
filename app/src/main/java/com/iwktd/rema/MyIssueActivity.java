@@ -44,7 +44,8 @@ public class MyIssueActivity extends AppCompatActivity {
             Log.e("MyIssueActivity", "Error, Can't find uid.");
             return ;
         }
-        mAdapter = new WaterFallAdapter(this, buildDataFromUid(uid));
+        this.list = buildDataFromUid(uid);
+        mAdapter = new WaterFallAdapter(this, this.list);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);

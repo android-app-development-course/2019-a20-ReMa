@@ -83,14 +83,18 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
     }
 
     private void setupTabs() {
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
-        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_label_white));
+//        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_grid_on_white));
+//        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_list_white));
+//        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_place_white));
+//        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setIcon(R.drawable.ic_label_white));
+
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setText("附近的人"));
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setText("动态"));
+        tlUserProfileTabs.addTab(tlUserProfileTabs.newTab().setText("我的点赞"));
     }
 
     private void setupUserProfileGrid() {
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         rvUserProfile.setLayoutManager(layoutManager);
         rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -122,6 +126,7 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
     public void onStateChange(int state) {
         if (RevealBackgroundView.STATE_FINISHED == state) {
             rvUserProfile.setVisibility(View.VISIBLE);
+
             tlUserProfileTabs.setVisibility(View.VISIBLE);
             vUserProfileRoot.setVisibility(View.VISIBLE);
             userPhotosAdapter = new UserProfileAdapter(this);
@@ -141,6 +146,7 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
     }
 
     private void animateUserProfileHeader() {
+           ivUserProfilePhoto.setImageResource(R.drawable.empty);
            vUserProfileRoot.setTranslationY(-vUserProfileRoot.getHeight());
            ivUserProfilePhoto.setTranslationY(-ivUserProfilePhoto.getHeight());
            vUserDetails.setTranslationY(-vUserDetails.getHeight());

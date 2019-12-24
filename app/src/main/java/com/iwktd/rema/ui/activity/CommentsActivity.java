@@ -55,7 +55,7 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
 
         // 2019-12 get data from intent?
         this.cid = this.getIntent().getIntExtra(ModelComments.cid, -1);
-        if (this.cid< 0){
+        if (this.cid < 0){
             Log.e("CommentsActivity", "Failed: cid < 0");
         }
 
@@ -173,6 +173,7 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             Log.e("Button send comment", "Too long! length > " + ContentOperator.MAX_COMMENT_LEN);
             return false;
         }
+
 
         int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
         if (id <= 0){

@@ -123,6 +123,7 @@ private void updateStatusBarColor() {
 
 private void setupRevealBackground(Bundle savedInstanceState) {
     vRevealBackground.setFillPaintColor(0xffffffff);
+
 //        vRevealBackground.setOnStateChangeListener(this);
     if (savedInstanceState == null) {
         final int[] startingLocation = getIntent().getIntArrayExtra(ARG_REVEAL_START_LOCATION);

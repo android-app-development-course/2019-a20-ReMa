@@ -20,6 +20,7 @@
             android:id="@+id/rvUserProfile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/empty2"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <com.google.android.material.appbar.AppBarLayout

@@ -10,6 +10,9 @@ public class PersonCard  {
     public String likeNum ; //点赞数
     public boolean isLike = false;
 
+    // 2019-12
+    public int coid;
+
     public int getAvatarUrl() { return avatarUrl;}
     public String getCourseName() { return courseName; }
     public String getUserName() { return userName; }

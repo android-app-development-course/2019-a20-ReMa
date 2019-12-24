@@ -76,10 +76,8 @@ public class ModelComments extends SQLiteOpenHelper {
         }
         cursor.close();
         //db.close();
-
         return res;
     }
-
 
     public static int addNewComment(Context cnt, int coid,  int uid, String content, int cid){
         int id = -1;
@@ -91,7 +89,7 @@ public class ModelComments extends SQLiteOpenHelper {
         values.put(ModelComments.uid, uid);
         values.put(ModelComments.content, content);
         values.put(ModelComments.cid, cid);
-        if (coid < 0){
+        if (coid >= 0){
             // for testing, input coid = -1
             values.put(ModelComments.coid, coid);
         }

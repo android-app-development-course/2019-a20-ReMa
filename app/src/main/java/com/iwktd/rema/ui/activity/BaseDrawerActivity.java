@@ -26,9 +26,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import com.iwktd.rema.R;
 
-/**
- * Created by Miroslaw Stanek on 15.07.15.
- */
 public class BaseDrawerActivity extends BaseActivity {
 
     @BindView(R.id.drawerLayout)
@@ -51,7 +48,7 @@ public class BaseDrawerActivity extends BaseActivity {
         LayoutInflater.from(this).inflate(layoutResID, viewGroup, true);
         bindViews();
         setupHeader();
-
+        ivMenuUserProfilePhoto.setImageResource(R.drawable.empty);
     }
 
 

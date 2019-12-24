@@ -29,6 +29,9 @@ import com.iwktd.rema.ui.activity.MainActivity;
 
 import java.util.Locale;
 
+import static com.iwktd.rema.ContentOperator.networkInit;
+import static com.iwktd.rema.ContentOperator.sessionOperation;
+
 
 public class LoginActivity extends AppCompatActivity {
     static boolean isChinese;
@@ -81,10 +84,8 @@ public class LoginActivity extends AppCompatActivity {
                         //int id = getAccountID(account, pwd);
                         dialog = ProgressDialog.show(LoginActivity.this, "",
                                 "Loading. Please wait...", true);
-                        NetworkInit networkInit = new NetworkInit(account, pwd, loginHandler, LoginActivity.this);
+                        networkInit = new NetworkInit(account, pwd, loginHandler, LoginActivity.this);
                         networkInit.start();
-                        ContentOperator.sessionOperation = new SessionOperation(networkInit.session);
-                        saveUserInfoToSP();
                         //switchToHomePage();
                     }
                 }
@@ -174,6 +175,11 @@ public class LoginActivity extends AppCompatActivity {
         //bundle.putInt("user_stars", 666); // 666个赞
         //bundle.putInt("user_course", 233); // 666个赞
         //bundle.putInt("user_comments", 996); // 666个赞
+
+        sessionOperation = new SessionOperation(networkInit.session);
+        Log.v("LoginActivity", "Hash = " + ContentOperator.getCurrentHash());
+        sessionOperation.update_db();
+        saveUserInfoToSP();
 
         //intent.putExtras(bundle);
         Log.d("LoginActivity", "Start home page");

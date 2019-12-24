@@ -12,6 +12,7 @@ import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.Models.ModelMyCollection;
 import com.iwktd.rema.Models.ModelTeacher;
 import com.iwktd.rema.Models.ModelUser;
+import com.iwktd.rema.Network.NetworkInit;
 import com.iwktd.rema.Network.SessionOperation;
 import com.iwktd.rema.Objects.ResponseDB;
 import com.iwktd.rema.Objects.TableObjects;
@@ -74,6 +75,7 @@ public class ContentOperator {
 
     // Karl Han
     static SessionOperation sessionOperation = null;
+    static NetworkInit networkInit = null;
     static OkHttpClient client;
 
     public synchronized static void setGlobalContext(Context context){
@@ -97,7 +99,7 @@ public class ContentOperator {
         assert(GlobalContext != null);
         return GlobalContext
                 .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
-                .getString(ContentOperator.KEY_HASH, "");
+                .getString(ContentOperator.KEY_HASH, "000000");
     }
 
     ContentOperator(){

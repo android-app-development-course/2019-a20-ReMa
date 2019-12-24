@@ -79,8 +79,8 @@ public class NetworkInit extends Thread{
 
     public void retriveSession(){
         RequestBody requestBody = new FormBody.Builder()
-                .add("username","rema")
-                .add("password", "admin")
+                .add("username",username)
+                .add("password", password)
                 .build();
 
         Request request = new Request.Builder()
@@ -96,29 +96,46 @@ public class NetworkInit extends Thread{
                 //if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
                 Headers responseHeaders = response.headers();
-                for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                }
+                //for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+                //    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                //}
 
                 String body = responseBody.string();
                 System.out.println(body);
-                Log.v("NetworkInit", "Body " + body);
-
-                session = responseHeaders.get("Set-Cookie");
-                System.out.println(session);
-                String[] s = session.split(";");
-                System.out.println(s[0]);
-                session = s[0];
-                Log.v("NetworkInit", "Session = " + session);
-
-                UIHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        loginActivity.dialog.dismiss();
-                        Toast.makeText(loginActivity, "Login success", Toast.LENGTH_SHORT).show();
-                        loginActivity.switchToHomePage();
+                try {
+                    JSONObject jsonObject = new JSONObject(body);
+                    int status = jsonObject.getInt("status");
+                    if (status == 1){
+                        UIHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loginActivity.dialog.dismiss();
+                                loginActivity.loginFailed();
+                            }
+                        });
+                        return;
                     }
-                });
+                }
+                catch (org.json.JSONException e){
+                    Log.v("NetworkInit", "Body " + body);
+
+                    session = responseHeaders.get("Set-Cookie");
+                    System.out.println(session);
+                    String[] s = session.split(";");
+                    System.out.println(s[0]);
+                    session = s[0];
+                    Log.v("NetworkInit", "Session = " + session);
+
+                    UIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loginActivity.dialog.dismiss();
+                            Toast.makeText(loginActivity, "Login success", Toast.LENGTH_SHORT).show();
+                            loginActivity.switchToHomePage();
+                        }
+                    });
+
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

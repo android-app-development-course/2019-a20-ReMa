@@ -50,6 +50,7 @@ public class SessionOperation implements Serializable {
     }
 
     public void update_db(){
+        Log.v("SessionOperation", "Hash = " + ContentOperator.getCurrentHash());
         if(latest_hash == "000000"){
             // get the whole db
             init_whole_db();

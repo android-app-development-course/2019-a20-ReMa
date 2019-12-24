@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 public class MainActivity extends AppCompatActivity {
     public Context waterfallContext;
     public List<PersonCard> list;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private WaterFallAdapter mAdapter;
 
+    public CreateCommentPopWin createCommentPopWin;
     // 2019-12
     // cid list, for intent
 
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        this.list = PersonCard.getPersonCardForMyComments(this, uid);
+        this.list = buildDataFromUid(uid);
         mAdapter = new WaterFallAdapter(this, this.list);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -101,17 +104,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public CreateCommentPopWin createCommentPopWin;
 
-    // 2019-12
-    // 这里就是修改评论的
     public void showCommentPopWin(View view, int position) {
-
-        createCommentPopWin = new CreateCommentPopWin(this, onClickListener);
+        createCommentPopWin = new CreateCommentPopWin(this,onClickListener, list.get(position).coid);
         createCommentPopWin.showAtLocation(findViewById(R.id.recyclerview), Gravity.CENTER,0,0);
-        createCommentPopWin.et_comment.setText(list.get(position).comment);
+        createCommentPopWin.courseName.setText(list.get(position).courseName);
+        createCommentPopWin.et_comment.setText(list.get(position).userName);
     }
 
+    // 2019-12 , for myComment ->
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -121,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_save:
                     String com = createCommentPopWin.et_comment.getText().toString();
-                    //list.get(position)
+                    // 2019-12
+                    ModelComments.updateContentByCoid(ContentOperator.getGlobalContext(), createCommentPopWin.coid, com);
                     createCommentPopWin.dismiss();
                     break;
             }
@@ -153,6 +155,28 @@ public class MainActivity extends AppCompatActivity {
         return list;
     }
 
+    private List<PersonCard> buildDataFromUid(int uid) {
+
+        ArrayList<HashMap<String, String>> comments = ModelComments.getCommentsByUid(this, uid);
+        HashMap<Integer, String> mapper = ModelCourse.getMapCid2Cname(this);
+
+        list = new ArrayList<>();
+        for(int i = 0 ; i< comments.size(); i++) {
+            PersonCard p = new PersonCard();
+            Integer cid = parseInt(comments.get(i).get(ModelComments.cid));
+            // 2019-12
+            p.coid = parseInt(comments.get(i).get(ModelComments.coid));
+            p.avatarUrl = R.drawable.img_feed_center_2;
+            p.courseName = mapper.get(cid);
+            p.userName = comments.get(i).get(ModelComments.content); // 显示评论
+            p.head = R.drawable.empty;
+            p.imgHeight = 400; //偶数和奇数的图片设置不同的高度，以到达错开的目的
+            p.like = R.drawable.ic_heart_outline_grey;
+            p.likeNum = "";
+            list.add(p);
+        }
+        return list;
+    }
 
     @Override
     protected void onStart(){

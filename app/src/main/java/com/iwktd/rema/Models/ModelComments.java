@@ -76,10 +76,8 @@ public class ModelComments extends SQLiteOpenHelper {
         }
         cursor.close();
         //db.close();
-
         return res;
     }
-
 
     public static int addNewComment(Context cnt, int coid,  int uid, String content, int cid){
         int id = -1;
@@ -185,7 +183,7 @@ public class ModelComments extends SQLiteOpenHelper {
     public static void dropAll(Context context){
         ModelComments model = new ModelComments(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("delete from " + ModelComments.tblName + ";");
+        db.execSQL("drop table " + ModelComments.tblName + ";");
         //db.close();
     }
 

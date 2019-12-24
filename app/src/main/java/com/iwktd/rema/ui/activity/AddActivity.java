@@ -79,7 +79,7 @@ protected void onCreate(Bundle savedInstanceState) {
                     String cname = ((EditText) findViewById(R.id.et_lessonname)).getText().toString();
                     String tname = ((EditText) findViewById(R.id.et_teacher)).getText().toString();
                     String intro = ((EditText) findViewById(R.id.et_intro)).getText().toString();
-                    // int result = create_course(cname, tname, intro)
+
                     if (createNewCourse(cname, tname, intro, uid)){
                         Log.d("AddActivity", "Success");
                         finish();
@@ -123,6 +123,7 @@ private void updateStatusBarColor() {
 
 private void setupRevealBackground(Bundle savedInstanceState) {
     vRevealBackground.setFillPaintColor(0xffffffff);
+
 //        vRevealBackground.setOnStateChangeListener(this);
     if (savedInstanceState == null) {
         final int[] startingLocation = getIntent().getIntArrayExtra(ARG_REVEAL_START_LOCATION);

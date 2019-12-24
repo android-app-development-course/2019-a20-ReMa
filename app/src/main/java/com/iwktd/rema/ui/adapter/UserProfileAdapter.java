@@ -40,7 +40,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public UserProfileAdapter(Context context) {
         this.context = context;
-        this.cellSize = Utils.getScreenWidth(context) / 3;
+        this.cellSize = Utils.getScreenWidth(context) ;
         this.photos = Arrays.asList(context.getResources().getStringArray(R.array.user_photos));
     }
 
@@ -51,6 +51,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         layoutParams.height = cellSize;
         layoutParams.width = cellSize;
         layoutParams.setFullSpan(false);
+
         view.setLayoutParams(layoutParams);
         return new PhotoViewHolder(view);
     }

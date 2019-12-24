@@ -39,8 +39,7 @@ public class MyCollectionActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);//recycleview_main.xml
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        this.list = PersonCard.getPersonCardForMyCollection(this);
-        mAdapter = new WaterFallAdapter(this, this.list);
+        mAdapter = new WaterFallAdapter(this, buildDataFromMyCollection());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -116,7 +115,25 @@ public class MyCollectionActivity extends AppCompatActivity {
         return list;
     }
 
+    private List<PersonCard> buildDataFromMyCollection() {
+        int uid = ContentOperator.getUid(this);
+        ArrayList<Integer> courseID = CollectionController.getCollection(this);
+        HashMap<Integer, String> mapCid2Cname = ModelCourse.getMapCid2Cname(this);
 
+        list = new ArrayList<>();
+        for(Integer i: courseID) {
+            PersonCard p = new PersonCard();
+            p.avatarUrl = R.drawable.empty;
+            p.courseName = mapCid2Cname.getOrDefault(i, "Error"); // 课程名
+            p.userName = "";
+            p.head = R.drawable.empty;
+            p.imgHeight = 400;
+            p.like = R.drawable.ic_heart_outline_grey;
+            p.likeNum = "0";
+            list.add(p);
+        }
+        return list;
+    }
 
     @Override
     protected void onStart(){

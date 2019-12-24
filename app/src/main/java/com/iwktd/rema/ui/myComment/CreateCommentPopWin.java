@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.iwktd.rema.R;
 
@@ -20,18 +21,20 @@ public class CreateCommentPopWin extends PopupWindow {
     private Button btn_save;
     private Button btn_exit;
     public EditText et_comment;
+    public TextView courseName;
+    public int coid;
 
-    public CreateCommentPopWin(Activity mContext, View.OnClickListener itemsOnClick) {
+    public CreateCommentPopWin(Activity mContext, View.OnClickListener itemsOnClick, int coid) {
         this.mContext = mContext;
         this.view = LayoutInflater.from(mContext).inflate(R.layout.create_comment_dialog,null);
         et_comment = (EditText) view.findViewById(R.id.et_mycomment);
         btn_exit = (Button) view.findViewById(R.id.btn_exit);
         btn_save = (Button) view.findViewById(R.id.btn_save);
-
+        courseName = (TextView) view.findViewById(R.id.courseName);
         //设置按钮监听
         btn_save.setOnClickListener(itemsOnClick);
         btn_exit.setOnClickListener(itemsOnClick);
-
+        this.coid = coid;
         //设置外部可点击
         this.setOutsideTouchable(true);
 

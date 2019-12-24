@@ -188,7 +188,7 @@ public class ModelUser extends SQLiteOpenHelper  {
     public static void dropAll(Context context){
         ModelMyCollection model = new ModelMyCollection(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("delete from " + ModelUser.tblName + ";");
+        db.execSQL("drop table " + ModelUser.tblName + ";");
         //db.close();
     }
 

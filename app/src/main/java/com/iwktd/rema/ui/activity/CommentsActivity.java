@@ -14,6 +14,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
@@ -173,12 +174,17 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             return false;
         }
 
-
-        int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
-        if (id <= 0){
-            Log.e("Button send comment", "Failed to add new comment.");
-        }else{
-            Log.d("Button send comment", "Success!");
+        // 2019-12
+        int id = ContentOperator.sessionOperation.create_comment(cid, comment);
+        //int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
+        if (id == 2){
+            Log.e("Button send comment", "评论太长了.");
+            Toast.makeText(ContentOperator.getGlobalContext(), "评论太长了.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (id == 1) {
+            Log.e("Button send comment", "Course didn't exist.");
+            Toast.makeText(ContentOperator.getGlobalContext(), "课程不存在.", Toast.LENGTH_SHORT).show();
+            return false;
         }
         return true;
     }

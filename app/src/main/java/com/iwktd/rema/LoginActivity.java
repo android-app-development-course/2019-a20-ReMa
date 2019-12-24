@@ -3,12 +3,14 @@ package com.iwktd.rema;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,11 @@ import java.util.Locale;
 
 
 public class LoginActivity extends AppCompatActivity {
+    // 2019
+    final Handler handler = null;
+    final Handler postHandler = new Handler();
+    ProgressDialog dialog;
+
     static boolean isChinese;
 
     static {
@@ -68,12 +75,15 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         );
+        // 2019-12
+        // 登陆
         button_sign_up.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         String account = text_account.getText().toString();
                         String pwd = text_pwd.getText().toString();
+
                         if (!Check(account, pwd)){
                             new AlertDialog.Builder(LoginActivity.this)
                                     .setTitle(R.string.sign_up_fail_title)
@@ -89,9 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         );
-
         this.isFirstTime();
-
     }
     // 2019-12
     // Check first time.
@@ -101,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("Login", "Is First time?");
         if (is_first_time){
             // 自动建立表
-            ContentOperator.init(this);
+            ContentOperator.zinit(this);
             //sp.edit().putBoolean("is_first_time", false).apply();
             Log.d("login", "finish initialization");
         }

@@ -123,7 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_save:
                     String com = createCommentPopWin.et_comment.getText().toString();
                     // 2019-12
-                    ModelComments.updateContentByCoid(ContentOperator.getGlobalContext(), createCommentPopWin.coid, com);
+                    ContentOperator.sessionOperation.update_comment(createCommentPopWin.coid, com);
+                    //ModelComments.updateContentByCoid(ContentOperator.getGlobalContext());
                     createCommentPopWin.dismiss();
                     break;
             }

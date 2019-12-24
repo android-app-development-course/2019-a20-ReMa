@@ -1,9 +1,11 @@
 package com.iwktd.rema;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import scut.carson_ho.searchview.ICallBack;
 import scut.carson_ho.searchview.SearchView;
@@ -16,6 +18,7 @@ public class SearchDemo extends AppCompatActivity {
     // 1. 初始化搜索框变量
     private SearchView searchView;
     private Button searchButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +34,8 @@ public class SearchDemo extends AppCompatActivity {
         searchView.setOnClickSearch(new ICallBack() {
             @Override
             public void SearchAciton(String string) {
-                System.out.println("我收到了" + string);
+
+                Log.d("SearchDemo", "我收到了 " + string);
             }
         });
 
@@ -49,7 +53,6 @@ public class SearchDemo extends AppCompatActivity {
     }
     void Bn_search(){
 
-        //HUIZHI
 
     }
 

@@ -58,7 +58,11 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ContentOperator.setGlobalContext(this);
+
         setupFeed();
+
+
 
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;

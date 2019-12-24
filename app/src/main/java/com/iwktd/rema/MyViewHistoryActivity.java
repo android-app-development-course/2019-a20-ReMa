@@ -31,6 +31,8 @@ public class MyViewHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_main_myviewhistory);
+        ContentOperator.setGlobalContext(this);
+
         init();
     }
 

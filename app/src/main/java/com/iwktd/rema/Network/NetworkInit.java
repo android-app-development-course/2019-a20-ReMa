@@ -1,5 +1,6 @@
 package com.iwktd.rema.Network;
 
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -105,6 +106,21 @@ public class NetworkInit extends Thread{
                 try {
                     JSONObject jsonObject = new JSONObject(body);
                     int status = jsonObject.getInt("status");
+                    String hash = jsonObject.getString("last_hash");
+                    Log.d("---hash", hash);
+                    // 2019-12 把登录状态, sessionID 记录在SP中
+                    // 如果考虑到session失效， 可以留个时间戳， 每次打开计算 duration < TimeLimit
+                    ContentOperator
+                            .getGlobalContext()
+                            .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                            .edit()
+                            .putBoolean(ContentOperator.IS_LOGINED, true)
+                            .putString(ContentOperator.KEY_SESSION, session)
+                            .apply();
+                    // 2019-12, update !
+                    ContentOperator.saveCurrentHash(hash);
+                    ContentOperator.saveSessionID(session);
+                    //ContentOperator.sessionOperation = new SessionOperation(hash, session);
                     if (status == 1){
                         UIHandler.post(new Runnable() {
                             @Override
@@ -117,8 +133,9 @@ public class NetworkInit extends Thread{
                     }
                 }
                 catch (org.json.JSONException e){
-                    Log.v("NetworkInit", "Body " + body);
-
+                    // 2019-12  重复插入是走了这条路线
+                    Log.v("NetworkInit-----", "Body " + body);
+                    //Log.d("---", ga)
                     session = responseHeaders.get("Set-Cookie");
                     System.out.println(session);
                     String[] s = session.split(";");

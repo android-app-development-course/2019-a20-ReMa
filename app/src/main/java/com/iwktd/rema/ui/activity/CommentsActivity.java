@@ -54,6 +54,9 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
         setupComments();
         setupSendCommentButton();
 
+        ContentOperator.setGlobalContext(this);
+
+
         // 2019-12 get data from intent?
         this.cid = this.getIntent().getIntExtra(ModelComments.cid, -1);
         if (this.cid < 0){

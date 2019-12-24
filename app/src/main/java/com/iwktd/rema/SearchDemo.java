@@ -2,6 +2,7 @@ package com.iwktd.rema;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,8 @@ public class SearchDemo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContentOperator.setGlobalContext(this);
+
 
         // 2. 绑定视图
         setContentView(R.layout.activity_search);
@@ -34,7 +37,8 @@ public class SearchDemo extends AppCompatActivity {
         searchView.setOnClickSearch(new ICallBack() {
             @Override
             public void SearchAciton(String string) {
-
+                // 2019-12
+                // do search
                 Log.d("SearchDemo", "我收到了 " + string);
             }
         });
@@ -46,6 +50,15 @@ public class SearchDemo extends AppCompatActivity {
                 finish();
             }
         });
+
+        searchButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }
+        );
 
 
         //索搜按钮（上次说到的索搜后面加个按钮，我也不知道有什么用）

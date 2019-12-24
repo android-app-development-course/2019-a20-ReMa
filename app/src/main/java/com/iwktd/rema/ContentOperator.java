@@ -78,6 +78,7 @@ public class ContentOperator {
     public static NetworkInit networkInit = null;
     public static OkHttpClient client;
 
+
     public synchronized static void setGlobalContext(Context context){
         GlobalContext = context;
     }
@@ -153,6 +154,18 @@ public class ContentOperator {
             SQLiteDatabase db_user = tb_user.getWritableDatabase();
             for(TableObjects.user u: resp.userVector){
                 ModelUser.addNewUser(context,u.uid, u.username);
+            }
+        }
+
+        {
+            //HashMap<Integer, String> mapTid2Tname = ModelTeacher.getMapTid2Tname(context);
+            ModelTeacher tb_teacher = new ModelTeacher(context, null, 1);
+            SQLiteDatabase db_course = tb_teacher.getWritableDatabase();
+            for (TableObjects.teacher t : resp.teacherVector) {
+                ModelTeacher.addNewTeacher(
+                        context,
+                        t.tid,
+                        t.tname);
             }
         }
 

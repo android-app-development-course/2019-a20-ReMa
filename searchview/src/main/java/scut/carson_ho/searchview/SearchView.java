@@ -63,6 +63,13 @@ public class SearchView extends LinearLayout {
     private int searchBlockHeight;
     private int searchBlockColor;
 
+    // 2019-12
+    private String keyword;
+
+    public void setKeyword(String keyword){
+        this.keyword = keyword;
+    }
+
     /**
      * 构造函数
      * 作用：对搜索框进行初始化
@@ -131,7 +138,7 @@ public class SearchView extends LinearLayout {
         helper = new RecordSQLiteOpenHelper(context);
 
         // 3. 第1次进入时查询所有的历史搜索记录
-        queryData("");
+        queryData(this.keyword);
 
         /**
          * "清空搜索历史"按钮
@@ -270,7 +277,7 @@ public class SearchView extends LinearLayout {
     }
 
     /**
-     * 关注1
+     * 2019-12 , 这里是显示搜索历史的
      * 模糊查询数据 & 显示到ListView列表上
      */
     private void queryData(String tempName) {
@@ -279,6 +286,7 @@ public class SearchView extends LinearLayout {
         Cursor cursor = helper.getReadableDatabase().rawQuery(
                 "select id as _id,name from records where name like '%" + tempName + "%' order by id desc ", null);
                 // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
+        // cao
         adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "cname" },
                 new int[] { android.R.id.text1 }, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         // 3. 设置适配器
@@ -302,7 +310,6 @@ public class SearchView extends LinearLayout {
      * 关注2：清空数据库
      */
     private void deleteData() {
-
         db = helper.getWritableDatabase();
         db.execSQL("delete from records");
         db.close();
@@ -336,7 +343,6 @@ public class SearchView extends LinearLayout {
      */
     public void setOnClickSearch(ICallBack mCallBack){
         this.mCallBack = mCallBack;
-
     }
 
     /**

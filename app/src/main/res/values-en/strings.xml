@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SignUp</string>
+    <string name="app_name">ReMa</string>
     <string name="account">account</string>
     <string name="pwd">password</string>
     <string name="sign_in">sign in</string>

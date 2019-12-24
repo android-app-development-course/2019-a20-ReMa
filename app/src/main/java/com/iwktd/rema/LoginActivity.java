@@ -88,12 +88,22 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String account = text_account.getText().toString();
                         String pwd = text_pwd.getText().toString();
+                        // 先看看是否登录了
+                        boolean is_logined = ContentOperator
+                                .getGlobalContext()
+                                .getSharedPreferences(ContentOperator.SP_INFO, MODE_PRIVATE)
+                                .getBoolean(ContentOperator.IS_LOGINED, false);
                         //int id = getAccountID(account, pwd);
-                        dialog = ProgressDialog.show(LoginActivity.this, "",
-                                "Loading. Please wait...", true);
                         networkInit = new NetworkInit(account, pwd, loginHandler, LoginActivity.this);
-                        networkInit.start();
-                        //switchToHomePage();
+                        if (!is_logined){
+                            Log.d("Login", "try to login.");
+                            dialog = ProgressDialog.show(LoginActivity.this, "",
+                                    "Loading. Please wait...", true);
+                            networkInit.start();
+                        }else{
+                            Log.d("mmm", "wuwuwu");
+                            switchToHomePage();
+                        }
                     }
                 }
         );

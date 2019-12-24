@@ -64,6 +64,8 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_add);
     updateStatusBarColor();
     setupRevealBackground(savedInstanceState);
+    ContentOperator.setGlobalContext(this);
+
 
     int uid = ContentOperator.getUid(this);
     if (uid < 0){

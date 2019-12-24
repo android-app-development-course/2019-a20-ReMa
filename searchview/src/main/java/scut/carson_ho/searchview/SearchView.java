@@ -37,7 +37,6 @@ public class SearchView extends LinearLayout {
     private LinearLayout search_block; // 搜索框布局
     private ImageView searchBack; // 返回按键
 
-
     // ListView列表 & 适配器
     private SearchListView listView;
     private BaseAdapter adapter;

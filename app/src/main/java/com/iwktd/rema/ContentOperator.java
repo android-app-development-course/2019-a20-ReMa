@@ -74,9 +74,9 @@ public class ContentOperator {
     private static Context GlobalContext = null;
 
     // Karl Han
-    static SessionOperation sessionOperation = null;
-    static NetworkInit networkInit = null;
-    static OkHttpClient client;
+    public static SessionOperation sessionOperation = null;
+    public static NetworkInit networkInit = null;
+    public static OkHttpClient client;
 
     public synchronized static void setGlobalContext(Context context){
         GlobalContext = context;
@@ -86,15 +86,33 @@ public class ContentOperator {
         return GlobalContext;
     }
 
+    public synchronized static void saveSessionID(String sessionID){
+        assert (GlobalContext != null);
+        GlobalContext
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                .edit()
+                .putString(ContentOperator.KEY_SESSION, sessionID)
+                .apply();
+    }
+
+    // 如果失败， 返回""
+    public synchronized static String getSessionID(){
+        assert(GlobalContext != null);
+        return GlobalContext
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                .getString(ContentOperator.KEY_SESSION, "");
+    }
+
     public synchronized static void saveCurrentHash(String hash){
         assert(GlobalContext != null);
         GlobalContext
                 .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
                 .edit()
-                .putString(ContentOperator.KEY_HASH, "")
+                .putString(ContentOperator.KEY_HASH, hash)
                 .apply();
     }
 
+    // 失败， 返回""
     public synchronized static String getCurrentHash(){
         assert(GlobalContext != null);
         return GlobalContext
@@ -106,12 +124,13 @@ public class ContentOperator {
         Log.d(ContentOperator.TAG, "Constructor");
     }
 
-    public static void init(Context context){
+    public static void zinit(Context context){
         ModelUser db_user = new ModelUser(context, null, 1);
         ModelTeacher db_t = new ModelTeacher(context, null, 1);
         ModelCourse db_course = new ModelCourse(context, null, 1);
         ModelComments db_command = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
+
 
         ContentOperator.client = new OkHttpClient.Builder()
                 .callTimeout(20_000, TimeUnit.MILLISECONDS)

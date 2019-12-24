@@ -17,6 +17,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.commonsware.cwac.camera.PictureTransaction;
 import com.commonsware.cwac.camera.SimpleCameraHost;
@@ -79,11 +80,13 @@ protected void onCreate(Bundle savedInstanceState) {
                     String cname = ((EditText) findViewById(R.id.et_lessonname)).getText().toString();
                     String tname = ((EditText) findViewById(R.id.et_teacher)).getText().toString();
                     String intro = ((EditText) findViewById(R.id.et_intro)).getText().toString();
-
-                    if (createNewCourse(cname, tname, intro, uid)){
+                    int resp = ContentOperator.sessionOperation.create_course(cname, tname, intro);
+                    if (resp == 0){
                         Log.d("AddActivity", "Success");
+                        Toast.makeText(ContentOperator.getGlobalContext(), "创建成功.", Toast.LENGTH_SHORT).show();
                         finish();
                     }else{
+                        Toast.makeText(ContentOperator.getGlobalContext(), "未知错误.", Toast.LENGTH_SHORT).show();
                         Log.e("AddActivity", "Failed to add course");
                     }
                 }
@@ -92,6 +95,8 @@ protected void onCreate(Bundle savedInstanceState) {
 
 }
 
+//
+// 废弃
 boolean createNewCourse(String cname, String tname, String intro, int uid){
     ModelCourse tb = new ModelCourse(this, null, 1);
     ContentValues cnt = new ContentValues();

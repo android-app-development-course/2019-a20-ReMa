@@ -3,6 +3,7 @@ package com.iwktd.rema.Network;
 import android.content.Context;
 import android.content.pm.ModuleInfo;
 
+import com.google.android.material.tabs.TabLayout;
 import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.Models.ModelCourse;
@@ -33,6 +34,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+
+import static com.iwktd.rema.ContentOperator.client;
 
 public class SessionOperation implements Serializable {
     private String session;
@@ -69,13 +72,8 @@ public class SessionOperation implements Serializable {
         t2c.put(t[3], TableObjects.course.class);
         t2c.put(t[4], TableObjects.comments.class);
         Request request = new Request.Builder()
-                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA)
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "0")
                 .header("Cookie", session)
-                .build();
-
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -95,7 +93,7 @@ public class SessionOperation implements Serializable {
                     }
 
                     String body = responseBody.string();
-                    System.out.println(body);
+                    //System.out.println(body);
                     //JSONObject jsonObject = JSONObject.parseObject(body);
                     //List<String> table_list = JSON.parseArray(jsonObject.getJSONArray("table_list").toJSONString(), String.class);
                     //for (String s : table_list){
@@ -103,7 +101,9 @@ public class SessionOperation implements Serializable {
                     //}
 
                     //List<JSONObject> tables = JSON.parseArray(jsonObject.get("tables").toString());
+                    Log.v("SessionOperation", "Body = " + body);
                     JSONObject obj = new JSONObject(body);
+                    Log.v("SessionOperation", String.valueOf(request.url()));
                     JSONArray table_list = obj.getJSONArray("table_list");
 
                     for(int i = 0; i < table_list.length(); i++){
@@ -123,10 +123,12 @@ public class SessionOperation implements Serializable {
                         System.out.println("Current table is " + table_name);
                         JSONArray values = table.getJSONArray("values");
                         Class c = t2c.get(table_name);
+                        TableObjects tableObjects = new TableObjects();
 
                         switch (table_name){
                             case "user":{
                                 for(int j = 0; j < values.length(); j++) {
+                                    Log.v("SessionOperation", values.getJSONObject(j).toString());
                                     db.userVector.add((TableObjects.user)fastJSON.JSON.parseObject(values.getJSONObject(j).toString(), t2c.get(table_name)));
                                 }
                                 break;
@@ -172,11 +174,6 @@ public class SessionOperation implements Serializable {
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "/" + latest_hash)
                 .header("Cookie", session)
-                .build();
-
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -253,11 +250,7 @@ public class SessionOperation implements Serializable {
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_REGISTER)
                 .post(requestBody)
-                .build();
-
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
+                .header("Cookie", session)
                 .build();
 
         try(Response response = client.newCall(request).execute()){
@@ -279,11 +272,6 @@ public class SessionOperation implements Serializable {
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_LOGOUT)
                 .header("Cookie", session)
                 .post(new FormBody.Builder().build())
-                .build();
-
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
                 .build();
 
         try(Response response = client.newCall(request).execute()){
@@ -322,10 +310,6 @@ public class SessionOperation implements Serializable {
         }
 
         // Be able to add now
-        OkHttpClient client = new OkHttpClient()
-            .newBuilder()
-            .followRedirects(false)
-            .build();
         RequestBody requestBody = new FormBody.Builder()
                 .add("coid", String.valueOf(coid))
                 .add("comment", comment)
@@ -333,6 +317,7 @@ public class SessionOperation implements Serializable {
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_CREATE_COMMENT)
                 .post(requestBody)
+                .header("Cookie", session)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -344,6 +329,7 @@ public class SessionOperation implements Serializable {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try(ResponseBody responseBody = response.body()){
                     String body = responseBody.string();
+                    //Log.v("SessionOperation", "Body = " + body);
                     JSONObject jsonObject = new JSONObject(body);
                     int status = jsonObject.getInt("status");
                     if (status == 102){
@@ -371,16 +357,13 @@ public class SessionOperation implements Serializable {
     }
 
     public void delete_comment(int coid){
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
-                .build();
         RequestBody requestBody = new FormBody.Builder()
                 .add("coid", String.valueOf(coid))
                 .build();
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_DELETE_COMMENT)
                 .post(requestBody)
+                .header("Cookie", session)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -421,10 +404,6 @@ public class SessionOperation implements Serializable {
     }
 
     public void update_comment(int coid, String comment){
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
-                .build();
         RequestBody requestBody = new FormBody.Builder()
                 .add("coid", String.valueOf(coid))
                 .add("comment", comment)
@@ -432,6 +411,7 @@ public class SessionOperation implements Serializable {
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_UPDATE_COMMENT)
                 .post(requestBody)
+                .header("Cookie", session)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -473,10 +453,6 @@ public class SessionOperation implements Serializable {
 
     public int create_course(String cname, String tname, String intro){
         // Be able to add now
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
-                .build();
         RequestBody requestBody = new FormBody.Builder()
                 .add("cname", cname)
                 .add("tname", tname)
@@ -485,6 +461,7 @@ public class SessionOperation implements Serializable {
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_CREATE_COURSE)
                 .post(requestBody)
+                .header("Cookie", session)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -521,16 +498,13 @@ public class SessionOperation implements Serializable {
     }
 
     public void delete_course(int cid){
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .followRedirects(false)
-                .build();
         RequestBody requestBody = new FormBody.Builder()
                 .add("cid", String.valueOf(cid))
                 .build();
         Request request = new Request.Builder()
                 .url(ContentOperator.SERVER_IP + ContentOperator.PATH_DELETE_COURSE)
                 .post(requestBody)
+                .header("Cookie", session)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

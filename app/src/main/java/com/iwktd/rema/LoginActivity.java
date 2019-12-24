@@ -34,6 +34,10 @@ import static com.iwktd.rema.ContentOperator.sessionOperation;
 
 
 public class LoginActivity extends AppCompatActivity {
+    // 2019
+    final Handler handler = null;
+    final Handler postHandler = new Handler();
+
     static boolean isChinese;
 
     public Handler loginHandler;
@@ -75,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         );
+        // 2019-12
+        // 登陆
         button_sign_up.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -90,9 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         );
-
         this.isFirstTime();
-
     }
 
     public void loginFailed(){
@@ -109,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("Login", "Is First time?");
         if (is_first_time){
             // 自动建立表
-            ContentOperator.init(this);
+            ContentOperator.zinit(this);
             //sp.edit().putBoolean("is_first_time", false).apply();
             Log.d("login", "finish initialization");
         }

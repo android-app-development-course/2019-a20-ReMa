@@ -40,7 +40,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     private static final int ANIM_DURATION_TOOLBAR = 300;
     private static final int ANIM_DURATION_FAB = 400;
     private MyDialog dialog;
-    @BindView(R.id.rvFeed)
+    @BindView(R.id.rvFeed_comment)
     RecyclerView rvFeed;
     @BindView(R.id.btnCreate)
     FloatingActionButton fabCreate;
@@ -54,8 +54,6 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
     // 2019-12
     // 通过feedadaptor.pos2cid 获得 cid.
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

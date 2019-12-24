@@ -7,7 +7,7 @@ import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.Models.ModelCourse;
 
 public class TableObjects {
-    public class user {
+    public static class user {
         public int uid;
         public String username;
         public void print(){
@@ -15,17 +15,17 @@ public class TableObjects {
         }
     }
 
-    public class teaching {
+    public static class teaching {
         public int cid;
         public int tid;
     }
 
-    public class teacher {
+    public static class teacher {
         public int tid;
         public String tname;
     }
 
-    public class course {
+    public static class course {
         public int cid;
         public String cname;
         public String intro;
@@ -34,7 +34,7 @@ public class TableObjects {
         public int uid;
     }
 
-    public class comments {
+    public static class comments {
         public int cid;
         public int coid;
         public String content;
@@ -42,7 +42,7 @@ public class TableObjects {
     }
 
     // it goes error if field is not public
-    public class update_db{
+    public static class update_db{
         public String content;
         public int opcode;
 

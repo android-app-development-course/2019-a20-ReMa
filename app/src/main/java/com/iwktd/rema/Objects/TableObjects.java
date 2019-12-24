@@ -1,7 +1,10 @@
 package com.iwktd.rema.Objects;
 
+import android.content.Context;
+
 import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
+import com.iwktd.rema.Models.ModelCourse;
 
 public class TableObjects {
     public class user {
@@ -51,26 +54,69 @@ public class TableObjects {
             System.out.println(arg);
             String []args = arg.split(",");
             System.out.println(args);
+            Context context = ContentOperator.getGlobalContext();
             switch (this.opcode){
                 case 100:{
                     // insert new comment
-                    ModelComments.addNewComment(ContentOperator.getGlobalContext(), Integer.parseInt(args[0]), Integer.parseInt(args[1]), args[2],Integer.parseInt(args[3]) );
+                    //(coid, uid, comment, cid)
+                    int coid = Integer.parseInt(args[0]);
+                    int uid = Integer.parseInt(args[1]);
+                    String comment = args[2];
+                    int cid = Integer.parseInt(args[3]);
+                    ModelComments.addNewComment(context, coid, uid, comment, cid);
                     break;
                 }
                 case 200:{
                     // delete comment
+                    // para(coid)
+                    int coid = Integer.parseInt(args[0]);
+                    if (args.length == 1){
+                        ModelComments.deleteByCoid(context, coid);
+                    }
+                    else{
+                        assert args.length == 2;
+                        String comment = args[1];
+                        ModelComments.updateContentByCoid(context, coid, comment);
+                    }
                     break;
                 }
                 case 300:{
                     // create course
+                    // (cid, cname, tid, intro, uid)
+                    int cid = Integer.parseInt(args[0]);
+                    String cname = args[1];
+                    int tid = Integer.parseInt(args[2]);
+                    String intro = args[3];
+                    int uid = Integer.parseInt(args[4]);
+                    // UNIMPLEMETED
+                    //ModelCourse.addNewCourse(context, cid, cname, tid, intro, uid);
                     break;
                 }
                 case 400:{
                     // delete course
+                    // para(cid)
+                    int cid = Integer.parseInt(args[0]);
+                    if (args.length == 1){
+                        ModelCourse.deleteByCid(context, cid);
+                    }
+                    else {
+                        assert args.length == 3;
+                        // para(cid, cname, tid, intro)
+                        String cname = args[1];
+                        int tid = Integer.parseInt(args[2]);
+                        String intro = args[3];
+                        // UNIMPLEMENTED
+                        //ModelCourse.modifyByCid(context, cid, cname, tname, likes, intro, uid);
+                    }
                     break;
                 }
                 case 500:{
                     // like course
+                    // para(likes +1, cid)
+                    int likes = Integer.parseInt(args[0]);
+                    int cid = Integer.parseInt(args[1]);
+                    // UNIMPLEMENTED
+                    //ModelCourse.
                     break;
                 }
                 default:{

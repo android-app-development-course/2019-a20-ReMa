@@ -68,7 +68,7 @@ public class SessionOperation implements Serializable {
         t2c.put(t[3], TableObjects.course.class);
         t2c.put(t[4], TableObjects.comments.class);
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:5000/mani/get_data/0")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA)
                 .header("Cookie", session)
                 .build();
 
@@ -169,7 +169,7 @@ public class SessionOperation implements Serializable {
     // mode differ
     public void get_increment_table(){
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:5000/mani/get_data/" + latest_hash)
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "/" + latest_hash)
                 .header("Cookie", session)
                 .build();
 
@@ -243,9 +243,39 @@ public class SessionOperation implements Serializable {
         });
     }
 
+    public void register(String username, String password){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("username",username)
+                .add("password", password)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_REGISTER)
+                .post(requestBody)
+                .build();
+
+        OkHttpClient client = new OkHttpClient()
+                .newBuilder()
+                .followRedirects(false)
+                .build();
+
+        try(Response response = client.newCall(request).execute()){
+            try (ResponseBody responseBody = response.body()) {
+                String body = responseBody.string();
+
+                JSONObject jsonObject = new JSONObject(body);
+                // UNIMPLEMENTED
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void logout(){
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:5000/autho/logout")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_LOGOUT)
                 .header("Cookie", session)
                 .post(new FormBody.Builder().build())
                 .build();
@@ -300,7 +330,7 @@ public class SessionOperation implements Serializable {
                 .add("comment", comment)
                 .build();
         Request request = new Request.Builder()
-                .url("127.0.0.1:5000/mani/create_comment")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_CREATE_COMMENT)
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -348,7 +378,7 @@ public class SessionOperation implements Serializable {
                 .add("coid", String.valueOf(coid))
                 .build();
         Request request = new Request.Builder()
-                .url("127.0.0.1:5000/mani/delete_comment")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_DELETE_COMMENT)
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -399,7 +429,7 @@ public class SessionOperation implements Serializable {
                 .add("comment", comment)
                 .build();
         Request request = new Request.Builder()
-                .url("127.0.0.1:5000/mani/delete_comment")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_UPDATE_COMMENT)
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -452,7 +482,7 @@ public class SessionOperation implements Serializable {
                 .add("intro", intro)
                 .build();
         Request request = new Request.Builder()
-                .url("127.0.0.1:5000/mani/create_course")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_CREATE_COURSE)
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -498,7 +528,7 @@ public class SessionOperation implements Serializable {
                 .add("cid", String.valueOf(cid))
                 .build();
         Request request = new Request.Builder()
-                .url("127.0.0.1:5000/mani/delete_comment")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_DELETE_COURSE)
                 .post(requestBody)
                 .build();
         client.newCall(request).enqueue(new Callback() {

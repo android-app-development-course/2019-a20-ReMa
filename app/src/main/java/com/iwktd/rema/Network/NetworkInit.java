@@ -1,5 +1,6 @@
 package com.iwktd.rema.Network;
 
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Objects.ResponseDB;
 import com.iwktd.rema.Objects.TableObjects.comments;
 import com.iwktd.rema.Objects.TableObjects.user;
@@ -67,7 +68,7 @@ public class NetworkInit extends Thread{
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:5000/autho/login")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_LOGIN)
                 .post(requestBody)
                 .build();
 

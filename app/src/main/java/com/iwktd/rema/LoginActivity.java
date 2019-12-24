@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button button_sign_up = findViewById(R.id.button_sign_up);
         final Switch text_switch_lang = findViewById(R.id.switch_lang);
         final TextView tv_sign_in = findViewById(R.id.tv_sign_in);
+        this.isFirstTime();
         loginHandler = new Handler();
 
         tv_sign_in.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
         );
-        this.isFirstTime();
     }
 
     public void loginFailed(){
@@ -110,12 +110,12 @@ public class LoginActivity extends AppCompatActivity {
     void isFirstTime(){
         SharedPreferences sp = this.getSharedPreferences(ContentOperator.SP_INFO, MODE_PRIVATE);
         boolean is_first_time = sp.getBoolean("is_first_time", true);
-        Log.d("Login", "Is First time?");
+        Log.d("Login", "Is First time?" + is_first_time);
         if (is_first_time){
             // 自动建立表
             ContentOperator.zinit(this);
             //sp.edit().putBoolean("is_first_time", false).apply();
-            Log.d("login", "finish initialization");
+            Log.d("Login", "finish initialization");
         }
     }
 

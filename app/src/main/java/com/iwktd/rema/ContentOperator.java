@@ -128,7 +128,7 @@ public class ContentOperator {
         ModelUser db_user = new ModelUser(context, null, 1);
         ModelTeacher db_t = new ModelTeacher(context, null, 1);
         ModelCourse db_course = new ModelCourse(context, null, 1);
-        ModelComments db_command = new ModelComments(context, null, 1);
+        ModelComments db_comment = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
 
 
@@ -143,10 +143,10 @@ public class ContentOperator {
 
     // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
     public synchronized static void updateAllTable(Context context, ResponseDB resp){
-        ModelMyCollection.dropAll(context);
-        ModelComments.dropAll(context);
-        ModelCourse.dropAll(context);
-        ModelUser.dropAll(context);
+        //ModelMyCollection.dropAll(context);
+        //ModelComments.dropAll(context);
+        //ModelCourse.dropAll(context);
+        //ModelUser.dropAll(context);
 
         {
             ModelUser tb_user = new ModelUser(context, null, 1);

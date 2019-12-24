@@ -89,15 +89,15 @@ public class SessionOperation implements Serializable {
 
                     Headers responseHeaders = response.headers();
                     for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                        System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                        Log.v("SessionOperation", responseHeaders.name(i) + ": " + responseHeaders.value(i));
                     }
 
                     String body = responseBody.string();
-                    //System.out.println(body);
+                    //Log.v("SessionOperation", body);
                     //JSONObject jsonObject = JSONObject.parseObject(body);
                     //List<String> table_list = JSON.parseArray(jsonObject.getJSONArray("table_list").toJSONString(), String.class);
                     //for (String s : table_list){
-                    //    System.out.println(s);
+                    //    Log.v("SessionOperation", s);
                     //}
 
                     //List<JSONObject> tables = JSON.parseArray(jsonObject.get("tables").toString());
@@ -106,10 +106,10 @@ public class SessionOperation implements Serializable {
                     Log.v("SessionOperation", String.valueOf(request.url()));
                     JSONArray table_list = obj.getJSONArray("table_list");
 
-                    for(int i = 0; i < table_list.length(); i++){
-                        String table = table_list.getString(i);
-                        System.out.println(table);
-                    }
+                    //for(int i = 0; i < table_list.length(); i++){
+                    //    String table = table_list.getString(i);
+                    //    Log.v("SessionOperation", table);
+                    //}
 
                     latest_hash = obj.getString("last_hash");
 
@@ -118,9 +118,9 @@ public class SessionOperation implements Serializable {
 
                     for(int i = 0; i < tables.length(); i++){
                         JSONObject table = tables.getJSONObject(i);
-                        //System.out.println(table.toString());
+                        //Log.v("SessionOperation", table.toString());
                         String table_name = table.getString("table");
-                        System.out.println("Current table is " + table_name);
+                        Log.v("SessionOperation", "Current table is " + table_name);
                         JSONArray values = table.getJSONArray("values");
                         Class c = t2c.get(table_name);
                         TableObjects tableObjects = new TableObjects();
@@ -128,7 +128,7 @@ public class SessionOperation implements Serializable {
                         switch (table_name){
                             case "user":{
                                 for(int j = 0; j < values.length(); j++) {
-                                    Log.v("SessionOperation", values.getJSONObject(j).toString());
+                                    //Log.v("SessionOperation", values.getJSONObject(j).toString());
                                     db.userVector.add((TableObjects.user)fastJSON.JSON.parseObject(values.getJSONObject(j).toString(), t2c.get(table_name)));
                                 }
                                 break;
@@ -187,7 +187,7 @@ public class SessionOperation implements Serializable {
                 // deal with error code first
                 try (ResponseBody responseBody = response.body()){
                     String body = responseBody.string();
-                    System.out.println(body);
+                    Log.v("SessionOperation", body);
 
                     JSONObject obj = new JSONObject(body);
                     int status = obj.getInt("status");
@@ -202,7 +202,7 @@ public class SessionOperation implements Serializable {
                             assert obj.getString("table") == "incrementTable";
                             JSONArray op_list = obj.getJSONArray("values");
                             String s = op_list.toString();
-                            System.out.println(s);
+                            Log.v("SessionOperation", s);
                             JSONArray arr = obj.getJSONArray("values");
                             //List<update_db> update_dbList = fastJSON.JSON.parseArray(s, update_db.class);
                             //for(update_db u : update_dbList){
@@ -211,7 +211,7 @@ public class SessionOperation implements Serializable {
                             Vector<TableObjects.update_db> update_list = new Vector();
                             for(int i = 0; i < arr.length(); i++){
                                 String obj_s = arr.getJSONObject(i).toString();
-                                System.out.println(obj_s);
+                                Log.v("SessionOperation", obj_s);
                                 update_list.add(fastJSON.JSON.parseObject(obj_s, TableObjects.update_db.class));
                             }
                             for(TableObjects.update_db u : update_list){
@@ -277,10 +277,10 @@ public class SessionOperation implements Serializable {
         try(Response response = client.newCall(request).execute()){
             try(ResponseBody body = response.body()){
                 String bodyString = body.string();
-                System.out.println(bodyString);
+                Log.v("SessionOperation", bodyString);
                 JSONObject obj = new JSONObject(bodyString);
                 String obj_s = obj.toString();
-                System.out.println(obj_s);
+                Log.v("SessionOperation", obj_s);
                 int status = obj.getInt("status");
                 assert status == 0;
 

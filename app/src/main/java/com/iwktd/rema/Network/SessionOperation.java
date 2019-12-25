@@ -482,6 +482,7 @@ public class SessionOperation implements Serializable {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try(ResponseBody responseBody = response.body()){
                     String body = responseBody.string();
+                    Log.v("SessionOperation-create_course", "Body = " + body);
                     JSONObject jsonObject = new JSONObject(body);
                     int status = jsonObject.getInt("status");
                     if (status == 302){

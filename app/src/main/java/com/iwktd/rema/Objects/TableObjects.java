@@ -6,6 +6,11 @@ import android.util.Log;
 import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
 import com.iwktd.rema.Models.ModelCourse;
+import com.iwktd.rema.Models.ModelTeacher;
+
+import java.util.HashMap;
+
+import static com.iwktd.rema.ContentOperator.trim_str;
 
 public class TableObjects {
     public static class user {
@@ -61,7 +66,7 @@ public class TableObjects {
                     //(coid, uid, comment, cid)
                     int coid = Integer.parseInt(args[0]);
                     int uid = Integer.parseInt(args[1]);
-                    String comment = args[2].substring(1, args[2].length() -1);
+                    String comment = trim_str(args[2]);
                     int cid = Integer.parseInt(args[3]);
                     ModelComments.addNewComment(context, coid, uid, comment, cid);
                     break;
@@ -75,21 +80,27 @@ public class TableObjects {
                     }
                     else{
                         assert args.length == 2;
-                        String comment = args[1];
+                        String comment = trim_str(args[1]);
                         ModelComments.updateContentByCoid(context, coid, comment);
                     }
                     break;
                 }
                 case 300:{
                     // create course
-                    // (cid, cname, tid, intro, uid)
+                    // (cid, cname, tid, intro, uid, tname)
                     int cid = Integer.parseInt(args[0]);
-                    String cname = args[1];
-                    int tid = Integer.parseInt(args[2]);
-                    String intro = args[3];
+                    String cname = trim_str(args[1]);
+                    String tname = trim_str(args[2]);
+                    String intro = trim_str(args[3]);
                     int uid = Integer.parseInt(args[4]);
+                    Log.v("TableObjects", "Strings = " + cname + intro);
+                    //if (args.length == 5){
+                    //    Log.v("TableObjects", "Compromise");
+                    //    break;
+                    //}
+                    //String tname = args[5];
                     // UNIMPLEMETED
-                    //ModelCourse.addNewCourse(context, cid, cname, tid, intro, uid);
+                    ModelCourse.addNewCourse(ContentOperator.getGlobalContext(), cid, cname, tname,intro, 0, uid);
                     break;
                 }
                 case 400:{
@@ -102,9 +113,9 @@ public class TableObjects {
                     else {
                         assert args.length == 3;
                         // para(cid, cname, tid, intro)
-                        String cname = args[1];
+                        String cname = trim_str(args[1]);
                         int tid = Integer.parseInt(args[2]);
-                        String intro = args[3];
+                        String intro = trim_str(args[3]);
                         // UNIMPLEMENTED
                         //ModelCourse.modifyByCid(context, cid, cname, tname, likes, intro, uid);
                     }

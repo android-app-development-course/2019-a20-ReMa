@@ -78,6 +78,9 @@ public class ContentOperator {
     public static NetworkInit networkInit = null;
     public static OkHttpClient client;
 
+    public static String trim_str(String str){
+        return str.substring(1, str.length() -1);
+    }
 
     public synchronized static void setGlobalContext(Context context){
         GlobalContext = context;

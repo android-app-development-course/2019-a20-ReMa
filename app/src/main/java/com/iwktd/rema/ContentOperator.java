@@ -54,7 +54,7 @@ public class ContentOperator {
    public final static String PATH_LOGOUT = "/autho/logout";
 
    // 需要补充两条 修改 的路由！
-   public final static String PATH_GET_DATA = "/mani/get_data/"; // + current_hash   0 -> all table
+   public final static String PATH_GET_DATA = "/mani/get_data"; // + current_hash   0 -> all table
    public final static String PATH_CREATE_COMMENT = "/mani/create_comment";
    public final static String PATH_DELETE_COMMENT = "/mani/delete_comment";
     public final static String PATH_UPDATE_COMMENT = "/mani/update_comment";

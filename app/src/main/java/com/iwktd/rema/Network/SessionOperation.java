@@ -39,26 +39,26 @@ import static com.iwktd.rema.ContentOperator.client;
 
 public class SessionOperation implements Serializable {
     private String session;
-    public String latest_hash;
     private int uid;
 
     public SessionOperation(String session){
         this.session = session;
-        this.latest_hash = "000000";
     }
 
     public SessionOperation(String session, String latest_hash){
         this.session = session;
-        this.latest_hash = latest_hash;
+        ContentOperator.saveCurrentHash(latest_hash);
     }
 
     public void update_db(){
-        Log.v("SessionOperation", "Hash = " + ContentOperator.getCurrentHash());
-        if(latest_hash == "000000"){
+        Log.v("SessionOperation", "in update_db hash = " + ContentOperator.getCurrentHash());
+        if(ContentOperator.getCurrentHash().equals("000000")){
             // get the whole db
+            Log.v("SessionOperation", "Init whole db");
             init_whole_db();
         }
         else{
+            Log.v("SessionOperation", "Get increment table");
             get_increment_table();
         }
     }
@@ -72,7 +72,7 @@ public class SessionOperation implements Serializable {
         t2c.put(t[3], TableObjects.course.class);
         t2c.put(t[4], TableObjects.comments.class);
         Request request = new Request.Builder()
-                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "0")
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "/0")
                 .header("Cookie", session)
                 .build();
 
@@ -111,7 +111,9 @@ public class SessionOperation implements Serializable {
                     //    Log.v("SessionOperation", table);
                     //}
 
-                    latest_hash = obj.getString("last_hash");
+                    String latest_hash = obj.getString("last_hash");
+                    Log.v("SessionOperation", "Update last hash to " + latest_hash);
+                    ContentOperator.saveCurrentHash(latest_hash);
 
                     JSONArray tables = obj.getJSONArray("tables");
                     ResponseDB db = new ResponseDB();
@@ -172,7 +174,7 @@ public class SessionOperation implements Serializable {
     // mode differ
     public void get_increment_table(){
         Request request = new Request.Builder()
-                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "/" + latest_hash)
+                .url(ContentOperator.SERVER_IP + ContentOperator.PATH_GET_DATA + "/" + ContentOperator.getCurrentHash())
                 .header("Cookie", session)
                 .build();
 
@@ -188,6 +190,7 @@ public class SessionOperation implements Serializable {
                 try (ResponseBody responseBody = response.body()){
                     String body = responseBody.string();
                     Log.v("SessionOperation", body);
+                    Log.v("SessionOperation", request.url().toString());
 
                     JSONObject obj = new JSONObject(body);
                     int status = obj.getInt("status");
@@ -204,6 +207,10 @@ public class SessionOperation implements Serializable {
                             String s = op_list.toString();
                             Log.v("SessionOperation", s);
                             JSONArray arr = obj.getJSONArray("values");
+                            String hash = obj.getString("new_hash");
+                            ContentOperator.saveCurrentHash(hash);
+                            ContentOperator.saveSessionID(session);
+                            Log.v("SessionOperation", "in increment table update hash to " + hash);
                             //List<update_db> update_dbList = fastJSON.JSON.parseArray(s, update_db.class);
                             //for(update_db u : update_dbList){
                             //    u.print();
@@ -227,7 +234,7 @@ public class SessionOperation implements Serializable {
                             // UNIMPLEMENTED
                             // probably clean the database
                             drop_all_db();
-                            latest_hash = "000000";
+                            ContentOperator.saveCurrentHash("000000");
                             update_db();
                         }
                     }
@@ -297,21 +304,23 @@ public class SessionOperation implements Serializable {
     // Return status code
     // * 1 is the comment too long
     // * 2 is course does not exist
-    public int create_comment(int coid, String comment){
+    public int create_comment(int cid, String comment){
         if(comment.length() > 100){
             // -1 represent the comment is too long
             return 1;
         }
         HashMap<Integer, String> map = ModelCourse.getMapCid2Cname(ContentOperator.getGlobalContext());
-        String s = map.get(coid);
+        String s = map.get(cid);
         if (s.length() == 0){
             // no such course
             return 2;
         }
 
+        Log.v("SessionOperation", "creating comment");
+
         // Be able to add now
         RequestBody requestBody = new FormBody.Builder()
-                .add("coid", String.valueOf(coid))
+                .add("cid", String.valueOf(cid))
                 .add("comment", comment)
                 .build();
         Request request = new Request.Builder()
@@ -329,13 +338,13 @@ public class SessionOperation implements Serializable {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try(ResponseBody responseBody = response.body()){
                     String body = responseBody.string();
-                    //Log.v("SessionOperation", "Body = " + body);
+                    Log.v("SessionOperation", "Body = " + body);
                     JSONObject jsonObject = new JSONObject(body);
                     int status = jsonObject.getInt("status");
                     if (status == 102){
                         // UNIMPLEMENTED
                         // Use handler to ???
-                        Log.v("create comment", "No enough parameter");
+                        Log.v("create comment", "No enough parameter" + body);
                         return;
                     }
                     else if (status == 100){

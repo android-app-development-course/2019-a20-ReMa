@@ -1,6 +1,7 @@
 package com.iwktd.rema.Objects;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
@@ -50,10 +51,9 @@ public class TableObjects {
             System.out.println("{\n\topcode = " + opcode + ",\n\tcontent = " + content + "\n}");
         }
         public void execute(){
-            String arg = this.content.substring(1, this.content.length()-2);
+            String arg = this.content.substring(1, this.content.length()-1);
             System.out.println(arg);
             String []args = arg.split(",");
-            System.out.println(args);
             Context context = ContentOperator.getGlobalContext();
             switch (this.opcode){
                 case 100:{
@@ -61,7 +61,7 @@ public class TableObjects {
                     //(coid, uid, comment, cid)
                     int coid = Integer.parseInt(args[0]);
                     int uid = Integer.parseInt(args[1]);
-                    String comment = args[2];
+                    String comment = args[2].substring(1, args[2].length() -1);
                     int cid = Integer.parseInt(args[3]);
                     ModelComments.addNewComment(context, coid, uid, comment, cid);
                     break;

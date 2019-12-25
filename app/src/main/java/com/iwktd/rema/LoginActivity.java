@@ -190,7 +190,12 @@ public class LoginActivity extends AppCompatActivity {
         //bundle.putInt("user_course", 233); // 666个赞
         //bundle.putInt("user_comments", 996); // 666个赞
 
-        sessionOperation = new SessionOperation(networkInit.session);
+        if (ContentOperator.getCurrentHash() == "000000"){
+            sessionOperation = new SessionOperation(networkInit.session);
+        }
+        else{
+            sessionOperation = new SessionOperation(networkInit.session, ContentOperator.getCurrentHash());
+        }
         Log.v("LoginActivity", "Hash = " + ContentOperator.getCurrentHash());
         sessionOperation.update_db();
         saveUserInfoToSP();

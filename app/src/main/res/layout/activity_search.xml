@@ -19,7 +19,7 @@
         app:searchBlockColor="#ffffff"
         />
     <Button
-        android:id="@+id/bn_search"
+        android:id="@+id/butten_search"
         android:layout_width="60dp"
         android:layout_height="40dp"
         android:background="#ffffff"

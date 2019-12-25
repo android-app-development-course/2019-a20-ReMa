@@ -31,6 +31,7 @@ public class SearchDemo extends AppCompatActivity {
 
         // 3. 绑定组件
         searchView = findViewById(R.id.search_view);
+        //searchButton = findViewById(R.id.butten_search);
 
         // 4. 设置点击搜索按键后的操作（通过回调接口）
         // 参数 = 搜索框输入的内容
@@ -51,6 +52,7 @@ public class SearchDemo extends AppCompatActivity {
             }
         });
 
+        /*
         searchButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -58,7 +60,7 @@ public class SearchDemo extends AppCompatActivity {
 
                     }
                 }
-        );
+        );*/
 
 
         //索搜按钮（上次说到的索搜后面加个按钮，我也不知道有什么用）

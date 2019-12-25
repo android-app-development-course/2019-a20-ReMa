@@ -59,10 +59,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ContentOperator.setGlobalContext(this);
-
         setupFeed();
-
-
 
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
@@ -257,12 +254,16 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     protected void onStart(){
         super.onStart();
         ContentOperator.setGlobalContext(this);
+
+        //setupFeed();
+        feedAdapter.updateItems(true);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         ContentOperator.setGlobalContext(this);
+        feedAdapter.updateItems(true);
     }
 
 

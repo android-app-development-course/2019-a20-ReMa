@@ -183,7 +183,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         if (animated) {
-            notifyItemRangeInserted(0, feedItems.size());
+            notifyItemRangeChanged(0, feedItems.size());
         } else {
             notifyDataSetChanged();
         }

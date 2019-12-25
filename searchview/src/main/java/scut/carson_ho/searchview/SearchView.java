@@ -136,7 +136,7 @@ public class SearchView extends LinearLayout {
 
         // 2. 实例化数据库SQLiteOpenHelper子类对象
         helper = new RecordSQLiteOpenHelper(context);
-
+        setKeyword("");
         // 3. 第1次进入时查询所有的历史搜索记录
         queryData(this.keyword);
 
@@ -193,7 +193,7 @@ public class SearchView extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                setKeyword(et_search.getText().toString());
             }
 
             // 输入文本后调用该方法
@@ -287,7 +287,7 @@ public class SearchView extends LinearLayout {
                 "select id as _id,name from records where name like '%" + tempName + "%' order by id desc ", null);
                 // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
         // cao
-        adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "cname" },
+        adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "name" },
                 new int[] { android.R.id.text1 }, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         // 3. 设置适配器
         listView.setAdapter(adapter);

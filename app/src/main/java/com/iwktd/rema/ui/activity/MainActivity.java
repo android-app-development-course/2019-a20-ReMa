@@ -59,14 +59,13 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ContentOperator.setGlobalContext(this);
+
+        update_course_list();
+    }
+
+    public void update_course_list(){
         setupFeed();
-
-        if (savedInstanceState == null) {
-            pendingIntroAnimation = true;
-        } else {
-            feedAdapter.updateItems(false);
-        }
-
+        feedAdapter.updateItems(false);
     }
 
     /*

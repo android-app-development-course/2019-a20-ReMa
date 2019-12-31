@@ -64,18 +64,21 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
         }
 
         // 设置data
+        update_comments();
+    }
+
+    public void update_comments(){
+        // 设置data
         this.commentsAdapter.setDataByCid(this.cid);
         drawingStartLocation = getIntent().getIntExtra(ARG_DRAWING_START_LOCATION, 0);
-        if (savedInstanceState == null) {
-            contentRoot.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    contentRoot.getViewTreeObserver().removeOnPreDrawListener(this);
-                    startIntroAnimation();
-                    return true;
-                }
-            });
-        }
+        contentRoot.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                contentRoot.getViewTreeObserver().removeOnPreDrawListener(this);
+                startIntroAnimation();
+                return true;
+            }
+        });
     }
 
     private void setupComments() {

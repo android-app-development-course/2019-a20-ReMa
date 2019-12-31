@@ -112,7 +112,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     // 修改， 改为重新读取db， 后面可继续优化
     public void addItem() {
         setDataByCid(cid);
-        notifyItemInserted(itemsCount - 1);
+        notifyItemChanged(itemsCount - 1);
     }
 
     public void setAnimationsLocked(boolean animationsLocked) {

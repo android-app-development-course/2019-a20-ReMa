@@ -93,13 +93,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                }
 //            }
 //        });
+        // 2019-12
+        // 电子
         cellFeedViewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int adapterPosition = cellFeedViewHolder.getAdapterPosition();
                 //int count = feedItems.get(adapterPosition).likesCount;
                 boolean islike = feedItems.get(adapterPosition).isLiked;
-                //Log.i("islike1:", ""+islike+" "+count);
                 //点赞和取消
                 if(feedItems.get(adapterPosition).isLiked) {
                     //count--;

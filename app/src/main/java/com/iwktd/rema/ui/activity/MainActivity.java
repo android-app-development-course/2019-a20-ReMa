@@ -254,7 +254,6 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     protected void onStart(){
         super.onStart();
         ContentOperator.setGlobalContext(this);
-
         //setupFeed();
         feedAdapter.updateItems(true);
     }
@@ -263,7 +262,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     protected void onResume(){
         super.onResume();
         ContentOperator.setGlobalContext(this);
-        feedAdapter.updateItems(true);
+        //feedAdapter.updateItems(true);
     }
 
 

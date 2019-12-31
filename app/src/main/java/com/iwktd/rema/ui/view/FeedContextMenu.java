@@ -27,6 +27,7 @@ public class FeedContextMenu extends LinearLayout {
         init();
     }
 
+    // 收藏按钮
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.view_context_menu, this, true);
         setBackgroundResource(R.drawable.bg_container_shadow);
@@ -58,7 +59,6 @@ public class FeedContextMenu extends LinearLayout {
             onItemClickListener.onReportClick(feedItem);
         }
         CollectionController.addNewRecord(this.context, this.cid);
-
 
     }
 

@@ -70,7 +70,7 @@ public class ContentOperator {
     public final static String KEY_UID = "uid";
     public final static String KEY_PWD = "password";
     public final static String KEY_HASH = "current_hash";
-
+    public final static int COMMENT_HEIGHT = 100; // 防止空指针错误
     private static Context GlobalContext = null;
 
     // Karl Han

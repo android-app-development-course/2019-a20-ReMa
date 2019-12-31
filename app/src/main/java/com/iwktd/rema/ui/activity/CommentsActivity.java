@@ -150,7 +150,8 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             commentsAdapter.addItem();
             commentsAdapter.setAnimationsLocked(false);
             commentsAdapter.setDelayEnterAnimation(false);
-            rvComments.smoothScrollBy(0, rvComments.getChildAt(0).getHeight() * commentsAdapter.getItemCount());
+            // getChildAt(0).getHeight() -> null pointer.
+            rvComments.smoothScrollBy(0, ContentOperator.COMMENT_HEIGHT * commentsAdapter.getItemCount());
 
             // 清空输入框
             etComment.setText(null);

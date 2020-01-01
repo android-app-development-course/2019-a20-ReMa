@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    android:background="@drawable/bg13"
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="80dp"
         android:layout_marginEnd="50dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,8 +40,9 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/account"
+                android:textColor="#000000"
                 android:singleLine="true"
-                android:text="account" />
+                android:text="rema" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,14 +60,15 @@
                 android:hint="@string/pwd"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:text="123456" />
+                android:textColor="#000000"
+                android:text="admin" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/button_sign_up"
-            android:layout_width="150dp"
-            android:layout_height="70dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_sign_up"
@@ -73,14 +76,25 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/tv_sign_in"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="注册"
+            android:textColor="#2d5d81"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="5dp"/>
+
         <Switch
             android:id="@+id/switch_lang"
-            android:layout_width="188dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:text="@string/switch_lang"
             android:textColor="#8BC34A"
+            android:layout_marginLeft="35dp"
             tools:text="@string/switch_lang" />
     </LinearLayout>
 

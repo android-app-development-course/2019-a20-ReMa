@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_group_1">
+        <item
+            android:id="@+id/button_main"
+            android:icon="@drawable/shouye"
+            android:title="首页" />
+        <item
+            android:id="@+id/button_personal_info"
+            android:icon="@drawable/ic_global_menu_feed"
+            android:title="我的个人资料" />
+        <item
+            android:id="@+id/button_my_comment"
+            android:icon="@drawable/ic_global_menu_news"
+            android:title="我的评论" />
+        <item
+            android:id="@+id/button_my_collection"
+            android:icon="@drawable/ic_global_menu_likes"
+            android:title="我的收藏" />
+        <item
+            android:id="@+id/button_add"
+            android:icon="@drawable/ic_global_menu_popular"
+            android:title="我的发布" />
+        <item
+            android:id="@+id/button_view_history"
+            android:icon="@drawable/ic_global_menu_nearby"
+            android:title="浏览历史" />
+<!--        <item-->
+<!--            android:id="@+id/menu_photo_you_liked"-->
+<!--            android:icon="@drawable/ic_global_menu_likes"-->
+<!--            android:title="Photos You've Liked" />-->
+    </group>
+    <group android:id="@+id/menu_group_2">
+        <item
+            android:id="@+id/menu_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/menu_about"
+            android:title="About" />
+    </group>
+</menu>

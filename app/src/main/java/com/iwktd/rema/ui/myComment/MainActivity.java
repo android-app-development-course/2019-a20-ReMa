@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_main);
+        ContentOperator.setGlobalContext(this);
+
         init();
     }
     private void init() {
@@ -123,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_save:
                     String com = createCommentPopWin.et_comment.getText().toString();
                     // 2019-12
-                    ModelComments.updateContentByCoid(ContentOperator.getGlobalContext(), createCommentPopWin.coid, com);
+                    ContentOperator.sessionOperation.update_comment(createCommentPopWin.coid, com);
+                    //ModelComments.updateContentByCoid(ContentOperator.getGlobalContext());
                     createCommentPopWin.dismiss();
                     break;
             }

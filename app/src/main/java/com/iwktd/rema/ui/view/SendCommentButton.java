@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ViewAnimator;
 
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.R;
 
 /**
@@ -33,6 +34,8 @@ public class SendCommentButton extends ViewAnimator implements View.OnClickListe
     public SendCommentButton(Context context) {
         super(context);
         this.context = context;
+        ContentOperator.setGlobalContext(context);
+
         init();
     }
 
@@ -83,7 +86,6 @@ public class SendCommentButton extends ViewAnimator implements View.OnClickListe
         if (onSendClickListener != null) {
             onSendClickListener.onSendClickListener(this);
         }
-
     }
 
     public void setOnSendClickListener(OnSendClickListener onSendClickListener) {

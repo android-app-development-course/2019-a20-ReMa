@@ -5,7 +5,4 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class ModelTeaching  {
-
-
-
 }

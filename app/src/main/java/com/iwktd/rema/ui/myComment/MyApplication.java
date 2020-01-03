@@ -6,6 +6,8 @@ package com.iwktd.rema.ui.myComment;
 import android.app.Application;
 import android.content.Context;
 
+import com.iwktd.rema.ContentOperator;
+
 //import com.facebook.drawee.backends.pipeline.Fresco;
 
 
@@ -16,6 +18,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+        ContentOperator.setGlobalContext(this);
+
         //context = getBaseContext();
 //        Fresco.initialize(this);
     }

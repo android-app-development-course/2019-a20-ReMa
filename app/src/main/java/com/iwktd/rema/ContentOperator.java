@@ -12,6 +12,7 @@ import com.iwktd.rema.Models.ModelCourse;
 import com.iwktd.rema.Models.ModelMyCollection;
 import com.iwktd.rema.Models.ModelTeacher;
 import com.iwktd.rema.Models.ModelUser;
+import com.iwktd.rema.Network.NetworkInit;
 import com.iwktd.rema.Network.SessionOperation;
 import com.iwktd.rema.Objects.ResponseDB;
 import com.iwktd.rema.Objects.TableObjects;
@@ -46,14 +47,14 @@ public class ContentOperator {
    public final static int OP_UNLIKE = 11;
    public final static int OP_GET_ALL_TABLE = 12;
 
-   public final static String SERVER_IP = "http://10.243.0.186:";
-   public final static String SERVER_PORT = "8080";
+   public final static String SERVER_IP = "http://10.243.0.186:8080";
+   //public final static String SERVER_PORT = "8080";
    public final static String PATH_LOGIN = "/autho/login"; // post
    public final static String PATH_REGISTER = "/autho/register"; // post
    public final static String PATH_LOGOUT = "/autho/logout";
 
    // 需要补充两条 修改 的路由！
-   public final static String PATH_GET_DATA = "/mani/get_data/"; // + current_hash   0 -> all table
+   public final static String PATH_GET_DATA = "/mani/get_data"; // + current_hash   0 -> all table
    public final static String PATH_CREATE_COMMENT = "/mani/create_comment";
    public final static String PATH_DELETE_COMMENT = "/mani/delete_comment";
     public final static String PATH_UPDATE_COMMENT = "/mani/update_comment";
@@ -69,12 +70,17 @@ public class ContentOperator {
     public final static String KEY_UID = "uid";
     public final static String KEY_PWD = "password";
     public final static String KEY_HASH = "current_hash";
-
+    public final static int COMMENT_HEIGHT = 100; // 防止空指针错误
     private static Context GlobalContext = null;
 
     // Karl Han
-    static SessionOperation sessionOperation = null;
-    static OkHttpClient client;
+    public static SessionOperation sessionOperation = null;
+    public static NetworkInit networkInit = null;
+    public static OkHttpClient client;
+
+    public static String trim_str(String str){
+        return str.substring(1, str.length() -1);
+    }
 
     public synchronized static void setGlobalContext(Context context){
         GlobalContext = context;
@@ -84,32 +90,51 @@ public class ContentOperator {
         return GlobalContext;
     }
 
+    public synchronized static void saveSessionID(String sessionID){
+        assert (GlobalContext != null);
+        GlobalContext
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                .edit()
+                .putString(ContentOperator.KEY_SESSION, sessionID)
+                .apply();
+    }
+
+    // 如果失败， 返回""
+    public synchronized static String getSessionID(){
+        assert(GlobalContext != null);
+        return GlobalContext
+                .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
+                .getString(ContentOperator.KEY_SESSION, "");
+    }
+
     public synchronized static void saveCurrentHash(String hash){
         assert(GlobalContext != null);
         GlobalContext
                 .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
                 .edit()
-                .putString(ContentOperator.KEY_HASH, "")
+                .putString(ContentOperator.KEY_HASH, hash)
                 .apply();
     }
 
+    // 失败， 返回""
     public synchronized static String getCurrentHash(){
         assert(GlobalContext != null);
         return GlobalContext
                 .getSharedPreferences(ContentOperator.SP_INFO, Context.MODE_PRIVATE)
-                .getString(ContentOperator.KEY_HASH, "");
+                .getString(ContentOperator.KEY_HASH, "000000");
     }
 
     ContentOperator(){
         Log.d(ContentOperator.TAG, "Constructor");
     }
 
-    public static void init(Context context){
+    public static void zinit(Context context){
         ModelUser db_user = new ModelUser(context, null, 1);
         ModelTeacher db_t = new ModelTeacher(context, null, 1);
         ModelCourse db_course = new ModelCourse(context, null, 1);
-        ModelComments db_command = new ModelComments(context, null, 1);
+        ModelComments db_comment = new ModelComments(context, null, 1);
         ModelMyCollection db_mycollection = new ModelMyCollection(context, null, 1);
+
 
         ContentOperator.client = new OkHttpClient.Builder()
                 .callTimeout(20_000, TimeUnit.MILLISECONDS)
@@ -122,16 +147,28 @@ public class ContentOperator {
 
     // 调用了这个方法会清空所有表， 要重启app以清空内存中保留的过时信息！
     public synchronized static void updateAllTable(Context context, ResponseDB resp){
-        ModelMyCollection.dropAll(context);
-        ModelComments.dropAll(context);
-        ModelCourse.dropAll(context);
-        ModelUser.dropAll(context);
+        //ModelMyCollection.dropAll(context);
+        //ModelComments.dropAll(context);
+        //ModelCourse.dropAll(context);
+        //ModelUser.dropAll(context);
 
         {
             ModelUser tb_user = new ModelUser(context, null, 1);
             SQLiteDatabase db_user = tb_user.getWritableDatabase();
             for(TableObjects.user u: resp.userVector){
                 ModelUser.addNewUser(context,u.uid, u.username);
+            }
+        }
+
+        {
+            //HashMap<Integer, String> mapTid2Tname = ModelTeacher.getMapTid2Tname(context);
+            ModelTeacher tb_teacher = new ModelTeacher(context, null, 1);
+            SQLiteDatabase db_course = tb_teacher.getWritableDatabase();
+            for (TableObjects.teacher t : resp.teacherVector) {
+                ModelTeacher.addNewTeacher(
+                        context,
+                        t.tid,
+                        t.tname);
             }
         }
 
@@ -167,6 +204,7 @@ public class ContentOperator {
         return id;
     }
 
+    /*
     // 前置条件: Info 里面已经输入了账号密码
     // 正常返回 非负值 , 异常返回-1
     public static int isLogined(Activity act, Bundle info){
@@ -190,6 +228,7 @@ public class ContentOperator {
         }
         return resp;
     }
+    */
 
     public static int getUid(Context context){
         return context
@@ -207,6 +246,7 @@ public class ContentOperator {
     // 传递username, password来询问服务器sessionID
     // 如果成功，将sessionID放入info中，并且返回 0; 其他情况都返回-1。
     // 应该先判断返回值，再取 sessionID(key = ContentOperator.KEY_SESSION)
+    /*
     public static int askForSessionID(Bundle info){
 
         String username = info.getString(ContentOperator.KEY_USERNAME);
@@ -259,5 +299,7 @@ public class ContentOperator {
         return -1;
 
     }
+
+     */
 
 }

@@ -40,7 +40,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     private static final int ANIM_DURATION_TOOLBAR = 300;
     private static final int ANIM_DURATION_FAB = 400;
     private MyDialog dialog;
-    @BindView(R.id.rvFeed)
+    @BindView(R.id.rvFeed_comment)
     RecyclerView rvFeed;
     @BindView(R.id.btnCreate)
     FloatingActionButton fabCreate;
@@ -54,20 +54,18 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
 
     // 2019-12
     // 通过feedadaptor.pos2cid 获得 cid.
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ContentOperator.setGlobalContext(this);
+
+        update_course_list();
+    }
+
+    public void update_course_list(){
         setupFeed();
-
-        if (savedInstanceState == null) {
-            pendingIntroAnimation = true;
-        } else {
-            feedAdapter.updateItems(false);
-        }
-
+        feedAdapter.updateItems(false);
     }
 
     /*
@@ -255,12 +253,15 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     protected void onStart(){
         super.onStart();
         ContentOperator.setGlobalContext(this);
+        //setupFeed();
+        feedAdapter.updateItems(true);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         ContentOperator.setGlobalContext(this);
+        //feedAdapter.updateItems(true);
     }
 
 

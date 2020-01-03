@@ -13,6 +13,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.R;
 
 public class CreateCommentPopWin extends PopupWindow {
@@ -31,6 +32,8 @@ public class CreateCommentPopWin extends PopupWindow {
         btn_exit = (Button) view.findViewById(R.id.btn_exit);
         btn_save = (Button) view.findViewById(R.id.btn_save);
         courseName = (TextView) view.findViewById(R.id.courseName);
+        // 2019-12
+
         //设置按钮监听
         btn_save.setOnClickListener(itemsOnClick);
         btn_exit.setOnClickListener(itemsOnClick);

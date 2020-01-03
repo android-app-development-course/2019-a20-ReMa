@@ -66,6 +66,9 @@ public class UserProfileActivity extends BaseDrawerActivity implements RevealBac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        ContentOperator.setGlobalContext(this);
+
+
         this.avatarSize = getResources().getDimensionPixelSize(R.dimen.user_profile_avatar_size);
         this.profilePhoto = getString(R.string.user_profile_photo);
 

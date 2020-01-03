@@ -93,13 +93,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                }
 //            }
 //        });
+        // 2019-12
+        // 电子
         cellFeedViewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int adapterPosition = cellFeedViewHolder.getAdapterPosition();
                 //int count = feedItems.get(adapterPosition).likesCount;
                 boolean islike = feedItems.get(adapterPosition).isLiked;
-                //Log.i("islike1:", ""+islike+" "+count);
                 //点赞和取消
                 if(feedItems.get(adapterPosition).isLiked) {
                     //count--;
@@ -164,7 +165,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // db 读取数据
         ArrayList<HashMap<String, String>> courseInfo = ModelCourse.getAllCourse(this.context);
         this.pos2cid = new HashMap<>();
-
         for(int i = 0; i < courseInfo.size(); i++){
             HashMap<String, String> c = courseInfo.get(i);
             if (c != null){
@@ -172,10 +172,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 feedItems.add(
                         new FeedItem(likes,
                                 false,
-                                "教师: "+c.get(ModelCourse.tname),
+                                "教师:  "+c.get(ModelCourse.tname),
                                 "课程名: "+c.get(ModelCourse.cname),
                                 "创建者: "+c.get(ModelCourse.uid),
-                                "简介: "+c.get(ModelCourse.intro)
+                                "简介:  "+c.get(ModelCourse.intro)
                                 )
                 );
                 // 创建 pos -> cid, 也即是 i -> cid
@@ -184,7 +184,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         if (animated) {
-            notifyItemRangeInserted(0, feedItems.size());
+            notifyItemRangeChanged(0, feedItems.size());
         } else {
             notifyDataSetChanged();
         }

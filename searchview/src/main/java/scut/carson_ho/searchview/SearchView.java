@@ -1,9 +1,11 @@
 package scut.carson_ho.searchview;
 
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.ColorSpace;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 /**
  * Created by Carson_Ho on 17/8/10.
@@ -36,7 +39,6 @@ public class SearchView extends LinearLayout {
     private TextView tv_clear;  // 删除搜索记录按键
     private LinearLayout search_block; // 搜索框布局
     private ImageView searchBack; // 返回按键
-
 
     // ListView列表 & 适配器
     private SearchListView listView;
@@ -60,6 +62,13 @@ public class SearchView extends LinearLayout {
     // 2. 搜索框设置：高度 & 颜色
     private int searchBlockHeight;
     private int searchBlockColor;
+
+    // 2019-12
+    private String keyword;
+
+    public void setKeyword(String keyword){
+        this.keyword = keyword;
+    }
 
     /**
      * 构造函数
@@ -127,9 +136,9 @@ public class SearchView extends LinearLayout {
 
         // 2. 实例化数据库SQLiteOpenHelper子类对象
         helper = new RecordSQLiteOpenHelper(context);
-
+        setKeyword("");
         // 3. 第1次进入时查询所有的历史搜索记录
-        queryData("");
+        queryData(this.keyword);
 
         /**
          * "清空搜索历史"按钮
@@ -184,7 +193,7 @@ public class SearchView extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                setKeyword(et_search.getText().toString());
             }
 
             // 输入文本后调用该方法
@@ -268,7 +277,7 @@ public class SearchView extends LinearLayout {
     }
 
     /**
-     * 关注1
+     * 2019-12 , 这里是显示搜索历史的
      * 模糊查询数据 & 显示到ListView列表上
      */
     private void queryData(String tempName) {
@@ -276,7 +285,8 @@ public class SearchView extends LinearLayout {
         // 1. 模糊搜索
         Cursor cursor = helper.getReadableDatabase().rawQuery(
                 "select id as _id,name from records where name like '%" + tempName + "%' order by id desc ", null);
-        // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
+                // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
+        // cao
         adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "name" },
                 new int[] { android.R.id.text1 }, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         // 3. 设置适配器
@@ -284,6 +294,8 @@ public class SearchView extends LinearLayout {
         adapter.notifyDataSetChanged();
 
         System.out.println(cursor.getCount());
+
+
         // 当输入框为空 & 数据库中有搜索记录时，显示 "删除搜索记录"按钮
         if (tempName.equals("") && cursor.getCount() != 0){
             tv_clear.setVisibility(VISIBLE);
@@ -298,7 +310,6 @@ public class SearchView extends LinearLayout {
      * 关注2：清空数据库
      */
     private void deleteData() {
-
         db = helper.getWritableDatabase();
         db.execSQL("delete from records");
         db.close();
@@ -332,7 +343,6 @@ public class SearchView extends LinearLayout {
      */
     public void setOnClickSearch(ICallBack mCallBack){
         this.mCallBack = mCallBack;
-
     }
 
     /**

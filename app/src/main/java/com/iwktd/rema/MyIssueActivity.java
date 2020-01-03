@@ -31,6 +31,8 @@ public class MyIssueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_main_myissue);
+        ContentOperator.setGlobalContext(this);
+
         init();
     }
 

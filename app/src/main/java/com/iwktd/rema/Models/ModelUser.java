@@ -29,8 +29,8 @@ public class ModelUser extends SQLiteOpenHelper  {
                 "username text unique not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
-        String insert = "insert into user (uid, type, username, password) values (1, 'A', 'karl-han', 'admin'), (2, 'A', 'rema', 'admin');";
-        db.execSQL(insert);
+        //String insert = "insert into user (uid, type, username, password) values (1, 'A', 'karl-han', 'admin'), (2, 'A', 'rema', 'admin');";
+        //db.execSQL(insert);
         Log.d("ModelUser", "create table.");
     }
 
@@ -99,6 +99,11 @@ public class ModelUser extends SQLiteOpenHelper  {
 
     // return id
     public static int addNewUser(Context cnt, int uid, String username){
+        ArrayList<HashMap<String, String>> arr = getAllUsers(cnt);
+        for (HashMap<String, String> map : arr){
+            Log.v("ModelUser", map.toString());
+        }
+
         int id = -1;
         ModelUser model = new ModelUser(cnt, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
@@ -188,7 +193,7 @@ public class ModelUser extends SQLiteOpenHelper  {
     public static void dropAll(Context context){
         ModelMyCollection model = new ModelMyCollection(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("drop table " + ModelUser.tblName + ";");
+        db.execSQL("delete from " + ModelUser.tblName + ";");
         //db.close();
     }
 

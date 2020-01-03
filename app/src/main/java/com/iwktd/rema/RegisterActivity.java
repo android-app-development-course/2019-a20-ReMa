@@ -13,6 +13,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.sign_in);
+        ContentOperator.setGlobalContext(this);
+
 
         final Button btn_sign_in = findViewById(R.id.btn_sign_in);
 

@@ -35,10 +35,10 @@ public class ModelCourse extends SQLiteOpenHelper {
                 "        uid integer not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
-        String insert = "insert into course (cid, cname, tname, intro, uid) values \n" +
-                "    (1, '计算机安全学', '斌头', '学习与密码学相关知识，了解密码学历史', 1),\n" +
-                "    (2, '编译原理', '黄煜廉', '学习如何将代码转换成机器可执行代码的整个过程', 2);";
-        db.execSQL(insert);
+        //String insert = "insert into course (cid, cname, tname, intro, uid) values \n" +
+        //        "    (1, '计算机安全学', '斌头', '学习与密码学相关知识，了解密码学历史', 1),\n" +
+        //        "    (2, '编译原理', '黄煜廉', '学习如何将代码转换成机器可执行代码的整个过程', 2);";
+        //db.execSQL(insert);
         Log.d("ModelCourse", "create table.");
     }
 
@@ -253,9 +253,7 @@ public class ModelCourse extends SQLiteOpenHelper {
     public static void dropAll(Context context){
         ModelCourse model = new ModelCourse(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("drop table " + ModelCourse.tblName + ";");
+        db.execSQL("delete from " + ModelCourse.tblName + ";");
         //db.close();
     }
-
-
 }

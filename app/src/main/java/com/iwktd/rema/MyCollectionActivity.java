@@ -32,10 +32,12 @@ public class MyCollectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_main_mycollection);
+        ContentOperator.setGlobalContext(this);
         init();
     }
 
     private void init() {
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);//recycleview_main.xml
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);

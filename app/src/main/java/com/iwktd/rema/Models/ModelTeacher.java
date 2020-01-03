@@ -25,15 +25,15 @@ public class ModelTeacher extends SQLiteOpenHelper {
     // 创建数据库， 添加初始数据.
     public void onCreate(SQLiteDatabase db) {
         //String drop = "drop table diary;";
-        String createSQL = "create table course(\n" +
+        String createSQL = "create table teacher(\n" +
                 "        tid integer primary key autoincrement,\n" +
                 "        tname text not null);";
         //db.execSQL(drop)
         db.execSQL(createSQL);
-        String insert = "insert into teacher (tid, tname) values\n" +
-                "    (1, 'Bintou'), " +
-                "    (2, '浴帘王子');";
-        db.execSQL(insert);
+        //String insert = "insert into teacher (tid, tname) values\n" +
+        //        "    (1, 'Bintou'), " +
+        //        "    (2, '浴帘王子');";
+        //db.execSQL(insert);
         Log.d("ModelTeacher", "create table.");
     }
 
@@ -182,7 +182,7 @@ public class ModelTeacher extends SQLiteOpenHelper {
     public static void dropAll(Context context){
         ModelTeacher model = new ModelTeacher(context, null, 1);
         SQLiteDatabase db = model.getReadableDatabase();
-        db.execSQL("drop table " + ModelTeacher.tblName + ";");
+        db.execSQL("delete from " + ModelTeacher.tblName + ";");
         //db.close();
     }
 

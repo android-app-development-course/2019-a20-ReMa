@@ -14,6 +14,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.iwktd.rema.ContentOperator;
 import com.iwktd.rema.Models.ModelComments;
@@ -53,6 +54,9 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
         setupComments();
         setupSendCommentButton();
 
+        ContentOperator.setGlobalContext(this);
+
+
         // 2019-12 get data from intent?
         this.cid = this.getIntent().getIntExtra(ModelComments.cid, -1);
         if (this.cid < 0){
@@ -60,18 +64,21 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
         }
 
         // 设置data
+        update_comments();
+    }
+
+    public void update_comments(){
+        // 设置data
         this.commentsAdapter.setDataByCid(this.cid);
         drawingStartLocation = getIntent().getIntExtra(ARG_DRAWING_START_LOCATION, 0);
-        if (savedInstanceState == null) {
-            contentRoot.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    contentRoot.getViewTreeObserver().removeOnPreDrawListener(this);
-                    startIntroAnimation();
-                    return true;
-                }
-            });
-        }
+        contentRoot.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                contentRoot.getViewTreeObserver().removeOnPreDrawListener(this);
+                startIntroAnimation();
+                return true;
+            }
+        });
     }
 
     private void setupComments() {
@@ -146,7 +153,8 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             commentsAdapter.addItem();
             commentsAdapter.setAnimationsLocked(false);
             commentsAdapter.setDelayEnterAnimation(false);
-            rvComments.smoothScrollBy(0, rvComments.getChildAt(0).getHeight() * commentsAdapter.getItemCount());
+            // getChildAt(0).getHeight() -> null pointer.
+            rvComments.smoothScrollBy(0, ContentOperator.COMMENT_HEIGHT * commentsAdapter.getItemCount());
 
             // 清空输入框
             etComment.setText(null);
@@ -173,12 +181,17 @@ public class CommentsActivity extends BaseDrawerActivity implements SendCommentB
             return false;
         }
 
-
-        int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
-        if (id <= 0){
-            Log.e("Button send comment", "Failed to add new comment.");
-        }else{
-            Log.d("Button send comment", "Success!");
+        // 2019-12
+        int id = ContentOperator.sessionOperation.create_comment(cid, comment);
+        //int id = ModelComments.addNewComment(this, -1, uid, comment, this.cid);
+        if (id == 2){
+            Log.e("Button send comment", "评论太长了.");
+            Toast.makeText(ContentOperator.getGlobalContext(), "评论太长了.", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (id == 1) {
+            Log.e("Button send comment", "Course didn't exist.");
+            Toast.makeText(ContentOperator.getGlobalContext(), "课程不存在.", Toast.LENGTH_SHORT).show();
+            return false;
         }
         return true;
     }

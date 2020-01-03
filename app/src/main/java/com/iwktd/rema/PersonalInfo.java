@@ -26,6 +26,9 @@ public class PersonalInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_info);
+
+        ContentOperator.setGlobalContext(this);
+
         personInfo = getIntent().getExtras();
         //Log.d("")
         Log.d("PersonalInfo", "miaomiaomiao");

@@ -100,6 +100,8 @@ public class ModelMyCollection extends SQLiteOpenHelper {
     }
 
     public static void dropAll(Context context){
-
+        ModelMyCollection model = new ModelMyCollection(context, null, 1);
+        SQLiteDatabase db = model.getReadableDatabase();
+        db.execSQL("delete from " + ModelMyCollection.tblName + ";");
     }
 }

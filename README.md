@@ -2,10 +2,11 @@
 
 ReMa是一个可定制化的通用安卓评论应用，[ReMa_server](https://github.com/Karl-Han/ReMa_server)为用户管理和数据存储的服务端应用。
 
-
 ## 客户端使用说明
 
-> 具体代码中类方法说明请见[ReMa client Documentation](./ReMa client Documentation.md)
+> 具体代码中类方法说明请见[ReMa client Documentation](./assets/ReMa client Documentation.md)
+
+在校园网下可直接安装 `./assets/ReMa.apk`进行试用。
 
 ### 特点
 

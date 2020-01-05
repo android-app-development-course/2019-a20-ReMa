@@ -4,7 +4,7 @@
  - `Model`类继承了`SQLiteHelper`，并封装了一些静态方法。
  - 第一次启动，将向服务端请求所有数据来初始化数据库。
  - 应用读取数据库，直接使用`Model`类的静态方法读取。
- - 应用需要创建、修改、删除内容，将使用`ContentOperation`中的`SessionOperator`类的静态实例的方法，向服务端询问操作是否可行。当服务器确认操作可行并且在服务端修改成功后，向本地端发回确认信息，客户端随后执行操作。
+ - 应用需要创建、修改、删除内容，将使用`ContentOperator`中的`SessionOperation`类的静态实例的方法，向服务端询问操作是否可行。当服务器确认操作可行并且在服务端修改成功后，向本地端发回确认信息，客户端随后执行操作。
 
 ## Model类:
 展示了部分方法， 详细内容见源码.
@@ -88,11 +88,6 @@
 ### ModelMyCollection
 这个是给本地的收藏用的:
 ```java
-    String createSQL = "create table " + ModelMyCollection.tblName +"(\n" +
-                    "        cid integer primary key not null, \n" +
-                    "        date integer not null);";
-                
-    
     public static int addNewRecord(Context context,int cid);
 
     // 删了多少条
@@ -103,7 +98,7 @@
 ```
 
 ### ContentOperator
-提供一些预定义的全局变量和静态方法：
+提供一些预定义的全局变量和静态方法，以下展示了部分内容，详细请见`ContentOperator.java`：
 ```java
     public final static String TAG = "ContentOperator"; // 给Log用的
 

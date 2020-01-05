@@ -6,6 +6,9 @@
  - 应用读取数据库，直接使用`Model`类的静态方法读取。
  - 应用需要创建、修改、删除内容，将使用`ContentOperator`中的`SessionOperation`类的静态实例的方法，向服务端询问操作是否可行。当服务器确认操作可行并且在服务端修改成功后，向本地端发回确认信息，客户端随后执行操作。
 
+## 注意事项
+- 服务端的**地址、端口、路由信息**等都硬编码在`ContentOperator`的静态变量中，请根据自身运行环境来修改！！
+
 ## Model类:
 展示了部分方法， 详细内容见源码.
 ### ModelUser
@@ -101,19 +104,6 @@
 提供一些预定义的全局变量和静态方法，以下展示了部分内容，详细请见`ContentOperator.java`：
 ```java
     public final static String TAG = "ContentOperator";
-
-    public final static int OP_SIGN_IN = 1;
-    public final static int OP_SIGN_UP = 2;
-    public final static int OP_CREATE_COURSE = 3;
-    public final static int OP_MODIFY_COURSE = 4;
-    public final static int OP_DELETE_COURSE = 5;
-    public final static int OP_CREATE_COMMENT = 6;
-    public final static int OP_MODIFY_COMMENT = 7;
-    public final static int OP_DELETE_COMMENT = 8;
-    public final static int OP_MODIFY_INFO = 9;  
-    public final static int OP_LIKE = 10;
-    public final static int OP_UNLIKE = 11;
-    public final static int OP_GET_ALL_TABLE = 12;
 
     public final static String SERVER_IP = "http://10.243.0.186:8080";
     public final static String PATH_LOGIN      = "/autho/login";     // post

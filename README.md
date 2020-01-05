@@ -100,7 +100,7 @@
 ### ContentOperator
 提供一些预定义的全局变量和静态方法，以下展示了部分内容，详细请见`ContentOperator.java`：
 ```java
-    public final static String TAG = "ContentOperator"; // 给Log用的
+    public final static String TAG = "ContentOperator";
 
     public final static int OP_SIGN_IN = 1;
     public final static int OP_SIGN_UP = 2;
@@ -110,52 +110,38 @@
     public final static int OP_CREATE_COMMENT = 6;
     public final static int OP_MODIFY_COMMENT = 7;
     public final static int OP_DELETE_COMMENT = 8;
-    public final static int OP_MODIFY_INFO = 9; // 修改个人信息
+    public final static int OP_MODIFY_INFO = 9;  
     public final static int OP_LIKE = 10;
     public final static int OP_UNLIKE = 11;
     public final static int OP_GET_ALL_TABLE = 12;
-    
-    public final static String SERVER_IP = "http://10.243.0.186:";
-    public final static String SERVER_PORT = "8080";
-    public final static String PATH_LOGIN = "/autho/login";  
-    public final static String PATH_REGISTER_ = "/autho/register"; 
-    public final static String PATH_LOGOUT = "/autho/logout";
 
-   // 需要补充两条 修改 的路由！
-   public final static String PATH_GET_DATA = "/mani/get_data/"; // 后接current_hash
-    public final static String PATH_CREATE_COMMENT = "/mani/create_comment";
-    public final static String PATH_DELETE_COMMENT = "/mani/create_comment";
-    //public final static String PATH_MODIFY_COMMENT = "/mani/create_comment";
-    public final static String PATH_CREATE_COURSE = "/mani/create_course";
-    public final static String PATH_DELETE_COURSE = "/mani/create_course";
-    //public final static String PATH_MODIFY_COURSE= "/mani/create_comment";
+    public final static String SERVER_IP = "http://10.243.0.186:8080";
+    public final static String PATH_LOGIN      = "/autho/login";     // post
+    public final static String PATH_REGISTER   = "/autho/register";  // post
+    public final static String PATH_LOGOUT     = "/autho/logout";
 
-    public final static String SP_INFO = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
-    public final static int MAX_COMMENT_LEN = 100; // 最大100个字符(英文也是)
-    public final static String IS_LOGINED = "is_signed_in";
-    public final static String KEY_SESSION = "Set-Cookie"; // 用来从Bundle中提取sessionID
-    public final static String KEY_USERNAME = "username";
-    public final static String KEY_PWD = "password";
-    public final static String KEY_HASH = "seesion_id";
-    
-// =============================================================== 方法
-    // 注册, 没弄好, 返回uid
-    public static int register(Bundle info);
+    public final static String PATH_GET_DATA        = "/mani/get_data";  // + current_hash   0 -> all table
+    public final static String PATH_CREATE_COMMENT  = "/mani/create_comment";
+    public final static String PATH_DELETE_COMMENT  = "/mani/delete_comment";
+    public final static String PATH_UPDATE_COMMENT  = "/mani/update_comment";
+    public final static String PATH_CREATE_COURSE   = "/mani/create_course";
+    public final static String PATH_DELETE_COURSE   = "/mani/delete_course";
+    //public final static String PATH_MODIFY_COURSE = "/mani/create_comment";
 
-    // 前置条件: Info 里面已经输入了账号密码, key统一用ContentOperator.KEY_XXX!
-    // 正常返回 非负值 , 异常返回-1
-    public static int isLogined(Activity act, Bundle info);
+    public final static String SP_INFO              = "local_info"; // 存储是否第一次打开app\是否登录， 账号名字等等信息
+    public final static int MAX_COMMENT_LEN         = 100; // 最大100个字符(英文也是)
+    public final static String IS_LOGINED           = "is_signed_in";
+    public final static String KEY_SESSION          = "Set-Cookie"; // 用来从Bundle中提取sessionID
+    public final static String KEY_USERNAME         = "username";
+    public final static String KEY_UID              = "uid";
+    public final static String KEY_PWD              = "password";
+    public final static String KEY_HASH             = "current_hash";
+    public final static int COMMENT_HEIGHT          = 100;  
+    private static Context GlobalContext            = null;
+    public static SessionOperation sessionOperation = null;
+    public static NetworkInit networkInit           = null;
+    public static OkHttpClient client;
 
-    // 读取uid
-    public static int getUid(Context context);
-    
-    // 退出登录，返回uid
-    public static int logOut(Context act, Bundle info);
-
-    // 传递username, password来询问服务器sessionID
-    // 如果成功，将sessionID放入info中，并且返回 0; 其他情况都返回-1。
-    // 应该先判断返回值，再取 sessionID(key = ContentOperator.KEY_SESSION)
-    public static int askForSessionID(Bundle info);
 ```
 
 ## UI
